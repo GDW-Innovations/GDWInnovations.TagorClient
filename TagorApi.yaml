@@ -1,0 +1,5289 @@
+---
+openapi: 3.0.0
+info:
+  title: Tagor API
+  version: 2.00.0000B1
+  description: |-
+    Release date: 29/09/2022
+
+    ## REQUIREMENTS
+    This version __requires__ Tagor >= 2.00.0000B0. Use [`Config/Info`](#operation/ConfigInfo) to get the active API version.
+
+    ## CHANGELOG
+    - New [`Dossier/CreateAgenda`](#operation/DossierCreateAgenda) endpoint.
+    - New return values in GetAgenda 'TJOB_Id, TJOBM_Id, TUSER_Id, Manueel and IsGeblokkeerd'
+    - In CreateLine you can now add if the line is fixed with 'IsFixed'
+    - In CreateLine you can now add a subarray with the intrests
+
+    ## INFO
+    - Using the download button at the top you can import this collection of endpoints in **Postman**
+    - In general all TQ(...)_Id fields are default fields which you can translate with the [`Code/GetDescription`](#operation/CodeGetDescription) endpoint. If you need an id to post to one of the endpoints you can use the [`Code/GetList`](#operation/CodeGetList) endpoint to get all possible values or [`Code/GetDescription`](#operation/CodeGetDescription) to get a value by code. These id's will be marked as `code id` in the documentation.
+    - We chose to return all ids as string because these are 64bit integers which are too big for javascript to handle.
+    - All italic text below the endpoint description is meant for people with access to Tagor.
+    - The user needs an email address configured in Tagor for the services to work properly.
+    - Pass the `Accept` header with `application/json` as value to have the server return errors in json format.
+    - Most endpoints can be batched/paged by passing a `BATCH-SIZE` and `BATCH-NUMBER` record in `dsWebContext`.
+
+    # AUTHENTICATION
+    Pass your token via an `Authorization` header like this: `Authorization: {bearer_format} {token}`.
+
+    ex: `Authorization: TGR IcoQbVw7wE...PPUPda61ET`
+    <!-- ReDoc-Inject: <security-definitions> -->
+  contact:
+    email: info@organi.be
+servers:
+- url: https://localhost/v1/web
+tags:
+- name: Actions
+  description: ''
+- name: Code
+  description: ''
+- name: Config
+  description: ''
+- name: Document
+  description: ''
+- name: Dossier
+  description: ''
+- name: Dossierlijn
+  description: ''
+- name: Login
+  description: ''
+- name: Message
+  description: ''
+- name: Party
+  description: Parties represent natural persons as well as legal entities.
+- name: Pay
+  description: |
+    Endpoints for interaction with a payment gateway.
+
+
+    _These endpoints require some configuration. Enter the correct parameters:_
+    - _`573` SIPS merchant id_
+    - _`574` SIPS secret_
+    - _`575` SIPS URL. This should be a base url without https prefix. ex: `payment-webinit.sips-atos.com`_
+    - _`576` SIPS Redirect URL. This is the page where SIPS should redirect to after payment. Like your front-end app._
+    - _`577` SIPS Response URL. This is the page where SIPS posts its data after a payment. This should be the location of the Tagor 3 API. ex: `https://api.organi.be/v1/rest/Pay/Finish`_
+    - _`596`: SIPS key version. Defaults to `1`._
+
+      _These parameters can be overwritten on the filetype configuration (TQDOSSOORT)._
+- name: TagorService
+  description: ''
+- name: User
+  description: Users represents Tagor users. This can be software users and api users.
+    A user extends a [Party](#tag/Party) by adding a username and some other extras.
+- name: SolvencyReport
+  description: ''
+components:
+  securitySchemes:
+    Tgr:
+      type: http
+      scheme: bearer
+      bearerFormat: Tgr
+      description: "Authentication via [`Login/Token`](#operation/LoginToken). Default
+        authentication with Tagor username/password or API-key. For clients with an
+        API-key there is a possibility to impersonate yourself as another Tagor user.
+        This way the different user configurations can be used with the same key.
+        To use this functionality simply pass an object in the `ttWebContext` array
+        with: \n- key: `user-login`\n- value: the username\n\nYou can verify your
+        call with the [`Config/User`](#operation/ConfigUser) endpoint.\n\n\n_The user
+        has to have the API permission set in the user management together with a
+        valid email address. For an API-key to impersonate as another user the `API
+        impersonate` toggle is required._"
+    Hash:
+      type: http
+      scheme: bearer
+      bearerFormat: Hash
+      description: |-
+        These endpoints can be directly called with the hash the defendant got by letter/email.
+
+
+        _File hashes are generated with mergefield `M_0585`._
+    Pin:
+      type: http
+      scheme: bearer
+      bearerFormat: Pin
+      description: |-
+        These endpoints can be directly called with the pin the defendant got by letter/email in combination with the filename/archive number. Pass this as a **base64 encoded string** of `{file}:{pin}`
+
+
+        _The value used in combination with the pincode is set in `parameter 590`. Pincodes are generated with mergefield `M_0077`._
+    Orng:
+      type: http
+      scheme: bearer
+      bearerFormat: Orng
+      description: |-
+        Pass the Orng token you received from the LDN backend (Organi only).
+
+
+        _The customer id has to be set in `parameter 589` and the environment code in `parameter 587`_.
+  schemas:
+    dsAttachmentWeb:
+      type: object
+      properties:
+        dsAttachmentWeb:
+          type: object
+          properties:
+            ttAttachmentWeb:
+              type: array
+              items:
+                type: object
+                properties:
+                  ttFileName:
+                    type: string
+                  ttFilePath:
+                    type: string
+                  ttComment:
+                    type: string
+                  TDOC_Id:
+                    type: string
+                  TQDISGROEP_Id:
+                    type: string
+                    format: code id
+                  FileContent:
+                    type: string
+                  FileType:
+                    type: string
+                  TJOB_Id:
+                    type: string
+    dsClipToFileDossiers:
+      type: object
+      properties:
+        dsClipToFileDossiers:
+          type: object
+          properties:
+            ttClipToFileDossiers:
+              type: array
+              items:
+                type: object
+                properties:
+                  TDOS_id:
+                    type: string
+                  Dossiernaam:
+                    type: string
+                  TQDOSSOORT_Id:
+                    type: string
+                    format: code id
+                  SaldoVerw:
+                    type: number
+    dsCodetabelIDs:
+      type: object
+      properties:
+        dsCodetabelIDs:
+          type: object
+          properties:
+            ttCodetabelIDs:
+              type: array
+              items:
+                type: object
+                properties:
+                  Tabel:
+                    type: string
+                  Id:
+                    type: string
+                  Code:
+                    type: string
+                  Taal:
+                    type: string
+                    enum:
+                    - Dut
+                    - Frn
+                    - Ger
+                    - Eng
+                  Omschrijving:
+                    type: string
+    dsCodeWeb:
+      type: object
+      properties:
+        dsCodeWeb:
+          type: object
+          properties:
+            ttCodeWeb:
+              type: array
+              items:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  id:
+                    type: string
+                  code:
+                    type: string
+                  language:
+                    type: string
+                  description:
+                    type: string
+    dsConfig:
+      type: object
+      properties:
+        dsConfig:
+          type: object
+          properties:
+            ttConfigWeb:
+              type: array
+              items:
+                type: object
+                properties:
+                  Waarde:
+                    type: string
+                  TQCFG_Id:
+                    type: string
+                    format: code id
+                  TQCFG_Code:
+                    type: string
+    dsConfigWeb:
+      type: object
+      properties:
+        dsConfigWeb:
+          type: object
+          properties:
+            ttConfigWeb:
+              type: array
+              items:
+                type: object
+                properties:
+                  data:
+                    type: string
+                  type_id:
+                    type: string
+                  type_code:
+                    type: string
+    dsDocuments:
+      type: object
+      properties:
+        dsDocuments:
+          type: object
+          properties:
+            ttDocuments:
+              type: array
+              items:
+                type: object
+                properties:
+                  TDOCM_Id:
+                    type: string
+                  omschrijving:
+                    type: string
+                  Id:
+                    type: string
+    dsFilter:
+      type: object
+      properties:
+        dsFilter:
+          type: object
+          properties:
+            ttFilter:
+              type: array
+              items:
+                type: object
+                properties:
+                  Tabel:
+                    type: string
+                  Veld:
+                    type: string
+                  Operator:
+                    type: string
+                  Waarde:
+                    type: string
+    dsTAGENDAWeb:
+      type: object
+      properties:
+        dsTAGENDAWeb:
+          type: object
+          properties:
+            ttTAGENDAWeb:
+              type: array
+              items:
+                type: object
+                properties:
+                  Omschrijving:
+                    type: string
+                  TimeStampScheduled:
+                    type: string
+                  TJOBM_Omschr:
+                    type: string
+                  TQSTATUS_Id:
+                    type: string
+                    format: code id
+                  UserName:
+                    type: string
+                  Subject:
+                    type: string
+                  TJOB_Id:
+                    type: string
+                  TJOBM_Id:
+                    type: string
+                  TUSER_Id:
+                    type: string
+                  Manueel:
+                    type: boolean
+                  IsGeblokkeerd:
+                    type: boolean                  
+                  
+    dsTBERICHTWeb:
+      type: object
+      properties:
+        dsTBERICHTWeb:
+          type: object
+          properties:
+            ttTBERICHTWeb:
+              type: array
+              items:
+                type: object
+                properties:
+                  TBERICHT_Id:
+                    type: string
+                  Ontvanger:
+                    type: string
+                  TJOB_Id:
+                    type: string
+                  TJOB_Onderwerp:
+                    type: string
+                  TJOB_TQSTATUS_Id:
+                    type: string
+                    description: Indicates read/unread status.
+                  TQSTATUS_Id:
+                    type: string
+                    format: code id
+                  TimeStampBericht:
+                    type: string
+                    nullable: true
+                  TimeStampStatusSinds:
+                    type: string
+                    nullable: true
+                  TQRICHTING_Id:
+                    type: string
+                    format: code id
+                  Verzender:
+                    type: string
+                  TJOB_bericht:
+                    type: string
+                  TPAR_id_Verzender:
+                    type: string
+                  TPAR_id_Ontvanger:
+                    type: string
+                  TDOS_Id:
+                    type: string
+                  TQDOSSOORT_Id:
+                    type: string
+                  ttTagWeb:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/ttTagWeb"
+    ttTagWeb:
+      type: object
+      properties:
+        Omschrijving:
+          type: string
+        TQTEMPLATE_Id:
+          type: string
+    dsTDOCWeb:
+      type: object
+      properties:
+        dsTDOCWeb:
+          type: object
+          properties:
+            ttTDOCWeb:
+              type: array
+              items:
+                type: object
+                properties:
+                  DatumDocument:
+                    type: string
+                    format: date
+                  DISFLMN_Extensie:
+                    type: string
+                  DISid:
+                    type: integer
+                  Naam:
+                    type: string
+                  TDOC_Id:
+                    type: string
+                  TQDISGROEP_Id:
+                    type: string
+                    format: code id
+                  Inhoud:
+                    type: string
+    dsTDOSAFBDETWeb:
+      type: object
+      properties:
+        dsTDOSAFBDETWeb:
+          type: object
+          properties:
+            ttTDOSAFBDETWeb:
+              type: array
+              items:
+                type: object
+                properties:
+                  TDOSAFB_Id:
+                    type: string
+                  Bedrag:
+                    type: string
+                  DatumBetaal:
+                    type: string
+                    format: date
+                  DatumTot:
+                    type: string
+                    format: date
+                  TQPERIODE_Id:
+                    type: string
+                    format: code id
+                  Sequence_Id:
+                    type: string
+                  Bedrag1stePeriode:
+                    type: string
+                  Datum1stePeriode:
+                    type: string
+                    format: date
+    dsTDOSDOSWeb:
+      type: object
+      properties:
+        dsTDOSDOSWeb:
+          type: object
+          properties:
+            ttTDOSDOSWeb:
+              type: array
+              items:
+                type: object
+                properties:
+                  TDOS_Id_Sub:
+                    type: string
+                  Dossiernaam:
+                    type: string
+                  KlantRef1:
+                    type: string
+    dsTDOSCorrespondenceWeb:
+      type: object
+      properties:
+        dsTDOSCorrespondenceWeb:
+          type: object
+          properties:
+            ttTDOSCorrespondenceWeb:
+              type: array
+              items:
+                type: object
+                properties:
+                  TDOS_Id:
+                    type: string
+                  Omschrijving:
+                    type: string
+                  DatumInfo:
+                    type: string
+                    format: date
+    dsTDOSINFOWeb:
+      type: object
+      properties:
+        dsTDOSINFOWeb:
+          type: object
+          properties:
+            ttTDOSINFOWeb:
+              type: array
+              items:
+                type: object
+                properties:
+                  TDOS_Id:
+                    type: string
+                  TQINFO_Id:
+                    type: string
+                    format: code id
+                  TQINFODEF_Id:
+                    type: string
+                    format: code id
+                  Omschrijving:
+                    type: string
+                  DatumInfo:
+                    type: string
+                    format: date
+    dsTDOSLIJNINFOWeb:
+      type: object
+      properties:
+        dsTDOSLIJNINFOWeb:
+          type: object
+          properties:
+            ttTDOSLIJNINFOWeb:
+              type: array
+              items:
+                type: object
+                properties:
+                  financial_line_id:
+                    type: string
+                  type_id:
+                    type: string
+                    format: code id
+                    description: A code id from the `TQINFO` table.
+                  description:
+                    type: string
+                  date:
+                    type: string
+                    format: date
+    dsTDOSLIJNWeb:
+      type: object
+      properties:
+        dsTDOSLIJNWeb:
+          type: object
+          properties:
+            ttTDOSLIJNWeb:
+              type: array
+              items:
+                type: object
+                properties:
+                  TDOSLIJN_Id:
+                    type: string
+                  Bedrag:
+                    type: number
+                  BedragBbConfrater:
+                    type: number
+                  BedragBTW:
+                    type: number
+                  Confrator:
+                    type: boolean
+                  DatumBoeking:
+                    type: string
+                    format: date
+                  Dossiernaam:
+                    type: string
+                  Omschrijving:
+                    type: string
+                  Opmerking:
+                    type: string
+                  Recht:
+                    type: number
+                  State:
+                    type: string
+                  TDOS_Id:
+                    type: string
+                  TQAARD_Id:
+                    type: string
+                    format: code id
+                  TQBOEKING_Id:
+                    type: string
+                    format: code id
+                  Kost:
+                    type: number
+                  BetalingKlant:
+                    type: number
+                  BetalingStudie:
+                    type: number
+                  Doorstorting:
+                    type: number
+                  DossierKlantReferte:
+                    type: string
+                  Gefixeerd:
+                    type: boolean
+                  Referte:
+                    type: string
+                  IsFixed:
+                    type: string
+                  ttTDOSLIJNINTR:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        TQINTREST_Id: 
+                          type: string
+                        Intresttoeslag:
+                          type: number
+                        DatumBegin:
+                          type: string
+                        DatumEind:
+                          type: string
+                        Bedrag:
+                          type: number
+                        DeelHoofdsom:
+                          type: number
+                      
+    dsTDOSPARWeb:
+      type: object
+      properties:
+        dsTDOSPARWeb:
+          type: object
+          properties:
+            ttTDOSPARWeb:
+              type: array
+              items:
+                type: object
+                properties:
+                  TPAR_Id:
+                    type: string
+                  Beroep:
+                    type: string
+                  GSM:
+                    type: string
+                  Naam:
+                    type: string
+                  Plaats:
+                    type: string
+                  Postcode:
+                    type: string
+                  Referentie:
+                    type: string
+                  RekNr:
+                    type: string
+                  Straat:
+                    type: string
+                  StraatBusNr:
+                    type: string
+                  StraatNr:
+                    type: string
+                  Tel:
+                    type: string
+                  TQPARSOORT_Id:
+                    type: string
+                    format: code id
+                  TQSOLVABILITEIT_Id_Adres:
+                    type: string
+                    format: code id
+                  TQSOLVABILITEIT_Id_Financieel:
+                    type: string
+                    format: code id
+                  SolvDtm_adres:
+                    type: string
+                    nullable: true
+                  SolvDtm_finan:
+                    type: string
+                    nullable: true
+                  KBOnr:
+                    type: string
+                  NationaalNr:
+                    type: string
+                  PartijVorm:
+                    type: string
+                  Mail:
+                    type: string
+    dsTDOSSALDOWeb:
+      type: object
+      properties:
+        dsTDOSSALDOWeb:
+          type: object
+          properties:
+            ttTDOSSALDOWeb:
+              type: array
+              items:
+                type: object
+                properties:
+                  TQSALDO_Id:
+                    type: string
+                    format: code id
+                  Bedrag:
+                    type: string
+    dsTDOSSearch:
+      type: object
+      properties:
+        dsTDOSSearch:
+          type: object
+          properties:
+            ttTDOSSearch:
+              type: array
+              items:
+                type: object
+                properties:
+                  Aanlegger:
+                    type: string
+                  Archiefnr:
+                    type: string
+                  DatumCreatie:
+                    type: string
+                    format: date
+                  DatumLtstBet:
+                    type: string
+                    format: date
+                  Dossiernaam:
+                    type: string
+                  Klant:
+                    type: string
+                  KlantRef1:
+                    type: string
+                  ReferteAdvocaat:
+                    type: string
+                  ReferteConfr:
+                    type: string
+                  TDOS_Id:
+                    type: string
+                  TQSTATUS_Id:
+                    type: string
+                    format: code id
+                  TQSTATUS_Id_Alarm:
+                    type: string
+                    format: code id
+                  TQSTATUS_Id_Klant:
+                    type: string
+                    format: code id
+                  TQSTATUS_Id_Stadium:
+                    type: string
+                    format: code id
+                  TQSTATUS_Id_Stop:
+                    type: string
+                    format: code id
+                  Verschijningsdatum:
+                    type: string
+                    format: date
+                  Verweerder:
+                    type: string
+                  TQDOSSOORT_Id:
+                    type: string
+                    format: code id
+                  SaldoKlant:
+                    type: number
+                  SaldoAanl:
+                    type: number
+                  SaldoVerw:
+                    type: number
+    dsTDOSTITELWeb:
+      type: object
+      properties:
+        dsTDOSTITELWeb:
+          type: object
+          properties:
+            ttTDOSTITELWeb:
+              type: array
+              items:
+                type: object
+                properties:
+                  TQRB_Id:
+                    type: string
+                    format: code id
+                  TQKAMER_Id:
+                    type: string
+                    format: code id
+                  Owning_RB_Entity:
+                    type: string
+                  Owning_RB_Id:
+                    type: string
+                  TimeStampTitel:
+                    type: string
+                  Omschrijving:
+                    type: string
+    dsTDOSVERSCHIJNINGWeb:
+      type: object
+      properties:
+        dsTDOSVERSCHIJNINGWeb:
+          type: object
+          properties:
+            ttTDOSVERSCHIJNINGWeb:
+              type: array
+              items:
+                type: object
+                properties:
+                  TQRB_Id:
+                    type: string
+                    format: code id
+                  Owning_RB_Entity:
+                    type: string
+                  Owning_RB_Id:
+                    type: string
+                  Plaats:
+                    type: string
+                  TQKAMER_Id:
+                    type: string
+                    format: code id
+                  TimeStampVerschijning:
+                    type: string
+                  Omschrijving:
+                    type: string
+    dsTDOSWeb:
+      type: object
+      properties:
+        dsTDOSWeb:
+          type: object
+          properties:
+            ttTDOSWeb:
+              type: array
+              items:
+                type: object
+                properties:
+                  Aanlegger:
+                    type: string
+                  Archiefnr:
+                    type: string
+                  DatumStop:
+                    type: string
+                    format: date
+                  Dossiernaam:
+                    type: string
+                  Klant:
+                    type: string
+                  KlantRef1:
+                    type: string
+                  KlantRef2:
+                    type: string
+                  SOLVDatum_adres:
+                    type: string
+                    format: date
+                  SOLVDatum_finan:
+                    type: string
+                    format: date
+                  StatusDatum:
+                    type: string
+                    format: date
+                  StatusDatum_Alarm:
+                    type: string
+                    format: date
+                  StatusDatum_Klant:
+                    type: string
+                    format: date
+                  StatusDatum_Stadium:
+                    type: string
+                    format: date
+                  TDOS_Id:
+                    type: string
+                  TQSOLV_Id_Adres:
+                    type: string
+                    format: code id
+                  TQSOLV_Id_Finan:
+                    type: string
+                    format: code id
+                  TQSTATUS_Id:
+                    type: string
+                    format: code id
+                  TQSTATUS_Id_Alarm:
+                    type: string
+                    format: code id
+                  TQSTATUS_Id_Klant:
+                    type: string
+                    format: code id
+                  TQSTATUS_Id_Stadium:
+                    type: string
+                    format: code id
+                  TQSTATUS_Id_Stop:
+                    type: string
+                    format: code id
+                  VerkoopDatum:
+                    type: string
+                    format: date
+                  Verweerder:
+                    type: string
+                  DatumCreatie:
+                    type: string
+                    format: date
+                  DatumWijziging:
+                    type: string
+                    format: date
+                  Subdossier:
+                    type: boolean
+                  TQDOSSOORT_Id:
+                    type: string
+                    format: code id
+                  SaldoKlant:
+                    type: number
+                  SaldoAanl:
+                    type: number
+                  SaldoVerw:
+                    type: number
+    dsTDOSDefendantWeb:
+      type: object
+      properties:
+        dsTDOSDefendantWeb:
+          type: object
+          properties:
+            ttTDOSDefendantWeb:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  status_id":
+                    type: string
+                  defendant":
+                    type: string
+                  creditor":
+                    type: string
+                  balance_defendant":
+                    type: number
+                  balance_office":
+                    type: number
+                  file_name:
+                    type: string
+    dsTPARSearch:
+      type: object
+      properties:
+        dsTPARSearch:
+          type: object
+          properties:
+            ttTPARSearch:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  first_name:
+                    type: string
+                  last_name:
+                    type: string
+    dsTUSERWeb:
+      type: object
+      properties:
+        dsTUSERWeb:
+          type: object
+          properties:
+            ttTUSERWeb:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  party_id:
+                    type: string
+                    description: Id of the party (TPAR) record.
+                  username:
+                    type: string
+                  name:
+                    type: string
+                  password:
+                    type: string
+                  landline:
+                    type: string
+                  fax:
+                    type: string
+                  cellphone:
+                    type: string
+                  email_address:
+                    type: string
+                  requires_2fa:
+                    type: boolean
+    dsTCOMWeb:
+      type: object
+      properties:
+        dsTCOMWeb:
+          type: object
+          properties:
+            ttTCOMWeb:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  comment:
+                    type: string
+                  content:
+                    type: string
+                  owning_entity:
+                    type: string
+                    enum:
+                      - TPAR
+                  owning_id:
+                    type: string
+                  type_id:
+                    type: string
+                    format: code id
+                    description: A code id from the `TQCOM` table.
+                  used:
+                    type: boolean
+                  billing:
+                    type: boolean
+                  mail_in_series:
+                    type: boolean
+    dsTPARADWeb:
+      type: object
+      properties:
+        dsTPARADWeb:
+          type: object
+          properties:
+            ttTPARADWeb:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  party_id:
+                    type: string
+                  type_id:
+                    type: string
+                    format: code id
+                    description: A code id from the `TQAD` table.
+                  street:
+                    type: string
+                  street_type_id:
+                    type: string
+                    format: code id
+                    description: A code id from the `TQSTRAAT` table.
+                  number:
+                    type: string
+                  mailbox:
+                    type: string
+                  postal_code:
+                    type: string
+                  postal_code_type_id:
+                    type: string
+                    format: code id
+                    description: A code id from the `TQPOST` table.
+                  city:
+                    type: string
+                  city_type_id:
+                    type: string
+                    format: code id
+                    description: A code id from the `TQPLAATS` table.
+                  country:
+                    type: string
+                  country_type_id:
+                    type: string
+                    format: code id
+                    description: A code id from the `TQLAND` table.
+                  current_address:
+                    type: boolean
+    dsSolvencyReport:
+      type: object
+      properties:
+        dsSolvencyReport:
+          type: object
+          properties:
+            ttSolvencyReport:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  type:
+                    type: string
+                  val:
+                    type: string
+    dsWebContext:
+      type: object
+      properties:
+        dsWebContext:
+          type: object
+          properties:
+            ttWebContext:
+              type: array
+              items:
+                type: object
+                properties:
+                  ContextKey:
+                    type: string
+                  ContextValue:
+                    type: string
+          example:
+            ttWebContext: []
+    LoginResponse:
+      type: object
+      properties:
+        response:
+          type: object
+          properties:
+            token_type:
+              type: string
+              enum:
+              - Tgr
+              - Orng
+              example: Tgr
+            expires_in:
+              type: integer
+              example: '3600'
+            token:
+              type: string
+            error:
+              type: string
+    SuccessErrorResponse:
+      type: object
+      properties:
+        Success:
+          type: boolean
+        Error:
+          type: string
+security:
+- Orng: []
+- Tgr: []
+paths:
+  "/Actions/SendMail":
+    post:
+      tags:
+      - Actions
+      summary: Actions/SendMail
+      description: |-
+        Send a mail. This endpoint will send a mail to the party entered in `TPAR_Id` if no `TPAR_Id` is passed it will send an email to the address passed in `Emailadres`. If `TDOS_Id` is passed the mail is only send if the file exists. When both `TDOS_Id` and `TPAR_Id` are passed, the party has to be a party connected to the file for the check to pass.
+
+
+        _`Parameter 569` has to contain the 117 connection string. In the office management screen a mailserver and mail template has to be configured. Logging about connection with the SMTP server can be found on c:\temp\YYYY\MM\DD\socketmail.log on the 117 server._
+      operationId: ActionsSendMail
+      security:
+      - Orng: []
+      - Tgr: []
+      - Hash: []
+      - Pin: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    TDOS_Id:
+                      type: string
+                    TPAR_Id:
+                      type: string
+                    Emailadres:
+                      type: string
+                    CodeEmail:
+                      type: string
+                  required:
+                  - CodeEmail
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    "$ref": "#/components/schemas/SuccessErrorResponse"
+  "/Actions/SendSms":
+    post:
+      tags:
+      - Actions
+      summary: Actions/SendSms
+      description: |-
+        Send a text. Requires `TPAR_Id`, `Gsmnr` or both. If a `TPAR_Id` is passed and the given party already has a communication number. The text will be send to this number. If not, or if you only pass the `Gsmnr` parameter the text will be send to this number instead.
+
+
+        _Enter the RingRing API key in `parameter 558`. `CodeSms` can also be any TQCFG value configured in the office managment screen._
+      operationId: ActionsSendSms
+      security:
+      - Orng: []
+      - Tgr: []
+      - Hash: []
+      - Pin: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    TDOS_Id:
+                      type: string
+                    TPAR_Id:
+                      type: string
+                    Gsmnr:
+                      type: string
+                    CodeSms:
+                      type: string
+                      enum:
+                      - SALDO
+                      - AFBETALINGSPLAN
+                  required:
+                  - CodeSms
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    "$ref": "#/components/schemas/SuccessErrorResponse"
+  "/Code/GetDescription":
+    post:
+      tags:
+      - Code
+      summary: Code/GetDescription
+      description: Converts code ids. Pass `ttCodetabelIDs` records with either `Id`
+        or `Code` fields filled in. This endpoint will update the other fields and
+        return the data.
+      operationId: CodeGetDescription
+      security:
+      - Orng: []
+      - Tgr: []
+      - Hash: []
+      - Pin: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+                    dsCodetabelIDs:
+                      "$ref": "#/components/schemas/dsCodetabelIDs"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsCodetabelIDs:
+                        "$ref": "#/components/schemas/dsCodetabelIDs"
+  "/Code/GetList":
+    post:
+      tags:
+      - Code
+      summary: Code/GetList
+      description: Returns a whole list of code ids. This endpoint can be used to
+        populate dropdown lists in a front-end application.
+      operationId: CodeGetList
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+            examples:
+              Get all possible statusses:
+                description: ''
+                value:
+                  request:
+                    dsWebContext:
+                      dsWebContext:
+                        ttWebContext:
+                        - ContextKey: table
+                          ContextValue: TQSTATUS
+              Get all possible file statusses:
+                description: The difference with this call and the first one is that
+                  these statusses are accepted on a `TDOS.TQSTATUS_Id` field.
+                value:
+                  request:
+                    dsWebContext:
+                      dsWebContext:
+                        ttWebContext:
+                        - ContextKey: table
+                          ContextValue: TQSTATUSVELD
+                        - ContextKey: tablex
+                          ContextValue: TQSTATUSX
+                        - ContextKey: filter
+                          ContextValue: TQSTATUSVELD.TabelNaam = 'TDOS' and TQSTATUSVELD.Veldnaam
+                            = 'TQSTATUS_Id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsCodetabelIDs:
+                        "$ref": "#/components/schemas/dsCodetabelIDs"
+  "/Config/GetRequestableDocuments":
+    post:
+      tags:
+      - Config
+      summary: Config/GetRequestableDocuments
+      description: Returns a list of all documents the user can generate.
+      operationId: ConfigGetRequestableDocuments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsCodetabelIDs:
+                        "$ref": "#/components/schemas/dsDocuments"
+  "/Config/Version":
+    post:
+      tags:
+      - Config
+      summary: Config/Version
+      description:
+      operationId: ConfigVersion
+      security: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+              examples:
+                '':
+                  description: ''
+                  value:
+                    response:
+                      dsWebContext:
+                        dsWebContext:
+                          ttWebContext:
+                          - ContextKey: Version
+                            ContextValue: 1.08.5000B3
+                          - ContextKey: VersionDate
+                            ContextValue:
+                          - ContextKey: InstalledOn
+                            ContextValue:
+  "/Config/Info":
+    post:
+      tags:
+      - Config
+      summary: Config/Info
+      description: Returns info about the bailiff's office. When called with a valid
+        `Authorization` header the endpoint will return some technical info about
+        the API aswell.
+      operationId: ConfigInfo
+      security: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsTDOSPARWeb:
+                        "$ref": "#/components/schemas/dsTDOSPARWeb"
+              examples:
+                '':
+                  description: ''
+                  value:
+                    response:
+                      dsWebContext:
+                        dsWebContext:
+                          ttWebContext:
+                          - ContextKey: AppId
+                            ContextValue: ''
+                          - ContextKey: APIVersion
+                            ContextValue: 1.08.5000B3
+                          - ContextKey: ConnectionString
+                            ContextValue: "-AppService asb_tagorvoxtron_live -H ORWI-DB
+                              -S 5192 -sessionModel Session-free"
+                          - ContextKey: MachineAPI
+                            ContextValue: ORWI-WWW
+                          - ContextKey: OEVersionAPI
+                            ContextValue: 11.7.3.0.1592
+                          - ContextKey: MachineTagor
+                            ContextValue: ORWI-DB
+                          - ContextKey: OEVersionTagor
+                            ContextValue: 10.2B
+                          - ContextKey: TagorVersion
+                            ContextValue: 1.08.2000B5
+                      dsTDOSPARWeb:
+                        dsTDOSPARWeb:
+                          ttTDOSPARWeb:
+                          - TPAR_Id: '9000000000000001706'
+                            Beroep: ''
+                            GSM: ''
+                            Naam: Organi BVBA
+                            Plaats: ''
+                            Postcode: '2610'
+                            Referentie: ''
+                            RekNr: '735030882966'
+                            Straat: Dynamicalaan
+                            StraatBusNr: ''
+                            StraatNr: '15'
+                            Tel: 038206300
+                            TQPARSOORT_Id: ''
+                            TQSOLVABILITEIT_Id_Adres: ''
+                            TQSOLVABILITEIT_Id_Financieel: ''
+                            SolvDtm_adres:
+                            SolvDtm_finan:
+                            KBOnr: 0441759675
+                            NationaalNr: ''
+                            PartijVorm: M
+                            Mail: info@organi.be
+                            Sequence_Id: ''
+  "/Config/Ping":
+    get:
+      tags:
+      - Config
+      summary: Config/Ping
+      description: Checks the connection to the API and Tagor
+      operationId: ConfigPingGet
+      security: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+              examples:
+                Ping appservers:
+                  description: ''
+                  value:
+                    response:
+                      dsWebContext:
+                        dsWebContext:
+                          ttWebContext:
+                          - ContextKey: TAGOR
+                            ContextValue: 'true'
+                          - ContextKey: API
+                            ContextValue: 'true'
+    post:
+      tags:
+      - Config
+      summary: Config/Ping
+      description: Checks the connection to the API and Tagor
+      operationId: ConfigPing
+      security: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+              examples:
+                Ping appservers:
+                  description: ''
+                  value:
+                    response:
+                      dsWebContext:
+                        dsWebContext:
+                          ttWebContext:
+                          - ContextKey: TAGOR
+                            ContextValue: 'true'
+                          - ContextKey: API
+                            ContextValue: 'true'
+  "/Config/User":
+    post:
+      tags:
+      - Config
+      summary: Config/User
+      description: Return info about the current user.
+      operationId: ConfigUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsTDOSPARWeb:
+                        "$ref": "#/components/schemas/dsTDOSPARWeb"
+  "/Config/DefendantSettings":
+    post:
+      tags:
+      - Config
+      summary: Config/DefendantSettings
+      description: Get general settings.
+      operationId: ConfigDefendantSettings
+      security:
+      - Hash: []
+      - Pin: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+  "/Document/Generate":
+    post:
+      tags:
+      - Document
+      summary: Document/Generate
+      description: A list of all possible `TDOCM_Id` values can be retreived with
+        [`User/GetPermissionsList`](#operation/UserGetPermissionsList).
+      operationId: DocumentGenerate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+  "/Document/Get":
+    post:
+      tags:
+      - Document
+      summary: Document/Get
+      description: |-
+        Get all documents on a file. `ttWebContext` requires a `TDOS_Id` element. The `Inhoud` field will always be empty here.
+
+        _Some parameters can be used to configure this endpoint:_
+        - `Parameter 192`: _Only show PDF files._
+        - `Parameter 369`: _Blacklist some security codes._
+        - `Parameter 430`: _Allowed `TQDISGROEP`s. Empty for all. __
+      operationId: DocumentGet
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+              example:
+                request:
+                  dsWebContext:
+                    dsWebContext:
+                      ttWebContext:
+                      - ContextKey: TDOS_Id
+                        ContextValue: '9000000000000000001'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsTDOCWeb:
+                        "$ref": "#/components/schemas/dsTDOCWeb"
+  "/Document/GetFile":
+    post:
+      tags:
+      - Document
+      summary: Document/GetFile
+      description: Get a single document on a file. `ttWebContext` requires a `TDOC_Id`
+        element.
+      operationId: DocumentGetFile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+              example:
+                request:
+                  dsWebContext:
+                    dsWebContext:
+                      ttWebContext:
+                      - ContextKey: TDOC_Id
+                        ContextValue: '9000000000000000001'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsTDOCWeb:
+                        "$ref": "#/components/schemas/dsTDOCWeb"
+  "/Document/GetMergefield":
+    post:
+      tags:
+      - Document
+      summary: Document/GetMergefield
+      description: Get one of the available mergefields on a file. `ttWebContext`
+        requires `TDOS_Id` and `Mergefield` elements. You can get a list of all available
+        mergefields by calling the [`User/GetPermissionsList`](#operation/UserGetPermissionsList)
+        endpoint and passing `WL_QRY_FIELD` as type.
+      operationId: DocumentGetMergefield
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+              example:
+                request:
+                  dsWebContext:
+                    dsWebContext:
+                      ttWebContext:
+                      - ContextKey: TDOS_Id
+                        ContextValue: '9000000000000000001'
+                      - ContextKey: Mergefield
+                        ContextValue: M_1000
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                example:
+                  request:
+                    dsWebContext:
+                      ttWebContext:
+                      - ContextKey: Output
+                        ContextValue: "          \r\n19/03/2019 Bevel                                     60,00
+                          EUR\r\n20/03/2019 Gemeengemaakt beslag                      14,11
+                          EUR\r\n                                               -----------
+                          ---\r\n           Totaal onder voorbehoud                   74,11
+                          EUR\r\n"
+  "/Dossier/AddAttachment":
+    post:
+      tags:
+      - Dossier
+      summary: Dossier/AddAttachment
+      description: Add a document to a file. `ttWebContext` requires a `TDOS_Id` element.
+      operationId: DossierAddAttachment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+                    dsAttachmentWeb:
+                      "$ref": "#/components/schemas/dsAttachmentWeb"
+              example:
+                request:
+                  dsWebContext:
+                    dsWebContext:
+                      ttWebContext:
+                      - ContextKey: TDOS_Id
+                        ContextValue: '9000000000000000001'
+                  dsAttachmentWeb:
+                    dsAttachmentWeb:
+                      ttAttachmentWeb:
+                      - FileType: txt
+                        ttFileName: classified.txt
+                        TQDISGROEP_Id: 9000000000000000000
+                        FileContent: aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj1kUXc0dzlXZ1hjUQ==
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsAttachmentWeb:
+                        "$ref": "#/components/schemas/dsAttachmentWeb"
+                example:
+                  request:
+                    dsWebContext:
+                      dsWebContext: {}
+                    dsAttachmentWeb:
+                      dsAttachmentWeb:
+                        ttAttachmentWeb:
+                        - ttFileName: classified.txt
+                          ttFilePath: c:\temp\
+                          ttComment: ''
+                          TDOC_Id: '9000000000000000001'
+                          TQDISGROEP_Id: '9000000000000000001'
+                          FileContent: aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj1kUXc0dzlXZ1hjUQ==
+                          FileType: txt
+                          TJOB_Id:
+  "/Dossier/CreateAgenda":
+    post:
+      tags:
+      - Dossier
+      summary: Dossier/CreateAgenda
+      description: Create an agenda record in a file. To update an existing record add the correct `TJOB_Id`. To create a new record, you don't need to add the `TJOB_Id`
+      operationId: DossierCreateAgenda
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+                    dsTAGENDAWeb:
+                      "$ref": "#/components/schemas/dsTAGENDAWeb"
+              example:
+                request:
+                  dsWebContext:
+                    dsWebContext:
+                      ttWebContext:
+                      - ContextKey: TDOS_Id
+                        ContextValue: '9000000000000000001'
+                  dsTAGENDAWeb:
+                    dsTAGENDAWeb:
+                      ttTAGENDAWeb:
+                      - Omschrijving: 'Payment received'
+                        TimeStampScheduled: '2019-12-12T00:00:00.000'
+                        TJOBM_Omschr: ''
+                        TQSTATUS_Id: '9000000000000000001'
+                        UserName: 'User 1'
+                        Subject: ''
+                        TJOB_Id: '0'
+                        TJOBM_Id: '9000000000000000669'
+                        TUSER_Id: '9000000000000000004'
+                        Manueel: false
+                        IsGeblokkeerd: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsTAGENDAWeb:
+                        "$ref": "#/components/schemas/dsTAGENDAWeb"
+                example:
+                  response:
+                    dsWebContext:
+                      dsWebContext: {}
+                    dsTAGENDAWeb:
+                      dsTAGENDAWeb:
+                        ttTAGENDAWeb:
+                        - Omschrijving: 'Payment received'
+                          TimeStampScheduled: '2019-12-12T00:00:00.000'
+                          TJOBM_Omschr: ''
+                          TQSTATUS_Id: '9000000000000000001'
+                          UserName: 'User 1'
+                          Subject: ''
+                          TJOB_Id: '0'
+                          TJOBM_Id: '9000000000000000669'
+                          TUSER_Id: '9000000000000000004'
+                          Manueel: false
+                          IsGeblokkeerd: false
+  "/Dossier/CreateInfoLine":
+    post:
+      tags:
+      - Dossier
+      summary: Dossier/CreateInfoLine
+      description: Create an info record in a file.
+      operationId: DossierCreateInfoLine
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+                    dsTDOSINFOWeb:
+                      "$ref": "#/components/schemas/dsTDOSINFOWeb"
+              example:
+                request:
+                  dsWebContext:
+                    dsWebContext: {}
+                  dsTDOSINFOWeb:
+                    dsTDOSINFOWeb:
+                      ttTDOSINFOWeb:
+                      - TDOS_Id: '9000000000000000001'
+                        TQINFO_Id: '9000000000000000001'
+                        TQINFODEF_Id: '9000000000000000001'
+                        Omschrijving: Received call of defendant.
+                        DatumInfo: '2019-12-12'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsTDOSINFOWeb:
+                        "$ref": "#/components/schemas/dsTDOSINFOWeb"
+                example:
+                  request:
+                    dsWebContext:
+                      dsWebContext: {}
+                    dsTDOSINFOWeb:
+                      dsTDOSINFOWeb:
+                        ttTDOSINFOWeb:
+                        - TDOS_Id: '9000000000000000001'
+                          TQINFO_Id: '9000000000000000001'
+                          TQINFODEF_Id: '9000000000000000001'
+                          Omschrijving: Received call of defendant.
+                          DatumInfo: '2019-12-12'
+  "/Dossier/CreateLine":
+    post:
+      tags:
+      - Dossier
+      summary: Dossier/CreateLine
+      description: Add a transaction to a file.
+      operationId: DossierCreateLine
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+                    dsTDOSLIJNWeb:
+                      "$ref": "#/components/schemas/dsTDOSLIJNWeb"
+              example:
+                request:
+                  dsWebContext:
+                    dsWebContext: {}
+                  dsTDOSLIJNWeb:
+                    dsTDOSLIJNWeb:
+                      ttTDOSLIJNWeb:
+                      - Bedrag: 100
+                        BedragBbConfrater: 0
+                        BedragBTW: 2
+                        Confrator: false
+                        DatumBoeking: '2019-12-12'
+                        Omschrijving: Payment received
+                        Opmerking: ''
+                        Recht: 0
+                        State: ''
+                        TDOS_Id: '9000000000000000001'
+                        TQAARD_Id: 0
+                        TQBOEKING_Id: '9000000000000000001'
+                        Uitschot: 0
+                        IsFixed: "true"
+                        ttTDOSLIJNINTRWEB: 
+                        - TQINTREST_Id: '0'
+                          Intresttoeslag: 1.1
+                          DatumBegin: "2022-10-22"
+                          DatumEind: "9999-12-31"
+                          Bedrag: 1000
+                          DeelHoofdsom: 333.34
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsTDOSLIJNWeb:
+                        "$ref": "#/components/schemas/dsTDOSLIJNWeb"
+                example:
+                  response:
+                    dsWebContext:
+                      dsWebContext: {}
+                    dsTDOSLIJNWeb:
+                      dsTDOSLIJNWeb:
+                        ttTDOSLIJNWeb:
+                        - Bedrag: 100
+                          BedragBbConfrater: 0
+                          BedragBTW: 2
+                          Confrator: false
+                          DatumBoeking: '2019-12-12'
+                          Omschrijving: Payment received
+                          Opmerking: ''
+                          Recht: 0
+                          State: ''
+                          TDOS_Id: '9000000000000000001'
+                          TQAARD_Id:
+                          TQBOEKING_Id: '9000000000000000001'
+                          Uitschot: 0
+                          Gefixeerd: true
+                          ttTDOSLIJNINTRWEB: 
+                          - TQINTREST_Id: '9000000000000000001'
+                            Intresttoeslag: 1.1
+                            DatumBegin: "2022-10-22"
+                            DatumEind: "9999-12-31"
+                            Bedrag: 1000
+                            DeelHoofdsom: 333.34
+  "/Dossier/Get":
+    post:
+      tags:
+      - Dossier
+      summary: Dossier/Get
+      description: Get a single file. `ttWebContext` requires a `TDOS_Id` element.
+      operationId: DossierGet
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+              example:
+                request:
+                  dsWebContext:
+                    dsWebContext:
+                      ttWebContext:
+                      - ContextKey: TDOS_Id
+                        ContextValue: '9000000000000000001'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsTDOSWeb:
+                        "$ref": "#/components/schemas/dsTDOSWeb"
+  "/Dossier/GetAgenda":
+    post:
+      tags:
+      - Dossier
+      summary: Dossier/GetAgenda
+      description: Get all calendar items for a single file. `ttWebContext` requires
+        a `TDOS_Id` element.
+      operationId: DossierGetAgenda
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+              example:
+                request:
+                  dsWebContext:
+                    dsWebContext:
+                      ttWebContext:
+                      - ContextKey: TDOS_Id
+                        ContextValue: '9000000000000000001'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsTAGENDAWeb:
+                        "$ref": "#/components/schemas/dsTAGENDAWeb"
+                    example:
+                      dsWebContext:
+                        dsWebContext: {}
+                      dsTAGENDAWeb:
+                        dsTAGENDAWeb:
+                          ttTAGENDAWeb:
+                          - Omschrijving: Payment received
+                            TimeStampScheduled: '2019-12-12T00:00:00.000'
+                            TJOBM_Omschr: ''
+                            TQSTATUS_Id: '9000000000000000001'
+                            UserName: User 1
+                            TJOB_Id: '0'
+                            TJOBM_Id: '9000000000000000669'
+                            TUSER_Id: '9000000000000000004'
+                            Manueel: false
+                            IsGeblokkeerd: false
+                          - Omschrijving: Message received
+                            TimeStampScheduled: '2019-12-12T11:05:02.496'
+                            TJOBM_Omschr: Webbericht
+                            TQSTATUS_Id: '9000000000000000001'
+                            UserName: User 2
+                            TJOB_Id: '9000000000000584248'
+                            TJOBM_Id: '0'
+                            TUSER_Id: '9000000000000000004'
+                            Manueel: false
+                            IsGeblokkeerd: false
+  "/Dossier/GetAppearance":
+    post:
+      tags:
+      - Dossier
+      summary: Dossier/GetAppearance
+      description: "`ttWebContext` requires a `TDOS_Id` element."
+      operationId: DossierGetAppearance
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+              example:
+                request:
+                  dsWebContext:
+                    dsWebContext:
+                      ttWebContext:
+                      - ContextKey: TDOS_Id
+                        ContextValue: '9000000000000000001'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsTDOSVERSCHIJNINGWeb:
+                        "$ref": "#/components/schemas/dsTDOSVERSCHIJNINGWeb"
+  "/Dossier/GetBalances":
+    post:
+      tags:
+      - Dossier
+      summary: Dossier/GetBalances
+      description: Get all balances of a file i.e. returns a summarized version of
+        [`Dossier/GetLines`](#operation/DossierGetLines). `ttWebContext` requires
+        a `TDOS_Id` element.
+      operationId: DossierGetBalances
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+              example:
+                request:
+                  dsWebContext:
+                    dsWebContext:
+                      ttWebContext:
+                      - ContextKey: TDOS_Id
+                        ContextValue: '9000000000000000001'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsTDOSSALDOWeb:
+                        "$ref": "#/components/schemas/dsTDOSSALDOWeb"
+                    example:
+                      dsWebContext:
+                        dsWebContext: {}
+                      dsTDOSSALDOWeb:
+                        dsTDOSSALDOWeb:
+                          ttTDOSSALDOWeb:
+                          - TQSALDO_Id: '9000000000000000001'
+                            Bedrag: 100
+                          - TQSALDO_Id: '9000000000000000002'
+                            Bedrag: 0
+  "/Dossier/GetCorrespondence":
+    post:
+      tags:
+      - Dossier
+      summary: Dossier/GetCorrespondence
+      description: Returns all correspondence on a file. `ttWebContext` requires a
+        `TDOS_Id` element.
+      operationId: DossierGetCorrespondence
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+              example:
+                request:
+                  dsWebContext:
+                    dsWebContext:
+                      ttWebContext:
+                      - ContextKey: TDOS_Id
+                        ContextValue: '9000000000000000001'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsTDOSINFOWeb:
+                        "$ref": "#/components/schemas/dsTDOSCorrespondenceWeb"
+                example:
+                  request:
+                    dsWebContext:
+                      dsWebContext: {}
+                    dsTDOSINFOWeb:
+                      dsTDOSINFOWeb:
+                        ttTDOSINFOWeb:
+                        - TDOS_Id: '9000000000000000001'
+                          TQINFO_Id: '9000000000000000001'
+                          TQINFODEF_Id: '0'
+                          Omschrijving: 'Webbericht: Hi!'
+                          DatumInfo: '2019-12-12'
+  "/Dossier/GetInfo":
+    post:
+      tags:
+      - Dossier
+      summary: Dossier/GetInfo
+      description: Returns all info records on a file. `ttWebContext` requires a `TDOS_Id`
+        element.
+      operationId: DossierGetInfo
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+              example:
+                request:
+                  dsWebContext:
+                    dsWebContext:
+                      ttWebContext:
+                      - ContextKey: TDOS_Id
+                        ContextValue: '9000000000000000001'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsTDOSINFOWeb:
+                        "$ref": "#/components/schemas/dsTDOSINFOWeb"
+                example:
+                  response:
+                    dsWebContext:
+                      dsWebContext: {}
+                    dsTDOSINFOWeb:
+                      dsTDOSINFOWeb:
+                        ttTDOSINFOWeb:
+                        - TDOS_Id: '9000000000000000001'
+                          TQINFO_Id: '9000000000000000001'
+                          TQINFODEF_Id: '0'
+                          Omschrijving: Call from defendant.
+                          DatumInfo: '2019-12-12'
+  "/Dossier/GetLines":
+    post:
+      tags:
+      - Dossier
+      summary: Dossier/GetLines
+      description: |-
+        Returns all transaction records on a file. `ttWebContext` requires a `TDOS_Id` element. Other options are optional:
+        - `is-defendant` (boolean): returns the overview from the defendants perspective.
+        - `evolution-only` (boolean): only returns records the office marked as 'important in the evolution of the file'.
+        - `unfinished-deeds` (boolean)
+
+
+        _To get files in the `evolution-only` view you have to mark `TQAARD` records as evolution._
+      operationId: DossierGetLines
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+            examples:
+              Get all transactions on a file.:
+                description: ''
+                value:
+                  request:
+                    dsWebContext:
+                      dsWebContext:
+                        ttWebContext:
+                        - ContextKey: TDOS_Id
+                          ContextValue: '9000000000000000001'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsTDOSLIJNWeb:
+                        "$ref": "#/components/schemas/dsTDOSLIJNWeb"
+                    example:
+                      dsWebContext:
+                        dsWebContext: {}
+                      dsTDOSLIJNWeb:
+                        dsTDOSLIJNWeb:
+                          ttTDOSLIJNWeb:
+                          - Bedrag: 1000
+                            BedragBbConfrater: 0
+                            BedragBTW: 0
+                            Confrator: false
+                            DatumBoeking: '2019-12-12'
+                            Omschrijving: Hoofdsom
+                            Opmerking: ''
+                            Recht: 0
+                            State: ''
+                            TDOS_Id: '9000000000000000001'
+                            TQAARD_Id: '0'
+                            TQBOEKING_Id: '9000000000000000001'
+                            Uitschot: 0
+                          - Bedrag: 150
+                            BedragBbConfrater: 0
+                            BedragBTW: 0
+                            Confrator: false
+                            DatumBoeking: '2019-11-12'
+                            Omschrijving: 'Verworven IR: 0,00'
+                            Opmerking: ''
+                            Recht: 0
+                            State: ''
+                            TDOS_Id: '9000000000000000001'
+                            TQAARD_Id: '0'
+                            TQBOEKING_Id: '9000000000000000001'
+                            Uitschot: 0
+  "/Dossier/GetParties":
+    post:
+      tags:
+      - Dossier
+      summary: Dossier/GetParties
+      description: "`ttWebContext` requires a `TDOS_Id` element."
+      operationId: DossierGetParties
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+              example:
+                request:
+                  dsWebContext:
+                    dsWebContext:
+                      ttWebContext:
+                      - ContextKey: TDOS_Id
+                        ContextValue: '9000000000000000001'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsTDOSPARWeb:
+                        "$ref": "#/components/schemas/dsTDOSPARWeb"
+  "/Dossier/GetPaymentPlans":
+    post:
+      tags:
+      - Dossier
+      summary: Dossier/GetPaymentPlans
+      description: |-
+        `ttWebContext` requires a `TDOS_Id` element. Other options are optional:
+        - `active-only` (boolean): only return active payment plans.
+      operationId: DossierGetPaymentPlans
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+              example:
+                request:
+                  dsWebContext:
+                    dsWebContext:
+                      ttWebContext:
+                      - ContextKey: TDOS_Id
+                        ContextValue: '9000000000000000001'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsTDOSAFBDETWeb:
+                        "$ref": "#/components/schemas/dsTDOSAFBDETWeb"
+  "/Dossier/GetSub":
+    post:
+      tags:
+      - Dossier
+      summary: Dossier/GetSub
+      description: "`ttWebContext` requires a `TDOS_Id` element."
+      operationId: DossierGetSub
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+              example:
+                request:
+                  dsWebContext:
+                    dsWebContext:
+                      ttWebContext:
+                      - ContextKey: TDOS_Id
+                        ContextValue: '9000000000000000001'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsTDOSDOSWeb:
+                        "$ref": "#/components/schemas/dsTDOSDOSWeb"
+  "/Dossier/GetTitle":
+    post:
+      tags:
+      - Dossier
+      summary: Dossier/GetTitle
+      description: "`ttWebContext` requires a `TDOS_Id` element."
+      operationId: DossierGetTitle
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+              example:
+                request:
+                  dsWebContext:
+                    dsWebContext:
+                      ttWebContext:
+                      - ContextKey: TDOS_Id
+                        ContextValue: '9000000000000000001'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsTDOSTITELWeb:
+                        "$ref": "#/components/schemas/dsTDOSTITELWeb"
+  "/Dossier/Search":
+    post:
+      tags:
+      - Dossier
+      summary: Dossier/Search
+      description: ''
+      operationId: DossierSearch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+                    dsFilter:
+                      "$ref": "#/components/schemas/dsFilter"
+            examples:
+              Get all files of a defendant:
+                description: Get all files of a defendant. The TQPARSOORT_Id can be
+                  retreived with the `Code/GetDescription` endpoint by getting the
+                  TQPARSOORT record with code `VERW`. This id will always stay the
+                  same so in theory you could also hardcode this.
+                value:
+                  request:
+                    dsWebContext:
+                      dsWebContext:
+                        ttWebContext: []
+                    dsFilter:
+                      dsFilter:
+                        ttFilter:
+                        - Veld: partij
+                          Operator: begins
+                          Waarde: defandant name
+                        - Veld: TDOSPAR.TQPARSOORT_Id
+                          Operator: "="
+                          Waarde: '9000000000000000003'
+              Get all files with reference/name:
+                description: Get all files with reference/name. This way you can search
+                  on all reference fields, file name and archive nr.
+                value:
+                  request:
+                    dsWebContext:
+                      dsWebContext:
+                        ttWebContext: []
+                    dsFilter:
+                      dsFilter:
+                        ttFilter:
+                        - Veld: zoeknaam
+                          Operator: begins
+                          Waarde: filename
+              Get a file by name:
+                description: Get a file with a specific name.
+                value:
+                  request:
+                    dsWebContext:
+                      dsWebContext:
+                        ttWebContext: []
+                    dsFilter:
+                      dsFilter:
+                        ttFilter:
+                        - Veld: TDOS.dossiernaam
+                          Operator: "="
+                          Waarde: filename
+              Get all mainfiles with names starting with VL:
+                description: Note the . (dot) at the end of 'Subdossiers'.
+                value:
+                  request:
+                    dsWebContext:
+                      dsWebContext:
+                        ttWebContext: []
+                    dsFilter:
+                      dsFilter:
+                        ttFilter:
+                        - Veld: TDOS.dossiernaam
+                          Operator: begins
+                          Waarde: VL
+                        - Veld: Subdossiers.
+                          Operator: "="
+                          Waarde: Geen
+              Get all subfiles with names starting with VL:
+                description: Note the . (dot) at the end of 'Subdossiers'.
+                value:
+                  request:
+                    dsWebContext:
+                      dsWebContext:
+                        ttWebContext: []
+                    dsFilter:
+                      dsFilter:
+                        ttFilter:
+                        - Veld: TDOS.dossiernaam
+                          Operator: begins
+                          Waarde: VL
+                        - Veld: Subdossiers.
+                          Operator: "="
+                          Waarde: Enkel
+              Get all files since 01/01/2019:
+                description: ''
+                value:
+                  request:
+                    dsWebContext:
+                      dsWebContext:
+                        ttWebContext: []
+                    dsFilter:
+                      dsFilter:
+                        ttFilter:
+                        - Veld: TDOS.DatumCreatie
+                          Operator: ">"
+                          Waarde: 01/01/2019
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsTDOSSearch:
+                        "$ref": "#/components/schemas/dsTDOSSearch"
+  "/Dossier/Stop":
+    post:
+      tags:
+      - Dossier
+      summary: Dossier/Stop
+      description: "`ttWebContext` requires a `TDOS_Id` element."
+      operationId: DossierStop
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+              example:
+                request:
+                  dsWebContext:
+                    dsWebContext:
+                      ttWebContext:
+                      - ContextKey: TDOS_Id
+                        ContextValue: '9000000000000000001'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsTDOSWeb:
+                        "$ref": "#/components/schemas/dsTDOSWeb"
+  "/Dossier/GetByDefendant":
+    post:
+      tags:
+      - Dossier
+      summary: Dossier/GetByDefendant
+      description: "`ttWebContext` requires a `TPAR_Id` element."
+      operationId: DossierGetByDefendant
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+              example:
+                request:
+                  dsWebContext:
+                    dsWebContext:
+                      ttWebContext:
+                      - ContextKey: TPAR_Id
+                        ContextValue: '9000000000000000001'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsTDOSWeb:
+                        "$ref": "#/components/schemas/dsTDOSDefendantWeb"
+  "/Login/Token":
+    post:
+      tags:
+      - Login
+      summary: Login/Token
+      description: "If you received an API key from Organi there is no need to call
+        this endpoint. The API key can be passed directly in the `Authorization` header.\n-
+        `client_credentials` requires you to pass the Tagor credentials in `client_id`
+        and `client_secret`. \n"
+      operationId: LoginToken
+      security: []
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                grant_type:
+                  type: string
+                  enum:
+                  - client_credentials
+                client_id:
+                  type: string
+                client_secret:
+                  type: string
+              required:
+              - grant_type
+              - client_secret
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/LoginResponse"
+        '400':
+          description: Multiple return values. See Resonse samples.
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/LoginResponse"
+              examples:
+                The request is missing (a) required parameter(s).:
+                  value:
+                    response:
+                      token_type: Tgr
+                      expires_in: '3600'
+                      token: ''
+                      error: The request is missing (a) required parameter(s).
+                The authorization grant type is not supported by the authorization server.:
+                  value:
+                    response:
+                      token_type: Tgr
+                      expires_in: '3600'
+                      token: ''
+                      error: The authorization grant type is not supported by the
+                        authorization server.
+                Unknown error.:
+                  value:
+                    response:
+                      token_type: Tgr
+                      expires_in: '3600'
+                      token: ''
+                      error: Unknown error.
+        '401':
+          description: Client authentication failed.
+        '422':
+          description: Client issue. Contact Organi.
+  "/Message/Add":
+    post:
+      tags:
+      - Message
+      summary: Message/Add
+      description: "`ttWebContext` requires a `TDOS_Id` element. Pass a message in
+        `dsTBERICHTWeb`. Optional attachments can be passed in `dsAttachmentWeb`.
+
+
+        _`Param 436` will be used to determine the message's disgroep. Defaults to `7006`_"
+      operationId: MessageAdd
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+                    dsTBERICHTWeb:
+                      "$ref": "#/components/schemas/dsTBERICHTWeb"
+                    dsAttachmentWeb:
+                      "$ref": "#/components/schemas/dsAttachmentWeb"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsTBERICHTWeb:
+                        "$ref": "#/components/schemas/dsTBERICHTWeb"
+                      dsAttachmentWeb:
+                        "$ref": "#/components/schemas/dsAttachmentWeb"
+  "/Message/GetListFilter":
+    post:
+      tags:
+      - Message
+      summary: Message/GetListFilter
+      description: Same endpoint as [`Message/GetList`](#operation/MessageGetList).
+        See this endpoint for the possible values in `dsWebContext`. This endpoint
+        also accepts a `dsFilter` object that works the same as [`Dossier/Search`](#operation/DossierSearch).
+      operationId: MessageGetListFilter
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+                    dsFilter:
+                      "$ref": "#/components/schemas/dsFilter"
+            examples:
+              Get all messages send from/to the current user:
+                description: ''
+                value:
+                  request:
+                    dsWebContext:
+                      dsWebContext:
+                        ttWebContext: []
+                    dsFilter:
+                      dsFilter:
+                        ttFilter: []
+              Filter by TDOS_Id:
+                description: Get all messages on a file.
+                value:
+                  request:
+                    dsWebContext:
+                      dsWebContext:
+                        ttWebContext:
+                        - ContextKey: "TDOS_Id"
+                          ContextValue: "9000000000000000001"
+                    dsFilter:
+                      dsFilter:
+                        ttFilter: []
+              Get all unread messages:
+                description: Get all unread messages for a user.
+                value:
+                  request:
+                    dsWebContext:
+                      dsWebContext:
+                        ttWebContext:
+                        - ContextKey: "BOX"
+                          ContextValue: "inbox"
+                        - ContextKey: "unread"
+                          ContextValue: "true"
+                    dsFilter:
+                      dsFilter:
+                        ttFilter: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsTBERICHTWeb:
+                        "$ref": "#/components/schemas/dsTBERICHTWeb"
+                      dsAttachmentWeb:
+                        "$ref": "#/components/schemas/dsAttachmentWeb"
+  "/Message/GetLog":
+    post:
+      tags:
+      - Message
+      summary: Message/GetLog
+      description: ''
+      operationId: MessageGetLog
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsTBERICHTWeb:
+                        "$ref": "#/components/schemas/dsTBERICHTWeb"
+                      dsAttachmentWeb:
+                        "$ref": "#/components/schemas/dsAttachmentWeb"
+  "/Message/GetMessage":
+    post:
+      tags:
+      - Message
+      summary: Message/GetMessage
+      description: Gets a single message based on id. `ttWebContext` requires a `TBERICHT_Id`
+        element.
+      operationId: MessageGetMessage
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+              example:
+                request:
+                  dsWebContext:
+                    dsWebContext:
+                      ttWebContext:
+                      - ContextKey: TBERICHT_Id
+                        ContextValue: '9000000000000000001'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsTBERICHTWeb:
+                        "$ref": "#/components/schemas/dsTBERICHTWeb"
+  "/Message/GetSenderReceiverList":
+    post:
+      tags:
+      - Message
+      summary: Message/GetSenderReceiverList
+      description: |-
+        When this endpoint is called without any `ttWebContext` records it will return all groups a user belongs to. Other options are optional:
+        - `Type` (enum `senders` or `receivers`): when `senders` is passed `TPAR_Id` is required.
+        - `TDOS_Id`: active file you want to send a message on. This is required to get the groups of the user. Otherwise only the active user will be returned (if this user is allowed to send messages).
+        - `TPAR_Id`: Id of the party you want to send messages to/from.
+      operationId: MessageGetSenderReceiverList
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsTDOSPARWeb:
+                        "$ref": "#/components/schemas/dsTDOSPARWeb"
+  "/Message/ToggleRead":
+    post:
+      tags:
+      - Message
+      summary: Message/ToggleRead
+      description: Toggles the status of a message. `ttWebContext` requires a `TBERICHT_Id`
+        element.
+      operationId: MessageToggleRead
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsTBERICHTWeb:
+                        "$ref": "#/components/schemas/dsTBERICHTWeb"
+  "/Party/Search":
+    post:
+      tags:
+      - Party
+      summary: Party/Search
+      description: ''
+      operationId: PartySearch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+                    dsFilter:
+                      "$ref": "#/components/schemas/dsFilter"
+            examples:
+              '':
+                description: Get by id.
+                value:
+                  request:
+                    dsWebContext:
+                      dsWebContext:
+                        ttWebContext: []
+                    dsFilter:
+                      dsFilter:
+                        ttFilter:
+                        - Veld: TPAR.TPAR_Id
+                          Operator: "="
+                          Waarde: '9000000000000000003'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsTPARSearch:
+                        "$ref": "#/components/schemas/dsTPARSearch"
+  "/Party/AddContactDetail":
+    post:
+      tags:
+      - Party
+      summary: Party/AddContactDetail
+      description: ''
+      operationId: PartyAddContactDetail
+      security:
+      - Orng: []
+      - Tgr: []
+      - Hash: []
+      - Pin: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+                    dsTCOMWeb:
+                      "$ref": "#/components/schemas/dsTCOMWeb"
+            examples:
+              '':
+                description: Get by id.
+                value:
+                  request:
+                    dsWebContext:
+                      dsWebContext:
+                        ttWebContext: []
+                    dsTCOMWeb:
+                      dsTCOMWeb:
+                        ttTCOMWeb:
+                        - value: 'info@organi.be'
+                          owning_id: '9000000000000000003'
+                          owning_entity: 'TPAR'
+                          type_id: '9000000000000000003'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsTCOMWeb:
+                        "$ref": "#/components/schemas/dsTCOMWeb"
+  "/Party/DeleteContactDetail":
+    post:
+      tags:
+      - Party
+      summary: Party/DeleteContactDetail
+      description: Deletes a single contact record.
+      operationId: PartyDeleteContactDetail
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+              example:
+                request:
+                  dsWebContext:
+                    dsWebContext:
+                      ttWebContext:
+                      - ContextKey: TCOM_Id
+                        ContextValue: '9000000000000000001'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                example:
+                  response:
+                    dsWebContext:
+                      dsWebContext:
+                        ttWebContext:
+                        - ContextKey: success
+                          ContextValue: 'true'
+  "/Party/GetContactDetails":
+    post:
+      tags:
+      - Party
+      summary: Party/GetContactDetails
+      description: Get all contact details for a single party.
+      operationId: PartyGetContactDetails
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+              example:
+                request:
+                  dsWebContext:
+                    dsWebContext:
+                      ttWebContext:
+                      - ContextKey: TPAR_Id
+                        ContextValue: '9000000000000000001'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsTCOMWeb:
+                        "$ref": "#/components/schemas/dsTCOMWeb"
+                example:
+                  response:
+                    dsWebContext:
+                      dsWebContext: {}
+                    dsTCOMWeb:
+                      dsTCOMWeb:
+                        ttTCOMWeb:
+                        - id: '9000000000000000001'
+                          value: 'info@organi.be'
+                          owning_id: '9000000000000000001'
+                          owning_entity: 'TPAR'
+                          type_id: '9000000000000000001'
+  "/Party/GetAddresses":
+    post:
+      tags:
+      - Party
+      summary: Party/GetAddresses
+      description: ''
+      operationId: PartyGetAddresses
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+            examples:
+              '':
+                description: Get by id.
+                value:
+                  request:
+                    dsWebContext:
+                      dsWebContext:
+                        ttWebContext:
+                        - ContextKey: TPAR_Id
+                          ContextValue: '9000000000000000001'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsTPARADWeb:
+                        "$ref": "#/components/schemas/dsTPARADWeb"
+  "/Pay/Finish":
+    post:
+      tags:
+      - Pay
+      summary: Pay/Finish
+      description: |-
+        Finishes the payment process. This should only be called by the SIPS servers.
+
+        _This endpoint will use the [`TagorService/OnlinePaymentReceived`](#operation/TagorServiceOnlinePaymentReceived) endpoint to create an informative payment record on the file._
+      operationId: PayFinish
+      security: []
+      parameters:
+        - in: query
+          name: redirectUrl
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                Seal:
+                  type: string
+                InterfaceVersion:
+                  type: string
+                locale:
+                  type: string
+                Data:
+                  type: string
+      responses:
+        '302':
+          description: Redirect
+          headers:
+            Location:
+              schema:
+                type: string
+                description: Redirect location as configured in Tagor (param 567).
+  "/Pay/Start":
+    post:
+      tags:
+      - Pay
+      summary: Pay/Start
+      description: |-
+        Starts the payment process. This endpoint will return data that you'll have to post as a form to the given endpoint. Post `redirectionVersion` and `redirectionData` to `redirectionUrl`. You'll end up on the payment page.
+        Look at the request samples for a javascript implementation.
+
+        _Set `parameter 576` with the return domain for the payment provider._
+      operationId: PayStart
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    Amount:
+                      type: string
+                    TDOS_Id:
+                      type: string
+                    Reference:
+                      type: string
+                    ReturnUrl:
+                      type: string
+                      description: This data will be appended to the base url entered
+                        in `parameter 576`.
+                  required:
+                  - Amount
+                  - TDOS_Id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      redirectionData:
+                        type: string
+                      redirectionStatusCode:
+                        type: string
+                      redirectionStatusMessage:
+                        type: string
+                      redirectionUrl:
+                        type: string
+                      redirectionVersion:
+                        type: string
+                      seal:
+                        type: string
+      x-code-samples:
+      - lang: Javascript
+        source: |-
+          var form = document.createElement('form');
+          document.body.appendChild(form);
+          form.method = 'post';
+          form.action = response['redirectionUrl'];
+
+          var input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = 'redirectionVersion';
+          input.value = response['redirectionVersion'];
+          form.appendChild(input);
+
+          input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = 'redirectionData';
+          input.value = response['redirectionData'];
+          form.appendChild(input);
+          form.submit();
+  "/TagorService/ApprovePaymentPlan":
+    post:
+      tags:
+      - TagorService
+      summary: TagorService/ApprovePaymentPlan
+      description: Approve the last paymentplan on a file. If the given `Telnr` is
+        a belgian mobile number the confirmation will be send as a text to that number.
+        If not a mail will be send to the defendant on the file.
+
+
+        _The formula with code `BEVAFBET` will be used as a template to send texts/mails. Be sure this record exists._
+      operationId: TagorServiceApprovePaymentPlan
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    TDOS_Id:
+                      type: string
+                    Telnr:
+                      type: string
+                    Taal:
+                      type: string
+                      enum:
+                      - Dut
+                      - Frn
+                      - Ger
+                      - Eng
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    allOf:
+                    - "$ref": "#/components/schemas/SuccessErrorResponse"
+                    - type: object
+                      properties:
+                        Medium:
+                          type: string
+                          enum:
+                          - EMAIL
+                          - SMS
+                          - GEEN
+                          description: Medium used to send the paymentplan confirmation.
+  "/TagorService/ClipToFile":
+    post:
+      tags:
+      - TagorService
+      summary: TagorService/ClipToFile
+      description: Search for a phone number. This endpoint will return only the first
+        matching party and its corresponding files.
+      operationId: TagorServiceClipToFile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    Telnr:
+                      type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    allOf:
+                    - "$ref": "#/components/schemas/SuccessErrorResponse"
+                    - type: object
+                      properties:
+                        TPAR_Id:
+                          type: string
+                        Taal:
+                          type: string
+                          enum:
+                          - Dut
+                          - Frn
+                          - Ger
+                          - Eng
+                        Partijtype:
+                          type: string
+                          enum:
+                          - K
+                          - V
+                          - A
+                          description: K = klant, V = verweerder, A = andere / onbekend
+                        dsClipToFileDossiers:
+                          "$ref": "#/components/schemas/dsClipToFileDossiers"
+  "/TagorService/FileToHash":
+    post:
+      tags:
+      - TagorService
+      summary: TagorService/FileToHash
+      operationId: TagorServiceFileToHash
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    Dossiernaam:
+                      type: string
+                    Partijsoort:
+                      type: string
+                    Geboortedatum:
+                      type: string
+                      format: date
+                    BTWnr:
+                      type: string
+                    CodeSms:
+                      type: string
+                    CodeEmail:
+                      type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    "$ref": "#/components/schemas/SuccessErrorResponse"
+  "/TagorService/GetDosInfo":
+    post:
+      tags:
+      - TagorService
+      summary: TagorService/GetDosInfo
+      operationId: TagorServiceGetDosInfo
+      description: |-
+        Get info about a file.
+
+
+        _`DossiersoortId` will be mapped if a mapping with code `VOXTRON` is available. Otherwise the id will be prefixed with `DSO`. `DosbehId` depends on `parameter 259`. See the result below for possible values._
+      security:
+      - Orng: []
+      - Tgr: []
+      - Hash: []
+      - Pin: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    TDOS_Id:
+                      type: string
+                      description: |-
+                        Id of the file you want to retreive.
+                        This field is not required when using the `Code` authentication. In this case this endpoint will always only return the file linked to the code.
+                    TPAR_Id:
+                      type: string
+                      description: When this id is passed, the party this id represents
+                        is returned (if its a party on the file). This is useful when
+                        a file has multiple parties of the same type and you want
+                        to get a specific party instead of the first one in the list.
+                  required:
+                  - TDOS_Id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    allOf:
+                    - "$ref": "#/components/schemas/SuccessErrorResponse"
+                    - type: object
+                      properties:
+                        Dossiernaam:
+                          type: string
+                        Aanlegger:
+                          type: string
+                        Verweerder:
+                          type: string
+                          description: Full name of the defendant.
+                        DossiersoortId:
+                          type: string
+                          description: This field will contain the file type. If a
+                            mapping with code `VOXTRON` is found in tagor, the id
+                            will converted. Otherwise `DSO + {filetype_id}` will be
+                            returned.
+                        StatusId:
+                          type: string
+                        StadiumId:
+                          type: string
+                        StadiumKlantId:
+                          type: string
+                        StopstatusId:
+                          type: string
+                        AlarmstatusId:
+                          type: string
+                        DosbehId:
+                          type: string
+                          description: This field can contain the `file name`, the
+                            `file admin's username` or  `'DBH' + the file admin's
+                            user id`
+                        EmailVerweerder:
+                          type: string
+                          description: Email address of the first defendant or the
+                            one with the id passed as `TPAR_Id` in the request.
+                        GsmVerweerder:
+                          type: string
+                          description: Mobile of the first defendant or the one with
+                            the id passed as `TPAR_Id` in the request.
+                        DatumLtstBet:
+                          type: string
+                          format: date
+                          description: Date of the last payment.
+                        BedragLtstBet:
+                          type: number
+                          format: float
+                          description: Amount of the last payment in general. Could be the same as `BedragLtstOnbvBet`
+                        DatumLtstOnbvBet:
+                          type: string
+                          format: date
+                        BedragLtstOnbvBet:
+                          type: number
+                          format: float
+                          description: Amount of the last payment which hasn't been confimed yet
+                        UrlFAQ:
+                          type: string
+                          description: Url pointing to the FAQ page
+  "/TagorService/GetPaymentPlanCriteria":
+    post:
+      tags:
+      - TagorService
+      summary: TagorService/GetPaymentPlanCriteria
+      operationId: TagorServiceGetPaymentPlanCriteria
+      security:
+      - Orng: []
+      - Tgr: []
+      - Hash: []
+      - Pin: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    TDOS_Id:
+                      type: string
+                      description: |-
+                        Id of the file you want to check.
+                        This field is not required when using the `Code` authentication. In this case this endpoint will always only use the file linked to the code.
+                    TPAR_Id:
+                      type: string
+                      description: Not in use.
+                  required:
+                  - TDOS_Id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    allOf:
+                    - "$ref": "#/components/schemas/SuccessErrorResponse"
+                    - type: object
+                      properties:
+                        Termijn1:
+                          type: number
+                          description: Period in months.
+                        Bedrag1:
+                          type: number
+                        Termijn2:
+                          type: number
+                          description: Period in months.
+                        Bedrag2:
+                          type: number
+                        TermijnMax:
+                          type: number
+                          description: Period in months.
+                        BedragMax:
+                          type: number
+                        PaymentPlanId:
+                          type: string
+                          description: Id of existing payment plan.
+  "/TagorService/GetSaldo":
+    post:
+      tags:
+      - TagorService
+      summary: TagorService/GetSaldo
+      operationId: TagorServiceGetSaldo
+      description: |-
+        Get the defendants balance on a file. This endpoint will create an info record (type `OPSV`) on the file indicating the balance was requested unless.
+
+
+        _The auto created info records can be disabled with `parameter 568`. This endpoint returns the balance with code `VRW` which is the defendants balance on the file._
+      security:
+      - Orng: []
+      - Tgr: []
+      - Hash: []
+      - Pin: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    TDOS_Id:
+                      type: string
+                      description: |-
+                        Id of the file you want to get the current balance of.
+                        This field is not required when using the `Code` authentication. In this case this endpoint will always only use the file linked to the code.
+                    IPadres:
+                      type: string
+                      description: Will be added as extra info to the info record
+                        that is created.
+                    Telnr:
+                      type: string
+                      description: Will be added as extra info to the info record
+                        that is created.
+                  required:
+                  - TDOS_Id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    allOf:
+                    - "$ref": "#/components/schemas/SuccessErrorResponse"
+                    - type: object
+                      properties:
+                        Saldo:
+                          type: number
+  "/TagorService/GetVoxtronReferentie":
+    post:
+      tags:
+      - TagorService
+      summary: TagorService/GetVoxtronReferentie
+      operationId: TagorServiceGetVoxtronReferentie
+      description: '`DossiersoortId` and `DosStatus` will be mapped if a mapping with code `VOXTRON` is available. Otherwise the id will be prefixed with `DSO`.`Parameter 303` effects the way the `Referentie` field is used to search for a file. `DosbehId` depends on `parameter 259`. See the result below for possible values. `Parameter 233` decides whether the file status or file stage status is returned in the `DosStatus` field.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    Referentie:
+                      type: string
+                      description: 'File reference to search by. This field can include
+                        an index number to get a specific defendant when there is
+                        more than one active defendant on the file. The index number
+                        should be passed as: `{reference}|{index}`.'
+                    Telnr:
+                      type: string
+                      description: This number will added as communication number
+                        on the defendant if its a new number and there's only one
+                        defendant on the selected file.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    allOf:
+                    - "$ref": "#/components/schemas/SuccessErrorResponse"
+                    - type: object
+                      properties:
+                        DosSoortId:
+                          type: string
+                          description: This field will contain the file type. If a
+                            mapping with code `VOXTRON` is found in tagor, the id
+                            will converted. Otherwise `DSO + {filetype_id}` will be
+                            returned.
+                        DosBehId:
+                          type: string
+                          description: This field can contain the `file name`, the
+                            `file admin's username` or  `'DBH' + the file admin's
+                            user id`
+                        DosStatus:
+                          type: string
+                          description: This field will contain the file status or
+                            file stage status. If a mapping with code `VOXTRON` is
+                            found in tagor, the id will converted. Otherwise `DSO
+                            + {status_id}` will be returned.
+                        AantalVerw:
+                          type: integer
+                          description: Amount of defendants on a file.
+                        VolgNrVerw:
+                          type: integer
+                          description: Index number of the defendant.
+                        DosId:
+                          type: string
+                        Dagvaarding:
+                          type: boolean
+                          description: Indicate if there's been a subpoena.
+                        ReturnCode:
+                          type: string
+                          description: |-
+                            - `0`: Success
+                            - `-1`: Unknown file or wrong index number passed in `Referentie`.
+                            - `-2`: Multiple files found.
+  "/TagorService/GetVoxtronVerwByHuisNr":
+    post:
+      tags:
+      - TagorService
+      summary: TagorService/GetVoxtronVerwByHuisNr
+      operationId: TagorServiceGetVoxtronVerwByHuisNr
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    DosId:
+                      type: string
+                    HuisNr:
+                      type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    allOf:
+                    - "$ref": "#/components/schemas/SuccessErrorResponse"
+                    - type: object
+                      properties:
+                        VolgNrVerw:
+                          type: number
+                        ReturnCode:
+                          type: string
+  "/TagorService/GetVoxtronVerwByPin":
+    post:
+      tags:
+      - TagorService
+      summary: TagorService/GetVoxtronVerwByPin
+      operationId: TagorServiceGetVoxtronVerwByPin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    DosId:
+                      type: string
+                    Pin:
+                      type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    "$ref": "#/components/schemas/SuccessErrorResponse"
+  "/TagorService/HashToFile":
+    post:
+      tags:
+      - TagorService
+      summary: TagorService/HashToFile
+      operationId: TagorServiceHashToFile
+      description: |-
+        Get the corresponding file for a file-hash.
+
+
+        _The tokens validity period is configurable in `parameter 502`_
+      security:
+      - Orng: []
+      - Tgr: []
+      - Hash: []
+      - Pin: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    Dossierhash:
+                      type: string
+                      description: This field is case-sensitive.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    allOf:
+                    - "$ref": "#/components/schemas/SuccessErrorResponse"
+                    - type: object
+                      properties:
+                        TDOS_Id:
+                          type: string
+                        TPAR_Id:
+                          type: string
+                        Taal:
+                          type: string
+                          enum:
+                          - Dut
+                          - Frn
+                          - Ger
+                          - Eng
+                          - null
+                          nullable: true
+                        GeldigTot:
+                          type: string
+                          nullable: true
+  "/TagorService/KantoorOpen":
+    post:
+      tags:
+      - TagorService
+      summary: TagorService/KantoorOpen
+      operationId: TagorServiceKantoorOpen
+      description: |-
+        Checks if an employe is available based on file type.
+
+
+        _Opening hours can be entered via the configuration menu in Tagor._
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    TDOS_Id:
+                      type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    allOf:
+                    - "$ref": "#/components/schemas/SuccessErrorResponse"
+                    - type: object
+                      properties:
+                        KantoorOpen:
+                          type: boolean
+  "/TagorService/OnlinePaymentReceived":
+    post:
+      tags:
+      - TagorService
+      summary: TagorService/OnlinePaymentReceived
+      operationId: TagorServiceOnlinePaymentReceived
+      description: |-
+        Creates an informative payment record on a file.
+
+
+        _The line's nature has to be configured in Tagor's office managment tool._
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    Bedrag:
+                      type: string
+                      description: ge 0
+                    TDOS_Id:
+                      type: string
+                    TPAR_Id:
+                      type: string
+                  required:
+                  - TDOS_Id
+                  - Bedrag
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    "$ref": "#/components/schemas/SuccessErrorResponse"
+  "/TagorService/PaymentInfo":
+    post:
+      tags:
+      - TagorService
+      summary: TagorService/PaymentInfo
+      operationId: TagorServicePaymentInfo
+      description: Get info about ongoing payment plans on a file.
+      security:
+      - Orng: []
+      - Tgr: []
+      - Hash: []
+      - Pin: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    TDOS_Id:
+                      type: string
+                      description: |-
+                        Id of the file you want to check.
+                        This field is not required when using the `Code` authentication. In this case this endpoint will always only use the file linked to the code.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    allOf:
+                    - "$ref": "#/components/schemas/SuccessErrorResponse"
+                    - type: object
+                      properties:
+                        Betaalplan:
+                          type: boolean
+                          description: Indicates whether there is a paymentplan.
+                        Maandbedrag:
+                          type: number
+                          format: double
+                          description: Agreed monthly amount of current payment plan.
+                        Achterstand:
+                          type: number
+                          format: double
+                          description: Arrears balance.
+  "/TagorService/PinToFile":
+    post:
+      tags:
+      - TagorService
+      summary: TagorService/PinToFile
+      operationId: TagorServicePinToFile
+      description: |-
+        Get the file id from a filename/pin combination. The value used in combination with the pin doesn't have to be a file name. This is configurable in Tagor.
+
+
+        _The value used in combination with the pincode is set in `parameter 590`. Pincodes are generated with mergefield `M_0077`._
+      security:
+      - Orng: []
+      - Tgr: []
+      - Hash: []
+      - Pin: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    Dossier:
+                      type: string
+                    Pin:
+                      type: string
+                  required:
+                  - Dossier
+                  - Pin
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    allOf:
+                    - "$ref": "#/components/schemas/SuccessErrorResponse"
+                    - type: object
+                      properties:
+                        TDOS_Id:
+                          type: string
+                        TPAR_Id:
+                          type: string
+  "/TagorService/SavePaymentPlan":
+    post:
+      tags:
+      - TagorService
+      summary: TagorService/SavePaymentPlan
+      operationId: TagorServiceSavePaymentPlan
+      description: |-
+        Add a payment plan to a file. This will always create a new payment plan and put all existing payment plans inactive. The input data is validated. Periodes has to be less than configured on the file type. An info records will be generated to indicate a new payment plan was requested.
+
+
+        _Payment plans can be auto accepted with `parameter 358`.
+        The auto created info records can be disabled with `parameter 568.
+        The default date can be configured in the file type config and in the office managment.
+        `_
+      security:
+      - Orng: []
+      - Tgr: []
+      - Hash: []
+      - Pin: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    TDOS_Id:
+                      type: string
+                      description: |-
+                        Id of the file you want to create a payment plan on.
+                        This field is not required when using the `Code` authentication. In this case this endpoint will always only use the file linked to the code.
+                    TPAR_Id:
+                      type: string
+                      description: The party to link with the payment plan
+                    Bedrag:
+                      type: number
+                      description: Enter either this one or `Periodes`
+                    Periodes:
+                      type: number
+                      description: Enter either this one or `Bedrag`
+                    Startdatum:
+                      type: string
+                      format: date
+                      description: Defaults to today plus a configured amount of days.
+                    IPadres:
+                      type: string
+                      format: ipv4
+                      description: When entered the payment plan will get the source `WEB`
+                    Telnr:
+                      type: string
+                      description: When entered the payment plan will get the source `CEN`
+                    RekeningId:
+                      type: string
+                      description: Not in use
+                    OverrideChecks:
+                      type: boolean
+                      default: false
+                      description: This disables all checks on the input data.
+                  required:
+                  - TDOS_Id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    allOf:
+                    - "$ref": "#/components/schemas/SuccessErrorResponse"
+                    - type: object
+                      properties:
+                        Periodes:
+                          type: integer
+                        Bedrag:
+                          type: number
+                          format: double
+  "/TagorService/SelfServiceAllowed":
+    post:
+      tags:
+      - TagorService
+      summary: TagorService/SelfServiceAllowed
+      operationId: TagorServiceSelfServiceAllowed
+      description: |-
+        Checks whether a user is allowed to request his/her file.
+
+
+        _Configuration should be done in Tagor's office management tool._
+      security:
+      - Orng: []
+      - Tgr: []
+      - Hash: []
+      - Pin: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    TDOS_Id:
+                      type: string
+                      description: |-
+                        Id of the file you want to check.
+                        This field is not required when using the `Code` authentication. In this case this endpoint will always only use the file linked to the code.
+                    Config:
+                      type: string
+                      description: Code of the config you want to validate against.
+                        Defaults to `DEF`.
+                    Telnr:
+                      type: string
+                      description: If you pass a phone number here it will be saved
+                        on the defendant as `last contact`.
+                  required:
+                  - TDOS_Id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    "$ref": "#/components/schemas/SuccessErrorResponse"
+              examples:
+                Success:
+                  description: ''
+                  value:
+                    response:
+                      Success: true
+                      Error: ''
+                Active paymentplan:
+                  description: ''
+                  value:
+                    response:
+                      Success: false
+                      Error: 'Actief afbetalingsplan op dossier
+
+'
+  "/TagorService/SendMail":
+    post:
+      tags:
+      - TagorService
+      summary: TagorService/SendMail
+      description: Deprecated in favor of [`Actions/SendMail`](#operation/sendMail).
+        **Will be removed in 1.08.3000B0**.
+      operationId: TagorServiceSendMail
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    TDOS_Id:
+                      type: string
+                    TPAR_Id:
+                      type: string
+                    Emailadres:
+                      type: string
+                    CodeEmail:
+                      type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    "$ref": "#/components/schemas/SuccessErrorResponse"
+      deprecated: true
+  "/TagorService/SendSms":
+    post:
+      tags:
+      - TagorService
+      summary: TagorService/SendSms
+      description: Deprecated in favor of [`Actions/SendSms`](#operation/sendSms).
+        **Will be removed in 1.08.3000B0**.
+      operationId: TagorServiceSendSms
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    TDOS_Id:
+                      type: string
+                    TPAR_Id:
+                      type: string
+                    TelNr:
+                      type: string
+                    CodeSms:
+                      type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    "$ref": "#/components/schemas/SuccessErrorResponse"
+      deprecated: true
+  "/TagorService/SetUserDossier":
+    post:
+      tags:
+      - TagorService
+      summary: TagorService/SetUserDossier
+      operationId: TagorServiceSetUserDossier
+      description: |-
+        Adds shortcut to a specific file for a specific user in Tagor.
+
+
+        _Default info type can be changed in the `CURCALL` mapping._
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    UserLogin:
+                      type: string
+                    DosId:
+                      type: string
+                    TelNr:
+                      type: string
+                    Direction:
+                      type: string
+                      enum:
+                      - IN
+                      - OUT
+                  required:
+                  - UserLogin
+                  - TelNr
+                  - Direction
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    "$ref": "#/components/schemas/SuccessErrorResponse"
+  "/TagorService/PaymentDetails":
+    post:
+      tags:
+      - TagorService
+      summary: TagorService/PaymentDetails
+      operationId: TagorServicePaymentDetails
+      security:
+      - Hash: []
+      - Pin: []
+      description: |-
+        Endpoint to get a detailed overview of the file.
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    allOf:
+                    - "$ref": "#/components/schemas/SuccessErrorResponse"
+                    - type: object
+                      properties:
+                        Data:
+                          type: string
+  "/TagorService/ScanBarcode":
+    post:
+      tags:
+      - TagorService
+      summary: TagorService/ScanBarcode
+      operationId: TagorServiceScanBarcode
+      security:
+      - Hash: []
+      - Pin: []
+      description: |-
+        Get the file/financial line connected to a barcode.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    barcode:
+                      type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    allOf:
+                    - "$ref": "#/components/schemas/SuccessErrorResponse"
+                    - type: object
+                      properties:
+                        file_id:
+                          type: string
+                        line_id:
+                          type: string
+                        fixed:
+                          type: boolean
+                          description: Indicates whether the line is fixed.
+  "/User/Add":
+    post:
+      tags:
+      - User
+      summary: User/Add
+      description: |-
+        Add/Create a user. Pass the `TPAR_Id` if you want to create a `User` for an existing `Party`.
+
+        Optional you can pass a `BASE-USER` context record with as value a `TUSER_Id` to inherit the web configuration of this user.
+      operationId: UserAdd
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+                    dsTUSERWeb:
+                      "$ref": "#/components/schemas/dsTUSERWeb"
+            examples:
+              Create user:
+                description: ''
+                value:
+                  request:
+                    dsWebContext:
+                      dsWebContext:
+                        ttWebContext: []
+                    dsTUSERWeb:
+                      dsTUSERWeb:
+                        ttTUSERWeb:
+                        - party_id: '9000000000000000001'
+                          username: organi
+                          name: Organi
+                          password: "*************"
+                          landline: 00328206300
+                          email_address: info@organi.be
+              Create user - inherit config from an existing user:
+                description: ''
+                value:
+                  request:
+                    dsWebContext:
+                      dsWebContext:
+                        ttWebContext:
+                        - ContextKey: BASE-USER
+                          ContextValue: '9000000000000000001'
+                    dsTUSERWeb:
+                      dsTUSERWeb:
+                        ttTUSERWeb:
+                        - party_id: '9000000000000000001'
+                          username: organi
+                          name: Organi
+                          password: "*************"
+                          landline: 00328206300
+                          email_address: info@organi.be
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsTUSERWeb:
+                        "$ref": "#/components/schemas/dsTUSERWeb"
+                example:
+                  request:
+                    dsWebContext:
+                      dsWebContext:
+                        ttWebContext: []
+                    dsTUSERWeb:
+                      dsTUSERWeb:
+                        ttTUSERWeb:
+                        - id: '9000000000000000001'
+                          party_id: '9000000000000000001'
+                          username: organi
+                          name: Organi
+                          password: ''
+                          landline: 00328206300
+                          fax: ''
+                          cellphone: ''
+                          email_address: info@organi.be
+  "/User/Get":
+    post:
+      tags:
+      - User
+      summary: User/Get
+      description: Get a user by id
+      operationId: UserGet
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+                  example:
+                    request:
+                      dsWebContext:
+                        dsWebContext:
+                          ttWebContext:
+                          - ContextKey: TUSER_Id
+                            ContextValue: '9000000000000000001'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsTUSERWeb:
+                        "$ref": "#/components/schemas/dsTUSERWeb"
+                example:
+                  request:
+                    dsWebContext:
+                      dsWebContext:
+                        ttWebContext: []
+                    dsTUSERWeb:
+                      dsTUSERWeb:
+                        ttTUSERWeb:
+                        - id: '9000000000000000001'
+                          party_id: '9000000000000000001'
+                          username: organi
+                          name: Organi
+                          password: ''
+                          landline: 00328206300
+                          fax: ''
+                          cellphone: ''
+                          email_address: info@organi.be
+                          requires_2fa: false
+  "/User/GetPermissions":
+    post:
+      tags:
+      - User
+      summary: User/GetPermissions
+      description: Get all (single) permissions of a user. This will return all the
+        permissions that are represented as a toggle in Tagor. i.e. all permissions
+        on the `Web permissies` tab.
+      operationId: UserGetPermissions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsConfigWeb:
+                        "$ref": "#/components/schemas/dsConfigWeb"
+  "/User/GetPermissionsList":
+    post:
+      tags:
+      - User
+      summary: User/GetPermissionsList
+      description: |-
+        List all permissions of a user by type. Via this endpoint you'll be able to retreive al permissions with mutliple values. In general this endpoint is for all permissions on the `Web configuratie` tab in Tagor.
+
+        Possible type values:
+        - `WEBT3001` or `TPAR` = Party
+          - Get a list of parties + party types. These have to be on a file for a user to be allowed to view the file.
+          - Unlike the other types this will return a pipe separated value of both party id and party type id
+
+
+        - `WEBT3002` or `TQDOSSOORT` = File type
+          - Returns a list of all file types a user is allowed to see
+
+
+        - `WEBT3006` or `TQDISGROEP` = Document types
+          - Returns a list of all document types a user can use when adding a document
+
+
+        - `WEBT3007` or `WL_QRY_FIELD` = Mergefields
+          - Returns a list of all mergefields a user is able to request with [`Document/GetMergefield`](#operation/DocumentGetMergefield)
+          - If a user doesn't have any mergefields configured the default setting from the office configuration screen will be used.
+
+
+        - `WEBT3005` or `TDOCM` = Document types
+          - Returns a list of all `TDOCM_Ids` a user is able to request in [`Document/Generate`](#operation/DocumentGenerate)
+
+
+        - `WEBT3004` or `TQDOCSECURITY` = Document security
+          - Returns a list of all document security types a user is able to see
+      operationId: UserGetPermissionsList
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+            examples:
+              Get all filetype permissions.:
+                value:
+                  request:
+                    dsWebContext:
+                      dsWebContext:
+                        ttWebContext:
+                        - ContextKey: TYPE
+                          ContextValue: TQDOSSOORT
+              Get all party/party-type permissions.:
+                value:
+                  request:
+                    dsWebContext:
+                      dsWebContext:
+                        ttWebContext:
+                        - ContextKey: TYPE
+                          ContextValue: TPAR
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsCodeWeb:
+                        "$ref": "#/components/schemas/dsCodeWeb"
+              examples:
+                '':
+                  description: ''
+                  value:
+                    request:
+                      dsWebContext:
+                        dsWebContext:
+                          ttWebContext:
+                          - {}
+                      dsCodeWeb:
+                        dsCodeWeb:
+                          ttCodeWeb:
+                          - type: TQDOSSOORT
+                            id: '9000000000000000001'
+                            code: EX
+                            language: Dut
+                            description: Example File Type
+  "/User/SavePermissions":
+    post:
+      tags:
+      - User
+      summary: User/SavePermissions
+      description: Save all (single) permissions of a user.
+      operationId: UserSavePermissions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+                    dsConfigWeb:
+                      "$ref": "#/components/schemas/dsConfigWeb"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsConfigWeb:
+                        "$ref": "#/components/schemas/dsConfigWeb"
+  "/User/SavePermissionsList":
+    post:
+      tags:
+      - User
+      summary: User/SavePermissionsList
+      description: 'Save a list of all permissions of a user by type. See [`User/GetPermissionsList`](#operation/UserGetPermissionsList)
+        for all possible type values. All current values for the specified user +
+        type will be deleted and overwritten with the posted valued. If you want to
+        add a value use [`User/GetPermissionsList`](#operation/UserGetPermissionsList)
+        to get all current values, add the value to the array and post it to this
+        endpoint. Note: for the `TPAR` permissions two values are required and should
+        be passed in the id field, seperated by a pipe.'
+      operationId: UserSavePermissionsList
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+                    dsCodeWeb:
+                      "$ref": "#/components/schemas/dsCodeWeb"
+            examples:
+              Allow a file type for user 'ORGANI'.:
+                description: ''
+                value:
+                  request:
+                    dsWebContext:
+                      dsWebContext:
+                        ttWebContext:
+                        - ContextKey: USER-LOGIN
+                          ContextValue: ORGANI
+                    dsCodeWeb:
+                      dsCodeWeb:
+                        ttCodeWeb:
+                        - type: TQDOSSOORT
+                          id: '9000000000000000001'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsCodeWeb:
+                        "$ref": "#/components/schemas/dsCodeWeb"
+  "/User/CanAccess":
+    post:
+      tags:
+      - User
+      summary: User/CanAccess
+      description: |-
+        This endpoint returns the users that have access to the given asset. E.g. If you pass `TQDOSSOORT_Id`, you'll get all users allowed to view files of this type. Pass one or more of the following filetypes:
+        - `TQDOSSOORT_Id`
+        - `TPAR_Id`. For filtering a party regardless of type.
+        - `TPAR|TQPARSOORT_Id`. For filtering a party with matching party type. Pass both `TPAR_Id` and `TQPARSOORT_Id` in a context record separated by a pipe. ex: `9000000000000000001|9000000000000000001`.
+
+
+        _This searches the values configured on the web configuration tab in the user managment._
+      operationId: UserCanAccess
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+            examples:
+              Check which user has access to a party.:
+                description: ''
+                value:
+                  request:
+                    dsWebContext:
+                      dsWebContext:
+                        ttWebContext:
+                        - ContextKey: TPAR_Id
+                          ContextValue: '9000000000000000001'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsTUSERWeb:
+                        "$ref": "#/components/schemas/dsTUSERWeb"
+  "/SolvencyReport/GetList":
+    post:
+      tags:
+      - SolvencyReport
+      summary: SolvencyReport/GetList
+      description: 'You can pass an additional `TQDOSSOORT_Id` to get file type specific config.'
+      operationId: SolvencyReportGetList
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsCodetabelIDs:
+                        "$ref": "#/components/schemas/dsCodetabelIDs"
+  "/SolvencyReport/Get":
+    post:
+      tags:
+      - SolvencyReport
+      summary: SolvencyReport/Get
+      description: This endpoint expects some values in ttWebContext. See example.
+      operationId: SolvencyReportGet
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+            examples:
+              Default:
+                description: ''
+                value:
+                  request:
+                    dsWebContext:
+                      dsWebContext:
+                        ttWebContext:
+                        - ContextKey: TCFGSOLVRAPMOD_Id
+                          ContextValue: 9000000000000000001
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsSolvencyReport:
+                        "$ref": "#/components/schemas/dsSolvencyReport"
+  "/SolvencyReport/Save":
+    post:
+      tags:
+      - SolvencyReport
+      summary: SolvencyReport/Save
+      description: This endpoint expects some values in ttWebContext. See example.
+      operationId: SolvencyReportSave
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+                    dsSolvencyReport:
+                      "$ref": "#/components/schemas/dsSolvencyReport"
+            examples:
+              Default:
+                description: ''
+                value:
+                  request:
+                    dsWebContext:
+                      dsWebContext:
+                        ttWebContext:
+                        - ContextKey: TCFGSOLVRAPMOD_Id
+                          ContextValue: 9000000000000000001
+                        - ContextKey: TDOS_Id
+                          ContextValue: 9000000000000000001
+                        - ContextKey: TPAR_Id
+
+                          ContextValue: 9000000000000000001
+                        - ContextKey: TPARAD_Id
+                          ContextValue: 9000000000000000001
+                    dsSolvencyReport:
+                      dsSolvencyReport:
+                        ttSolvencyReport:
+                        - id: "9000000000000000560"
+                          val: "W1"
+                        - id: "9000000000000000558"
+                          val: "true"
+                        - id: "9000000000000000556"
+                          val: "6.4"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        type: object
+                        properties:
+                          dsWebContext:
+                            type: object
+                            properties:
+                              ttWebContext:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    ContextKey:
+                                      type: string
+                                      example: success
+                                    ContextValue:
+                                      type: string
+                                      example: true
+  "/Dossierlijn/GetInfo":
+    post:
+      tags:
+      - Dossierlijn
+      summary: Dossierlijn/GetInfo
+      description: Returns all info records on a financial record. `ttWebContext` requires a `TDOSLIJN_Id`
+        element.
+      operationId: DossierlijnGetInfo
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+              example:
+                request:
+                  dsWebContext:
+                    dsWebContext:
+                      ttWebContext:
+                      - ContextKey: TDOSLIJN_Id
+                        ContextValue: '9000000000000000001'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsTDOSLIJNINFOWeb:
+                        "$ref": "#/components/schemas/dsTDOSLIJNINFOWeb"
+                example:
+                  response:
+                    dsWebContext:
+                      dsWebContext: {}
+                    dsTDOSLIJNINFOWeb:
+                      dsTDOSLIJNINFOWeb:
+                        ttTDOSLIJNINFOWeb:
+                        - financial_line_id: '9000000000000000001'
+                          type_id: '9000000000000000001'
+                          description: Received call of defendant.
+                          date: '2019-12-12'
+  "/Dossierlijn/DeleteInfoLine":
+    post:
+      tags:
+      - Dossierlijn
+      summary: Dossierlijn/DeleteInfoLine
+      description: Deletes a single info record.
+      operationId: DossierlijnDeleteInfoLine
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+              example:
+                request:
+                  dsWebContext:
+                    dsWebContext:
+                      ttWebContext:
+                      - ContextKey: TDOSLIJNINFO_Id
+                        ContextValue: '9000000000000000001'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                example:
+                  response:
+                    dsWebContext:
+                      dsWebContext:
+                        ttWebContext:
+                        - ContextKey: success
+                          ContextValue: 'true'
+  "/Dossierlijn/CreateInfoLine":
+    post:
+      tags:
+      - Dossierlijn
+      summary: Dossierlijn/CreateInfoLine
+      description: Create an info record on a financial record
+      operationId: DossierlijnCreateInfoLine
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request:
+                  type: object
+                  properties:
+                    dsWebContext:
+                      "$ref": "#/components/schemas/dsWebContext"
+                    dsTDOSLIJNINFOWeb:
+                      "$ref": "#/components/schemas/dsTDOSLIJNINFOWeb"
+              example:
+                request:
+                  dsWebContext:
+                    dsWebContext: {}
+                  dsTDOSLIJNINFOWeb:
+                    dsTDOSLIJNINFOWeb:
+                      ttTDOSLIJNINFOWeb:
+                      - financial_line_id: '9000000000000000001'
+                        type_id: '9000000000000000001'
+                        description: Received call of defendant.
+                        date: '2019-12-12'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    properties:
+                      dsWebContext:
+                        "$ref": "#/components/schemas/dsWebContext"
+                      dsTDOSLIJNINFOWeb:
+                        "$ref": "#/components/schemas/dsTDOSLIJNINFOWeb"
+                example:
+                  request:
+                    dsWebContext:
+                      dsWebContext: {}
+                    dsTDOSINFOWeb:
+                      dsTDOSINFOWeb:
+                        ttTDOSINFOWeb:
+                        - financial_line_id: '9000000000000000001'
+                          type_id: '9000000000000000001'
+                          description: Received call of defendant.
+                          date: '2019-12-12'
