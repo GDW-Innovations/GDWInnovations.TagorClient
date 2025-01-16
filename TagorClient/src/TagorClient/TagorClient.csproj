@@ -1,34 +1,44 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo><!-- setting GenerateAssemblyInfo to false causes this bug https://github.com/dotnet/project-system/issues/3934 -->
     <TargetFramework>net8.0</TargetFramework>
     <AssemblyName>TagorClient</AssemblyName>
-    <PackageId>TagorClient</PackageId>
+    <PackageId>TagorDotNET</PackageId>
     <OutputType>Library</OutputType>
-    <Authors>OpenAPI</Authors>
-    <Company>OpenAPI</Company>
+    <Authors>OpenAPI, VictorCorne, Wim Van Houts</Authors>
+    <Company>OpenAPI, GDWInnovations</Company>
     <AssemblyTitle>OpenAPI Library</AssemblyTitle>
-    <Description>A library generated from a OpenAPI doc</Description>
+    <Description>A TAGOR library in csharp, generated from OpenAPI doc</Description>
     <Copyright>No Copyright</Copyright>
     <RootNamespace>TagorClient</RootNamespace>
     <Version>1.0.0</Version>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\TagorClient.xml</DocumentationFile>
-    <RepositoryUrl>https://github.com/GIT_USER_ID/GIT_REPO_ID.git</RepositoryUrl>
+    <RepositoryUrl>https://github.com/GDW-Innovations/Tagor.NET</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>Minor update</PackageReleaseNotes>
+    <PackageReleaseNotes>Initial version</PackageReleaseNotes>
     <Nullable>annotations</Nullable>
     <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <Title>TagorDotNET</Title>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageProjectUrl>https://github.com/GDW-Innovations/Tagor.NET</PackageProjectUrl>
+    <PackageTags>Tagor, csharp, dotnet, net, api</PackageTags>
+    <PackAsTool>False</PackAsTool>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="JsonSubTypes" Version="2.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="RestSharp" Version="112.0.0" />
     <PackageReference Include="Polly" Version="8.1.0" />
-  </ItemGroup>
-
-  <ItemGroup>
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>
