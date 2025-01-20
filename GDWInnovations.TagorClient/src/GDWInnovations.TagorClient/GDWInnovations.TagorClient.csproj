@@ -6,26 +6,34 @@
     <AssemblyName>GDWInnovations.TagorClient</AssemblyName>
     <PackageId>GDWInnovations.TagorClient</PackageId>
     <OutputType>Library</OutputType>
-    <Authors>OpenAPI</Authors>
-    <Company>OpenAPI</Company>
+    <Authors>OpenAPI, VictorCorne, Wim Van Houts</Authors>
+    <Company>OpenAPI, GDWInnovations</Company>
     <AssemblyTitle>OpenAPI Library</AssemblyTitle>
-    <Description>A library generated from a OpenAPI doc</Description>
+    <Description>A TAGOR library in csharp, generated from OpenAPI doc</Description>
     <Copyright>No Copyright</Copyright>
     <RootNamespace>GDWInnovations.TagorClient</RootNamespace>
     <Version>1.1.0</Version>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\GDWInnovations.TagorClient.xml</DocumentationFile>
-    <RepositoryUrl>https://github.com/GIT_USER_ID/GIT_REPO_ID.git</RepositoryUrl>
+    <RepositoryUrl>https://github.com/GDW-Innovations/Tagor.NET</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>Minor update</PackageReleaseNotes>
+    <PackageReleaseNotes>Update Namespaces</PackageReleaseNotes>
     <Nullable>annotations</Nullable>
     <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <Title>GDWInnovations.TagorDotNET</Title>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageProjectUrl>https://github.com/GDW-Innovations/Tagor.NET</PackageProjectUrl>
+    <PackageTags>Tagor, csharp, dotnet, net, api</PackageTags>
+    <PackAsTool>False</PackAsTool>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <IncludeSymbols>True</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="..\..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\..\README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
