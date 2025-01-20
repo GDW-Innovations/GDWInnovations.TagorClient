@@ -14,7 +14,7 @@
     <RootNamespace>GDWInnovations.TagorClient</RootNamespace>
     <Version>1.1.0</Version>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\GDWInnovations.TagorClient.xml</DocumentationFile>
-    <RepositoryUrl>https://github.com/GDW-Innovations/Tagor.NET</RepositoryUrl>
+    <RepositoryUrl>https://github.com/GDW-Innovations/GDWInnovations.Tagor.NET</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageReleaseNotes>Update Namespaces</PackageReleaseNotes>
     <Nullable>annotations</Nullable>
@@ -22,7 +22,7 @@
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <Title>GDWInnovations.TagorDotNET</Title>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageProjectUrl>https://github.com/GDW-Innovations/Tagor.NET</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/GDW-Innovations/GDWInnovations.Tagor.NET</PackageProjectUrl>
     <PackageTags>Tagor, csharp, dotnet, net, api</PackageTags>
     <PackAsTool>False</PackAsTool>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
