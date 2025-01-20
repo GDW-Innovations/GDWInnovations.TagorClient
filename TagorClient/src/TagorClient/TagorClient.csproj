@@ -25,9 +25,14 @@
     <PackageProjectUrl>https://github.com/GDW-Innovations/Tagor.NET</PackageProjectUrl>
     <PackageTags>Tagor, csharp, dotnet, net, api</PackageTags>
     <PackAsTool>False</PackAsTool>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="..\..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
     <None Include="..\..\README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
