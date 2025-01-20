@@ -10,6 +10,9 @@ The documentation for the api is very complete and can be found under [`TagorCli
 
 IMPORTANT: This code comes as provided, with no support or guarantees. This code is not owned, published or supported by Organi but is managed by GDW Innovations.
 
+Update 2025-01-20:
+Renamed the namespaces from `TagorClient` to `GDWInnovations.TagorClient`
+
 ```
  ___________ _    _   _____                            _   _                 
 |  __ \  _  \ |  | | |_   _|                          | | (_)                
