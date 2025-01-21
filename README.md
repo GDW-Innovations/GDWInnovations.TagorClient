@@ -6,7 +6,7 @@ Recreate this using this command
 openapi-generator-cli generate -i TagorApi.yaml -g csharp -o TagorClient --additional-properties=packageName=TagorClient
 ```
 
-The documentation for the api is very complete and can be found under [`TagorClient/docs`](https://github.com/GDW-Innovations/Tagor.NET/blob/main/TagorClient/README.md)
+The documentation for the api is very complete and can be found under [`TagorClient/docs`](https://github.com/GDW-Innovations/GDWInnovations.TagorClient/blob/main/GDWInnovations.TagorClient/README.md)
 
 IMPORTANT: This code comes as provided, with no support or guarantees. This code is not owned, published or supported by Organi but is managed by GDW Innovations.
 

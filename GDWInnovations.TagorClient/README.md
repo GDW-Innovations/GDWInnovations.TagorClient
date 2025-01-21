@@ -110,14 +110,7 @@ namespace Example
 
             Configuration config = new Configuration();
             config.BasePath = "https://localhost/v1/web";
-            // Configure Bearer token for authorization: Pin
-            config.AccessToken = "YOUR_BEARER_TOKEN";
-            // Configure Bearer token for authorization: Orng
-            config.AccessToken = "YOUR_BEARER_TOKEN";
-            // Configure Bearer token for authorization: Hash
-            config.AccessToken = "YOUR_BEARER_TOKEN";
-            // Configure Bearer token for authorization: Tgr
-            config.AccessToken = "YOUR_BEARER_TOKEN";
+            config.DefaultHeaders.Add("Authorization", "XX_TOKEN_XX"); 
 
             var apiInstance = new ActionsApi(config);
             var actionsSendMailRequest = new ActionsSendMailRequest?(); // ActionsSendMailRequest? |  (optional) 
