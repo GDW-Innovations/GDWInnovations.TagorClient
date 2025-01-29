@@ -54,7 +54,7 @@ namespace GDWInnovations.TagorClient.Model
         /// <param name="datumLtstOnbvBet">datumLtstOnbvBet.</param>
         /// <param name="bedragLtstOnbvBet">Amount of the last payment which hasn&#39;t been confimed yet.</param>
         /// <param name="urlFAQ">Url pointing to the FAQ page.</param>
-        public TagorServiceGetDosInfo200ResponseResponse(bool success = default(bool), string error = default(string), string dossiernaam = default(string), string aanlegger = default(string), string verweerder = default(string), string dossiersoortId = default(string), string statusId = default(string), string stadiumId = default(string), string stadiumKlantId = default(string), string stopstatusId = default(string), string alarmstatusId = default(string), string dosbehId = default(string), string emailVerweerder = default(string), string gsmVerweerder = default(string), DateOnly datumLtstBet = default(DateOnly), float bedragLtstBet = default(float), DateOnly datumLtstOnbvBet = default(DateOnly), float bedragLtstOnbvBet = default(float), string urlFAQ = default(string))
+        public TagorServiceGetDosInfo200ResponseResponse(bool success = default(bool), string error = default(string), string dossiernaam = default(string), string aanlegger = default(string), string verweerder = default(string), string dossiersoortId = default(string), string statusId = default(string), string stadiumId = default(string), string stadiumKlantId = default(string), string stopstatusId = default(string), string alarmstatusId = default(string), string dosbehId = default(string), string emailVerweerder = default(string), string gsmVerweerder = default(string), DateOnly? datumLtstBet = null, float bedragLtstBet = default(float), DateOnly? datumLtstOnbvBet = null, float bedragLtstOnbvBet = default(float), string urlFAQ = default(string))
         {
             this.Success = success;
             this.Error = error;
@@ -171,7 +171,7 @@ namespace GDWInnovations.TagorClient.Model
         /// </summary>
         /// <value>Date of the last payment.</value>
         [DataMember(Name = "DatumLtstBet", EmitDefaultValue = false)]
-        public DateOnly DatumLtstBet { get; set; }
+        public DateOnly? DatumLtstBet { get; set; }
 
         /// <summary>
         /// Amount of the last payment in general. Could be the same as &#x60;BedragLtstOnbvBet&#x60;
@@ -184,7 +184,7 @@ namespace GDWInnovations.TagorClient.Model
         /// Gets or Sets DatumLtstOnbvBet
         /// </summary>
         [DataMember(Name = "DatumLtstOnbvBet", EmitDefaultValue = false)]
-        public DateOnly DatumLtstOnbvBet { get; set; }
+        public DateOnly? DatumLtstOnbvBet { get; set; }
 
         /// <summary>
         /// Amount of the last payment which hasn&#39;t been confimed yet
