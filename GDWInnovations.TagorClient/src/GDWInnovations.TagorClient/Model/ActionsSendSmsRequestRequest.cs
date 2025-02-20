@@ -32,31 +32,12 @@ namespace GDWInnovations.TagorClient.Model
     [DataContract(Name = "ActionsSendSms_request_request")]
     public partial class ActionsSendSmsRequestRequest : IValidatableObject
     {
-        /// <summary>
-        /// Defines CodeSms
-        /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
-        public enum CodeSmsEnum
-        {
-            /// <summary>
-            /// Enum SALDO for value: SALDO
-            /// </summary>
-            [EnumMember(Value = "SALDO")]
-            SALDO = 1,
-
-            /// <summary>
-            /// Enum AFBETALINGSPLAN for value: AFBETALINGSPLAN
-            /// </summary>
-            [EnumMember(Value = "AFBETALINGSPLAN")]
-            AFBETALINGSPLAN = 2
-        }
-
 
         /// <summary>
         /// Gets or Sets CodeSms
         /// </summary>
         [DataMember(Name = "CodeSms", IsRequired = true, EmitDefaultValue = true)]
-        public CodeSmsEnum CodeSms { get; set; }
+        public string CodeSms { get; set; }
         /// <summary>
         /// Initializes a new instance of the <see cref="ActionsSendSmsRequestRequest" /> class.
         /// </summary>
@@ -69,7 +50,7 @@ namespace GDWInnovations.TagorClient.Model
         /// <param name="tPARId">tPARId.</param>
         /// <param name="gsmnr">gsmnr.</param>
         /// <param name="codeSms">codeSms (required).</param>
-        public ActionsSendSmsRequestRequest(string tDOSId = default(string), string tPARId = default(string), string gsmnr = default(string), CodeSmsEnum codeSms = default(CodeSmsEnum))
+        public ActionsSendSmsRequestRequest(string tDOSId = default(string), string tPARId = default(string), string gsmnr = default(string), string codeSms = default(string))
         {
             this.CodeSms = codeSms;
             this.TDOSId = tDOSId;

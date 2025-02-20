@@ -13,6 +13,9 @@ IMPORTANT: This code comes as provided, with no support or guarantees. This code
 Update 2025-01-20:
 Renamed the namespaces from `TagorClient` to `GDWInnovations.TagorClient`
 
+Update 2025-02-20:
+Changed the send sms code [`Actions/SendSms`](https://docs.organi.be/Tagor/1.08.5000B3.html#tag/Actions/operation/ActionsSendSms) from enum to string.
+
 ```
  ___________ _    _   _____                            _   _                 
 |  __ \  _  \ |  | | |_   _|                          | | (_)                
@@ -22,8 +25,3 @@ Renamed the namespaces from `TagorClient` to `GDWInnovations.TagorClient`
  \____/___/  \/  \/   \___/_| |_|_| |_|\___/ \_/ \__,_|\__|_|\___/|_| |_|___/
                                                                              
 ```                                                                          
-
-                                                                     
-
-                                                                                      
-                                                                                      
