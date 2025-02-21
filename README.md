@@ -20,6 +20,9 @@ Renamed the namespaces from `TagorClient` to `GDWInnovations.TagorClient`
 Update 2025-02-20:
 Changed the send sms code [`Actions/SendSms`](https://docs.organi.be/Tagor/1.08.5000B3.html#tag/Actions/operation/ActionsSendSms) from enum to string.
 
+Update 2025-02-21:
+We allow logging in the apis! For this, just call `xxxApi.SetLogger(LoggerFactory)`
+
 ```
  ___________ _    _   _____                            _   _                 
 |  __ \  _  \ |  | | |_   _|                          | | (_)                
