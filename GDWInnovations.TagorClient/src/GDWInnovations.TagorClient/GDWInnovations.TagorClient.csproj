@@ -12,11 +12,10 @@
     <Description>A TAGOR library in csharp, generated from OpenAPI doc</Description>
     <Copyright>No Copyright</Copyright>
     <RootNamespace>GDWInnovations.TagorClient</RootNamespace>
-    <Version>1.1.2</Version>
+    <Version>1.1.3</Version>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\GDWInnovations.TagorClient.xml</DocumentationFile>
-    <RepositoryUrl>https://github.com/GDW-Innovations/GDWInnovations.Tagor.NET</RepositoryUrl>
+    <RepositoryUrl>https://github.com/GDW-Innovations/GDWInnovations.Tagor.NET.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>Update Namespaces</PackageReleaseNotes>
     <Nullable>annotations</Nullable>
     <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
@@ -44,6 +43,9 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="RestSharp" Version="112.0.0" />
     <PackageReference Include="Polly" Version="8.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>

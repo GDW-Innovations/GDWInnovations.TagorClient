@@ -34,7 +34,7 @@ namespace GDWInnovations.TagorClient.Client
         /// Version of the package.
         /// </summary>
         /// <value>Version of the package.</value>
-        public const string Version = "1.0.0";
+        public const string Version = "1.1.3";
 
         /// <summary>
         /// Identifier for ISO 8601 DateTime Format
@@ -118,7 +118,7 @@ namespace GDWInnovations.TagorClient.Client
         public Configuration()
         {
             Proxy = null;
-            UserAgent = WebUtility.UrlEncode("OpenAPI-Generator/1.0.0/csharp");
+            UserAgent = WebUtility.UrlEncode("OpenAPI-Generator/1.1.3/csharp");
             BasePath = "https://localhost/v1/web";
             DefaultHeaders = new ConcurrentDictionary<string, string>();
             ApiKey = new ConcurrentDictionary<string, string>();
@@ -541,7 +541,7 @@ namespace GDWInnovations.TagorClient.Client
             report += "    OS: " + System.Environment.OSVersion + "\n";
             report += "    .NET Framework Version: " + System.Environment.Version  + "\n";
             report += "    Version of the API: 2.00.0000B1\n";
-            report += "    SDK Package Version: 1.0.0\n";
+            report += "    SDK Package Version: 1.1.3\n";
 
             return report;
         }
