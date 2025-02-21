@@ -124,6 +124,10 @@ namespace {{packageName}}.{{apiPackage}}
     /// </summary>
     {{>visibility}} partial class {{classname}} : {{interfacePrefix}}{{classname}}
     {
+        /// <summary>
+        /// Set the logger to this service
+        /// </summary>
+        /// <param name="loggerFactory">The logger factory</param>
         public void SetLogger(ILoggerFactory loggerFactory)
         {
             this.Client.SetLogger(loggerFactory);

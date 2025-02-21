@@ -386,6 +386,10 @@ namespace GDWInnovations.TagorClient.Api
     /// </summary>
     public partial class ConfigApi : IConfigApi
     {
+        /// <summary>
+        /// Set the logger to this service
+        /// </summary>
+        /// <param name="loggerFactory">The logger factory</param>
         public void SetLogger(ILoggerFactory loggerFactory)
         {
             this.Client.SetLogger(loggerFactory);
