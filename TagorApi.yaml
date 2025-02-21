@@ -1169,9 +1169,6 @@ paths:
                       type: string
                     CodeSms:
                       type: string
-                      enum:
-                      - SALDO
-                      - AFBETALINGSPLAN
                   required:
                   - CodeSms
       responses:
