@@ -22,6 +22,11 @@ namespace GDWInnovations.TagorClient.Client
     public interface IAsynchronousClient
     {
         /// <summary>
+        /// Sets the logger to log this client
+        /// </summary>
+        public void SetLogger(Microsoft.Extensions.Logging.ILoggerFactory logger);
+        
+        /// <summary>
         /// Executes a non-blocking call to some <paramref name="path"/> using the GET http verb.
         /// </summary>
         /// <param name="path">The relative path to invoke.</param>

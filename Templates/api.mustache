@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
 using System.Net.Mime;
+using Microsoft.Extensions.Logging;
 using {{packageName}}.Client;
 {{#hasOAuthMethods}}using {{packageName}}.Client.Auth;
 {{/hasOAuthMethods}}
@@ -111,7 +112,11 @@ namespace {{packageName}}.{{apiPackage}}
     /// </summary>
     {{>visibility}} interface {{interfacePrefix}}{{classname}} : {{interfacePrefix}}{{classname}}Sync{{#supportsAsync}}, {{interfacePrefix}}{{classname}}Async{{/supportsAsync}}
     {
-
+        /// <summary>
+        /// Set the logger to this service
+        /// </summary>
+        /// <param name="loggerFactory"></param>
+        public void SetLogger(ILoggerFactory loggerFactory);   
     }
 
     /// <summary>
@@ -119,6 +124,12 @@ namespace {{packageName}}.{{apiPackage}}
     /// </summary>
     {{>visibility}} partial class {{classname}} : {{interfacePrefix}}{{classname}}
     {
+        public void SetLogger(ILoggerFactory loggerFactory)
+        {
+            this.Client.SetLogger(loggerFactory);
+            this.AsynchronousClient.SetLogger(loggerFactory);
+        }
+
         private {{packageName}}.Client.ExceptionFactory _exceptionFactory = (name, response) => null;
 
         /// <summary>

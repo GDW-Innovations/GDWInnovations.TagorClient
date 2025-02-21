@@ -30,6 +30,7 @@ using Polly;
 using {{packageName}}.Client.Auth;
 {{/hasOAuthMethods}}
 using {{packageName}}.{{modelPackage}};
+using Microsoft.Extensions.Logging;
 
 namespace {{packageName}}.Client
 {
@@ -169,6 +170,16 @@ namespace {{packageName}}.Client
     {{>visibility}} partial class ApiClient : ISynchronousClient{{#supportsAsync}}, IAsynchronousClient{{/supportsAsync}}
     {
         private readonly string _baseUrl;
+        private ILogger<ApiClient> _logger;
+
+        /// <summary>
+        /// Sets the logger for this client.
+        /// </summary>
+        /// <param name="loggerFactory">The logger factory</param>
+        public void SetLogger(ILoggerFactory loggerFactory)
+        {
+            _logger = loggerFactory.CreateLogger<ApiClient>();
+        }
 
         /// <summary>
         /// Specifies the settings on a <see cref="JsonSerializer" /> object.
@@ -281,6 +292,9 @@ namespace {{packageName}}.Client
             if (path == null) throw new ArgumentNullException("path");
             if (options == null) throw new ArgumentNullException("options");
             if (configuration == null) throw new ArgumentNullException("configuration");
+
+            _logger?.LogInformation("{Method} request to {Path}", method, path);
+            _logger?.LogDebug("Site is {Site}, Request options: {@Options}", configuration.BasePath, options);
 
             RestRequest request = new RestRequest(path, Method(method));
 

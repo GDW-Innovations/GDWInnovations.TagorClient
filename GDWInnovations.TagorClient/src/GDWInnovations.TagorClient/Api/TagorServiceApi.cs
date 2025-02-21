@@ -15,6 +15,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
 using System.Net.Mime;
+using Microsoft.Extensions.Logging;
 using GDWInnovations.TagorClient.Client;
 using GDWInnovations.TagorClient.Model;
 
@@ -1044,7 +1045,11 @@ namespace GDWInnovations.TagorClient.Api
     /// </summary>
     public interface ITagorServiceApi : ITagorServiceApiSync, ITagorServiceApiAsync
     {
-
+        /// <summary>
+        /// Set the logger to this service
+        /// </summary>
+        /// <param name="loggerFactory"></param>
+        public void SetLogger(ILoggerFactory loggerFactory);   
     }
 
     /// <summary>
@@ -1052,6 +1057,12 @@ namespace GDWInnovations.TagorClient.Api
     /// </summary>
     public partial class TagorServiceApi : ITagorServiceApi
     {
+        public void SetLogger(ILoggerFactory loggerFactory)
+        {
+            this.Client.SetLogger(loggerFactory);
+            this.AsynchronousClient.SetLogger(loggerFactory);
+        }
+
         private GDWInnovations.TagorClient.Client.ExceptionFactory _exceptionFactory = (name, response) => null;
 
         /// <summary>
@@ -1190,6 +1201,7 @@ namespace GDWInnovations.TagorClient.Api
             };
 
             var localVarContentType = GDWInnovations.TagorClient.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarMultipartFormData = localVarContentType == "multipart/form-data";
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
@@ -1348,6 +1360,7 @@ namespace GDWInnovations.TagorClient.Api
             };
 
             var localVarContentType = GDWInnovations.TagorClient.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarMultipartFormData = localVarContentType == "multipart/form-data";
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
@@ -1506,6 +1519,7 @@ namespace GDWInnovations.TagorClient.Api
             };
 
             var localVarContentType = GDWInnovations.TagorClient.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarMultipartFormData = localVarContentType == "multipart/form-data";
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
@@ -1664,6 +1678,7 @@ namespace GDWInnovations.TagorClient.Api
             };
 
             var localVarContentType = GDWInnovations.TagorClient.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarMultipartFormData = localVarContentType == "multipart/form-data";
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
@@ -1846,6 +1861,7 @@ namespace GDWInnovations.TagorClient.Api
             };
 
             var localVarContentType = GDWInnovations.TagorClient.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarMultipartFormData = localVarContentType == "multipart/form-data";
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
@@ -2028,6 +2044,7 @@ namespace GDWInnovations.TagorClient.Api
             };
 
             var localVarContentType = GDWInnovations.TagorClient.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarMultipartFormData = localVarContentType == "multipart/form-data";
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
@@ -2210,6 +2227,7 @@ namespace GDWInnovations.TagorClient.Api
             };
 
             var localVarContentType = GDWInnovations.TagorClient.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarMultipartFormData = localVarContentType == "multipart/form-data";
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
@@ -2368,6 +2386,7 @@ namespace GDWInnovations.TagorClient.Api
             };
 
             var localVarContentType = GDWInnovations.TagorClient.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarMultipartFormData = localVarContentType == "multipart/form-data";
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
@@ -2526,6 +2545,7 @@ namespace GDWInnovations.TagorClient.Api
             };
 
             var localVarContentType = GDWInnovations.TagorClient.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarMultipartFormData = localVarContentType == "multipart/form-data";
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
@@ -2684,6 +2704,7 @@ namespace GDWInnovations.TagorClient.Api
             };
 
             var localVarContentType = GDWInnovations.TagorClient.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarMultipartFormData = localVarContentType == "multipart/form-data";
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
@@ -2866,6 +2887,7 @@ namespace GDWInnovations.TagorClient.Api
             };
 
             var localVarContentType = GDWInnovations.TagorClient.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarMultipartFormData = localVarContentType == "multipart/form-data";
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
@@ -3024,6 +3046,7 @@ namespace GDWInnovations.TagorClient.Api
             };
 
             var localVarContentType = GDWInnovations.TagorClient.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarMultipartFormData = localVarContentType == "multipart/form-data";
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
@@ -3179,6 +3202,7 @@ namespace GDWInnovations.TagorClient.Api
             };
 
             var localVarContentType = GDWInnovations.TagorClient.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarMultipartFormData = localVarContentType == "multipart/form-data";
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
@@ -3332,6 +3356,7 @@ namespace GDWInnovations.TagorClient.Api
             };
 
             var localVarContentType = GDWInnovations.TagorClient.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarMultipartFormData = localVarContentType == "multipart/form-data";
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
@@ -3514,6 +3539,7 @@ namespace GDWInnovations.TagorClient.Api
             };
 
             var localVarContentType = GDWInnovations.TagorClient.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarMultipartFormData = localVarContentType == "multipart/form-data";
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
@@ -3696,6 +3722,7 @@ namespace GDWInnovations.TagorClient.Api
             };
 
             var localVarContentType = GDWInnovations.TagorClient.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarMultipartFormData = localVarContentType == "multipart/form-data";
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
@@ -3878,6 +3905,7 @@ namespace GDWInnovations.TagorClient.Api
             };
 
             var localVarContentType = GDWInnovations.TagorClient.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarMultipartFormData = localVarContentType == "multipart/form-data";
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
@@ -4036,6 +4064,7 @@ namespace GDWInnovations.TagorClient.Api
             };
 
             var localVarContentType = GDWInnovations.TagorClient.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarMultipartFormData = localVarContentType == "multipart/form-data";
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
@@ -4220,6 +4249,7 @@ namespace GDWInnovations.TagorClient.Api
             };
 
             var localVarContentType = GDWInnovations.TagorClient.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarMultipartFormData = localVarContentType == "multipart/form-data";
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
@@ -4382,6 +4412,7 @@ namespace GDWInnovations.TagorClient.Api
             };
 
             var localVarContentType = GDWInnovations.TagorClient.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarMultipartFormData = localVarContentType == "multipart/form-data";
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
@@ -4542,6 +4573,7 @@ namespace GDWInnovations.TagorClient.Api
             };
 
             var localVarContentType = GDWInnovations.TagorClient.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            var localVarMultipartFormData = localVarContentType == "multipart/form-data";
             if (localVarContentType != null)
             {
                 localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);

@@ -31,6 +31,7 @@ using RestSharpMethod = RestSharp.Method;
 using FileIO = System.IO.File;
 using Polly;
 using GDWInnovations.TagorClient.Model;
+using Microsoft.Extensions.Logging;
 
 namespace GDWInnovations.TagorClient.Client
 {
@@ -169,6 +170,16 @@ namespace GDWInnovations.TagorClient.Client
     public partial class ApiClient : ISynchronousClient, IAsynchronousClient
     {
         private readonly string _baseUrl;
+        private ILogger<ApiClient> _logger;
+
+        /// <summary>
+        /// Sets the logger for this client.
+        /// </summary>
+        /// <param name="loggerFactory">The logger factory</param>
+        public void SetLogger(ILoggerFactory loggerFactory)
+        {
+            _logger = loggerFactory.CreateLogger<ApiClient>();
+        }
 
         /// <summary>
         /// Specifies the settings on a <see cref="JsonSerializer" /> object.
@@ -282,6 +293,9 @@ namespace GDWInnovations.TagorClient.Client
             if (options == null) throw new ArgumentNullException("options");
             if (configuration == null) throw new ArgumentNullException("configuration");
 
+            _logger?.LogInformation("{Method} request to {Path}", method, path);
+            _logger?.LogDebug("Site is {Site}, Request options: {@Options}", configuration.BasePath, options);
+
             RestRequest request = new RestRequest(path, Method(method));
 
             if (options.PathParameters != null)
@@ -317,7 +331,7 @@ namespace GDWInnovations.TagorClient.Client
                 {
                     foreach (var value in headerParam.Value)
                     {
-                        request.AddHeader(headerParam.Key, value);
+                        request.AddOrUpdateHeader(headerParam.Key, value);
                     }
                 }
             }
@@ -381,6 +395,14 @@ namespace GDWInnovations.TagorClient.Client
                         else
                             request.AddFile(fileParam.Key, bytes, "no_file_name_provided");
                     }
+                }
+            }
+
+            if (options.HeaderParameters != null)
+            {
+                if (options.HeaderParameters.TryGetValue("Content-Type", out var contentTypes) && contentTypes.Any(header => header.Contains("multipart/form-data")))
+                {
+                    request.AlwaysMultipartFormData = true;
                 }
             }
 
