@@ -3015,9 +3015,6 @@ components:
         Gsmnr:
           type: string
         CodeSms:
-          enum:
-          - SALDO
-          - AFBETALINGSPLAN
           type: string
       required:
       - CodeSms
@@ -5118,6 +5115,7 @@ components:
           DatumLtstBet:
             description: Date of the last payment.
             format: date
+            nullable: true
             type: string
           BedragLtstBet:
             description: Amount of the last payment in general. Could be the same
@@ -5126,6 +5124,7 @@ components:
             type: number
           DatumLtstOnbvBet:
             format: date
+            nullable: true
             type: string
           BedragLtstOnbvBet:
             description: Amount of the last payment which hasn't been confimed yet

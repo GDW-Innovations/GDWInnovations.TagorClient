@@ -18,9 +18,9 @@ Name | Type | Description | Notes
 **DosbehId** | **string** | This field can contain the &#x60;file name&#x60;, the &#x60;file admin&#39;s username&#x60; or  &#x60;&#39;DBH&#39; + the file admin&#39;s user id&#x60; | [optional] 
 **EmailVerweerder** | **string** | Email address of the first defendant or the one with the id passed as &#x60;TPAR_Id&#x60; in the request. | [optional] 
 **GsmVerweerder** | **string** | Mobile of the first defendant or the one with the id passed as &#x60;TPAR_Id&#x60; in the request. | [optional] 
-**DatumLtstBet** | **DateOnly** | Date of the last payment. | [optional] 
+**DatumLtstBet** | **DateOnly?** | Date of the last payment. | [optional] 
 **BedragLtstBet** | **float** | Amount of the last payment in general. Could be the same as &#x60;BedragLtstOnbvBet&#x60; | [optional] 
-**DatumLtstOnbvBet** | **DateOnly** |  | [optional] 
+**DatumLtstOnbvBet** | **DateOnly?** |  | [optional] 
 **BedragLtstOnbvBet** | **float** | Amount of the last payment which hasn&#39;t been confimed yet | [optional] 
 **UrlFAQ** | **string** | Url pointing to the FAQ page | [optional] 
 
