@@ -2,7 +2,7 @@
     "packageAuthors": "OpenAPI, VictorCorne, Wim Van Houts",
     "packageCompany": "OpenAPI, GDWInnovations",
     "packageDescription": "A TAGOR library in csharp, generated from OpenAPI doc",
-    "packageVersion": "1.1.3",
+    "packageVersion": "1.1.4",
     "gitUserId": "GDW-Innovations",
     "gitRepoId": "GDWInnovations.Tagor.NET"
 
