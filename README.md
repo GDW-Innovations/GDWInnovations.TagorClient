@@ -10,12 +10,6 @@ The documentation for the api is very complete and can be found under [`TagorCli
 
 IMPORTANT: This code comes as provided, with no support or guarantees. This code is not owned, published or supported by Organi but is managed by GDW Innovations.
 
-Update 2025-01-20:
-Renamed the namespaces from `TagorClient` to `GDWInnovations.TagorClient`
-
-Update 2025-02-20:
-Changed the send sms code [`Actions/SendSms`](https://docs.organi.be/Tagor/1.08.5000B3.html#tag/Actions/operation/ActionsSendSms) from enum to string.
-
 ```
  ___________ _    _   _____                            _   _                 
 |  __ \  _  \ |  | | |_   _|                          | | (_)                
@@ -25,3 +19,35 @@ Changed the send sms code [`Actions/SendSms`](https://docs.organi.be/Tagor/1.08.
  \____/___/  \/  \/   \___/_| |_|_| |_|\___/ \_/ \__,_|\__|_|\___/|_| |_|___/
                                                                              
 ```                                                                          
+
+## Issues
+
+When generating some objects who require some fields to not be null, you may get a null value exception depending on how you initialize the objects. You may get an exception if you initialize an object via the Object initialization syntax, but not if you use the constructor initialization
+
+```
+// Object initialization syntax. Will fail because the internal object is first initialized, and then passed the arguments (in curly braces)
+TagorServiceOnlinePaymentReceivedRequest request = new()
+{
+    Request = new()
+    {
+        Bedrag = "123,45",
+        TDOSId = "abc",
+        TPARId = "def",
+    }
+};
+
+// Constructor initialization of the inner object. Will not fail
+TagorServiceOnlinePaymentReceivedRequest requestTwo = new()
+{
+    Request = new(bedrag: "123,45", tDOSId: "abc", tPARId: "def")
+};
+```
+
+
+## Updates
+Update 2025-01-20:
+Renamed the namespaces from `TagorClient` to `GDWInnovations.TagorClient`
+
+Update 2025-02-20:
+Changed the send sms code [`Actions/SendSms`](https://docs.organi.be/Tagor/1.08.5000B3.html#tag/Actions/operation/ActionsSendSms) from enum to string.
+
