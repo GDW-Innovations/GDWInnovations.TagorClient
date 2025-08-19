@@ -32,12 +32,6 @@ namespace GDWInnovations.TagorClient.Model
     [DataContract(Name = "ActionsSendSms_request_request")]
     public partial class ActionsSendSmsRequestRequest : IValidatableObject
     {
-
-        /// <summary>
-        /// Gets or Sets CodeSms
-        /// </summary>
-        [DataMember(Name = "CodeSms", IsRequired = true, EmitDefaultValue = true)]
-        public string CodeSms { get; set; }
         /// <summary>
         /// Initializes a new instance of the <see cref="ActionsSendSmsRequestRequest" /> class.
         /// </summary>
@@ -52,6 +46,11 @@ namespace GDWInnovations.TagorClient.Model
         /// <param name="codeSms">codeSms (required).</param>
         public ActionsSendSmsRequestRequest(string tDOSId = default(string), string tPARId = default(string), string gsmnr = default(string), string codeSms = default(string))
         {
+            // to ensure "codeSms" is required (not null)
+            if (codeSms == null)
+            {
+                throw new ArgumentNullException("codeSms is a required property for ActionsSendSmsRequestRequest and cannot be null");
+            }
             this.CodeSms = codeSms;
             this.TDOSId = tDOSId;
             this.TPARId = tPARId;
@@ -75,6 +74,12 @@ namespace GDWInnovations.TagorClient.Model
         /// </summary>
         [DataMember(Name = "Gsmnr", EmitDefaultValue = false)]
         public string Gsmnr { get; set; }
+
+        /// <summary>
+        /// Gets or Sets CodeSms
+        /// </summary>
+        [DataMember(Name = "CodeSms", IsRequired = true, EmitDefaultValue = true)]
+        public string CodeSms { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object

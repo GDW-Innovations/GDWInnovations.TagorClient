@@ -1169,9 +1169,6 @@ paths:
                       type: string
                     CodeSms:
                       type: string
-                      enum:
-                      - SALDO
-                      - AFBETALINGSPLAN
                   required:
                   - CodeSms
       responses:
@@ -3732,6 +3729,7 @@ paths:
                           type: string
                           format: date
                           description: Date of the last payment.
+                          nullable: true
                         BedragLtstBet:
                           type: number
                           format: float
@@ -3739,6 +3737,7 @@ paths:
                         DatumLtstOnbvBet:
                           type: string
                           format: date
+                          nullable: true
                         BedragLtstOnbvBet:
                           type: number
                           format: float
