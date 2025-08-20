@@ -7117,6 +7117,7 @@ components:
           type: string
         Verschijningsdatum:
           format: date
+          nullable: true
           type: string
         Verweerder:
           type: string

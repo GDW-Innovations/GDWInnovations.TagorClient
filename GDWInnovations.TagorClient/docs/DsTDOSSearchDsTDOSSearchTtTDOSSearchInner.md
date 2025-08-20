@@ -19,7 +19,7 @@ Name | Type | Description | Notes
 **TQSTATUSIdKlant** | **string** |  | [optional] 
 **TQSTATUSIdStadium** | **string** |  | [optional] 
 **TQSTATUSIdStop** | **string** |  | [optional] 
-**Verschijningsdatum** | **DateOnly** |  | [optional] 
+**Verschijningsdatum** | **DateOnly?** |  | [optional] 
 **Verweerder** | **string** |  | [optional] 
 **TQDOSSOORTId** | **string** |  | [optional] 
 **SaldoKlant** | **decimal** |  | [optional] 

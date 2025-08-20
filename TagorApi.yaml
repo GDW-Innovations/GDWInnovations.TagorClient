@@ -715,6 +715,7 @@ components:
                   Verschijningsdatum:
                     type: string
                     format: date
+                    nullable: true
                   Verweerder:
                     type: string
                   TQDOSSOORT_Id:
