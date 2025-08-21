@@ -7084,9 +7084,11 @@ components:
           type: string
         DatumCreatie:
           format: date
+          nullable: true
           type: string
         DatumLtstBet:
           format: date
+          nullable: true
           type: string
         Dossiernaam:
           type: string

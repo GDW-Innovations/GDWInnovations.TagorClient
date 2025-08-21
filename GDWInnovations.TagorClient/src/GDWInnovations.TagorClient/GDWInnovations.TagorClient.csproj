@@ -12,7 +12,7 @@
     <Description>A TAGOR library in csharp, generated from OpenAPI doc</Description>
     <Copyright>No Copyright</Copyright>
     <RootNamespace>GDWInnovations.TagorClient</RootNamespace>
-    <Version>1.1.5</Version>
+    <Version>1.1.6</Version>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\GDWInnovations.TagorClient.xml</DocumentationFile>
     <RepositoryUrl>https://github.com/GDW-Innovations/GDWInnovations.Tagor.NET.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>

@@ -682,9 +682,11 @@ components:
                   DatumCreatie:
                     type: string
                     format: date
+                    nullable: true
                   DatumLtstBet:
                     type: string
                     format: date
+                    nullable: true
                   Dossiernaam:
                     type: string
                   Klant:

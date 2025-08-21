@@ -6,8 +6,8 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Aanlegger** | **string** |  | [optional] 
 **Archiefnr** | **string** |  | [optional] 
-**DatumCreatie** | **DateOnly** |  | [optional] 
-**DatumLtstBet** | **DateOnly** |  | [optional] 
+**DatumCreatie** | **DateOnly?** |  | [optional] 
+**DatumLtstBet** | **DateOnly?** |  | [optional] 
 **Dossiernaam** | **string** |  | [optional] 
 **Klant** | **string** |  | [optional] 
 **KlantRef1** | **string** |  | [optional] 

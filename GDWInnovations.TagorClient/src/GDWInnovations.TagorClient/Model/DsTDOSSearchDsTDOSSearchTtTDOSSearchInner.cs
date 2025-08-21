@@ -56,7 +56,7 @@ namespace GDWInnovations.TagorClient.Model
         /// <param name="saldoKlant">saldoKlant.</param>
         /// <param name="saldoAanl">saldoAanl.</param>
         /// <param name="saldoVerw">saldoVerw.</param>
-        public DsTDOSSearchDsTDOSSearchTtTDOSSearchInner(string aanlegger = default(string), string archiefnr = default(string), DateOnly datumCreatie = default(DateOnly), DateOnly datumLtstBet = default(DateOnly), string dossiernaam = default(string), string klant = default(string), string klantRef1 = default(string), string referteAdvocaat = default(string), string referteConfr = default(string), string tDOSId = default(string), string tQSTATUSId = default(string), string tQSTATUSIdAlarm = default(string), string tQSTATUSIdKlant = default(string), string tQSTATUSIdStadium = default(string), string tQSTATUSIdStop = default(string), DateOnly? verschijningsdatum = default(DateOnly?), string verweerder = default(string), string tQDOSSOORTId = default(string), decimal saldoKlant = default(decimal), decimal saldoAanl = default(decimal), decimal saldoVerw = default(decimal))
+        public DsTDOSSearchDsTDOSSearchTtTDOSSearchInner(string aanlegger = default(string), string archiefnr = default(string), DateOnly? datumCreatie = default(DateOnly?), DateOnly? datumLtstBet = default(DateOnly?), string dossiernaam = default(string), string klant = default(string), string klantRef1 = default(string), string referteAdvocaat = default(string), string referteConfr = default(string), string tDOSId = default(string), string tQSTATUSId = default(string), string tQSTATUSIdAlarm = default(string), string tQSTATUSIdKlant = default(string), string tQSTATUSIdStadium = default(string), string tQSTATUSIdStop = default(string), DateOnly? verschijningsdatum = default(DateOnly?), string verweerder = default(string), string tQDOSSOORTId = default(string), decimal saldoKlant = default(decimal), decimal saldoAanl = default(decimal), decimal saldoVerw = default(decimal))
         {
             this.Aanlegger = aanlegger;
             this.Archiefnr = archiefnr;
@@ -96,14 +96,14 @@ namespace GDWInnovations.TagorClient.Model
         /// <summary>
         /// Gets or Sets DatumCreatie
         /// </summary>
-        [DataMember(Name = "DatumCreatie", EmitDefaultValue = false)]
-        public DateOnly DatumCreatie { get; set; }
+        [DataMember(Name = "DatumCreatie", EmitDefaultValue = true)]
+        public DateOnly? DatumCreatie { get; set; }
 
         /// <summary>
         /// Gets or Sets DatumLtstBet
         /// </summary>
-        [DataMember(Name = "DatumLtstBet", EmitDefaultValue = false)]
-        public DateOnly DatumLtstBet { get; set; }
+        [DataMember(Name = "DatumLtstBet", EmitDefaultValue = true)]
+        public DateOnly? DatumLtstBet { get; set; }
 
         /// <summary>
         /// Gets or Sets Dossiernaam
