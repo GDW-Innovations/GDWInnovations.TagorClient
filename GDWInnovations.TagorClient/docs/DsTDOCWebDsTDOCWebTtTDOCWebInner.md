@@ -6,7 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **DatumDocument** | **DateOnly** |  | [optional] 
 **DISFLMNExtensie** | **string** |  | [optional] 
-**DISid** | **int** |  | [optional] 
+**DISid** | **string** |  | [optional] 
 **Naam** | **string** |  | [optional] 
 **TDOCId** | **string** |  | [optional] 
 **TQDISGROEPId** | **string** |  | [optional] 

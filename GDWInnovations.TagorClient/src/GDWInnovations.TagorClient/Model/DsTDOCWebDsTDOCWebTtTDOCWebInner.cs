@@ -42,7 +42,7 @@ namespace GDWInnovations.TagorClient.Model
         /// <param name="tDOCId">tDOCId.</param>
         /// <param name="tQDISGROEPId">tQDISGROEPId.</param>
         /// <param name="inhoud">inhoud.</param>
-        public DsTDOCWebDsTDOCWebTtTDOCWebInner(DateOnly datumDocument = default(DateOnly), string dISFLMNExtensie = default(string), int dISid = default(int), string naam = default(string), string tDOCId = default(string), string tQDISGROEPId = default(string), string inhoud = default(string))
+        public DsTDOCWebDsTDOCWebTtTDOCWebInner(DateOnly datumDocument = default(DateOnly), string dISFLMNExtensie = default(string), string dISid = default(string), string naam = default(string), string tDOCId = default(string), string tQDISGROEPId = default(string), string inhoud = default(string))
         {
             this.DatumDocument = datumDocument;
             this.DISFLMNExtensie = dISFLMNExtensie;
@@ -69,7 +69,7 @@ namespace GDWInnovations.TagorClient.Model
         /// Gets or Sets DISid
         /// </summary>
         [DataMember(Name = "DISid", EmitDefaultValue = false)]
-        public int DISid { get; set; }
+        public string DISid { get; set; }
 
         /// <summary>
         /// Gets or Sets Naam

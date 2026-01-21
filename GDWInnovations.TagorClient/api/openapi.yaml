@@ -2518,14 +2518,14 @@ components:
           - DatumDocument: 2000-01-23
             DISFLMN_Extensie: DISFLMN_Extensie
             TDOC_Id: TDOC_Id
-            DISid: 0
+            DISid: DISid
             Naam: Naam
             TQDISGROEP_Id: TQDISGROEP_Id
             Inhoud: Inhoud
           - DatumDocument: 2000-01-23
             DISFLMN_Extensie: DISFLMN_Extensie
             TDOC_Id: TDOC_Id
-            DISid: 0
+            DISid: DISid
             Naam: Naam
             TQDISGROEP_Id: TQDISGROEP_Id
             Inhoud: Inhoud
@@ -3270,14 +3270,14 @@ components:
             - DatumDocument: 2000-01-23
               DISFLMN_Extensie: DISFLMN_Extensie
               TDOC_Id: TDOC_Id
-              DISid: 0
+              DISid: DISid
               Naam: Naam
               TQDISGROEP_Id: TQDISGROEP_Id
               Inhoud: Inhoud
             - DatumDocument: 2000-01-23
               DISFLMN_Extensie: DISFLMN_Extensie
               TDOC_Id: TDOC_Id
-              DISid: 0
+              DISid: DISid
               Naam: Naam
               TQDISGROEP_Id: TQDISGROEP_Id
               Inhoud: Inhoud
@@ -3299,14 +3299,14 @@ components:
               - DatumDocument: 2000-01-23
                 DISFLMN_Extensie: DISFLMN_Extensie
                 TDOC_Id: TDOC_Id
-                DISid: 0
+                DISid: DISid
                 Naam: Naam
                 TQDISGROEP_Id: TQDISGROEP_Id
                 Inhoud: Inhoud
               - DatumDocument: 2000-01-23
                 DISFLMN_Extensie: DISFLMN_Extensie
                 TDOC_Id: TDOC_Id
-                DISid: 0
+                DISid: DISid
                 Naam: Naam
                 TQDISGROEP_Id: TQDISGROEP_Id
                 Inhoud: Inhoud
@@ -6649,7 +6649,7 @@ components:
         DatumDocument: 2000-01-23
         DISFLMN_Extensie: DISFLMN_Extensie
         TDOC_Id: TDOC_Id
-        DISid: 0
+        DISid: DISid
         Naam: Naam
         TQDISGROEP_Id: TQDISGROEP_Id
         Inhoud: Inhoud
@@ -6660,7 +6660,7 @@ components:
         DISFLMN_Extensie:
           type: string
         DISid:
-          type: integer
+          type: string
         Naam:
           type: string
         TDOC_Id:
@@ -6677,14 +6677,14 @@ components:
         - DatumDocument: 2000-01-23
           DISFLMN_Extensie: DISFLMN_Extensie
           TDOC_Id: TDOC_Id
-          DISid: 0
+          DISid: DISid
           Naam: Naam
           TQDISGROEP_Id: TQDISGROEP_Id
           Inhoud: Inhoud
         - DatumDocument: 2000-01-23
           DISFLMN_Extensie: DISFLMN_Extensie
           TDOC_Id: TDOC_Id
-          DISid: 0
+          DISid: DISid
           Naam: Naam
           TQDISGROEP_Id: TQDISGROEP_Id
           Inhoud: Inhoud
