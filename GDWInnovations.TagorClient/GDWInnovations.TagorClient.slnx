@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="src/GDWInnovations.TagorClient.Test/GDWInnovations.TagorClient.Test.csproj" />
+  <Project Path="src/GDWInnovations.TagorClient/GDWInnovations.TagorClient.csproj" />
+</Solution>

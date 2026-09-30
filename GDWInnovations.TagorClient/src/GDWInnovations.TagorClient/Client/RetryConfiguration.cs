@@ -15,7 +15,7 @@ using RestSharp;
 namespace GDWInnovations.TagorClient.Client
 {
     /// <summary>
-    /// Configuration class to set the polly retry policies to be applied to the requests.
+    /// TagorConfiguration class to set the polly retry policies to be applied to the requests.
     /// </summary>
     public static class RetryConfiguration
     {

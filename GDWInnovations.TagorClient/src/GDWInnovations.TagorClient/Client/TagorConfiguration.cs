@@ -24,9 +24,9 @@ using System.Net.Security;
 namespace GDWInnovations.TagorClient.Client
 {
     /// <summary>
-    /// Represents a set of configuration settings
+    /// Represents a set of tagorConfiguration settings
     /// </summary>
-    public class Configuration : IReadableConfiguration
+    public class TagorConfiguration : IReadableTagorConfiguration
     {
         #region Constants
 
@@ -34,7 +34,7 @@ namespace GDWInnovations.TagorClient.Client
         /// Version of the package.
         /// </summary>
         /// <value>Version of the package.</value>
-        public const string Version = "1.1.4";
+        public const string Version = "1.1.8";
 
         /// <summary>
         /// Identifier for ISO 8601 DateTime Format
@@ -112,10 +112,10 @@ namespace GDWInnovations.TagorClient.Client
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Configuration" /> class
+        /// Initializes a new instance of the <see cref="TagorConfiguration" /> class
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("ReSharper", "VirtualMemberCallInConstructor")]
-        public Configuration()
+        public TagorConfiguration()
         {
             Proxy = null;
             UserAgent = WebUtility.UrlEncode("OpenAPI-Generator/1.1.4/csharp");
@@ -141,10 +141,10 @@ namespace GDWInnovations.TagorClient.Client
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Configuration" /> class
+        /// Initializes a new instance of the <see cref="TagorConfiguration" /> class
         /// </summary>
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("ReSharper", "VirtualMemberCallInConstructor")]
-        public Configuration(
+        public TagorConfiguration(
             IDictionary<string, string> defaultHeaders,
             IDictionary<string, string> apiKey,
             IDictionary<string, string> apiKeyPrefix,
@@ -573,10 +573,10 @@ namespace GDWInnovations.TagorClient.Client
         /// <summary>
         /// Merge configurations.
         /// </summary>
-        /// <param name="first">First configuration.</param>
-        /// <param name="second">Second configuration.</param>
-        /// <return>Merged configuration.</return>
-        public static IReadableConfiguration MergeConfigurations(IReadableConfiguration first, IReadableConfiguration second)
+        /// <param name="first">First tagorConfiguration.</param>
+        /// <param name="second">Second tagorConfiguration.</param>
+        /// <return>Merged tagorConfiguration.</return>
+        public static IReadableTagorConfiguration MergeConfigurations(IReadableTagorConfiguration first, IReadableTagorConfiguration second)
         {
             if (second == null) return first ?? GlobalConfiguration.Instance;
 
@@ -588,7 +588,7 @@ namespace GDWInnovations.TagorClient.Client
             foreach (var kvp in second.ApiKeyPrefix) apiKeyPrefix[kvp.Key] = kvp.Value;
             foreach (var kvp in second.DefaultHeaders) defaultHeaders[kvp.Key] = kvp.Value;
 
-            var config = new Configuration
+            var config = new TagorConfiguration
             {
                 ApiKey = apiKey,
                 ApiKeyPrefix = apiKeyPrefix,

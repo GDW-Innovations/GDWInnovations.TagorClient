@@ -20,7 +20,7 @@ namespace GDWInnovations.TagorClient.Client
     /// <summary>
     /// Represents a readable-only configuration contract.
     /// </summary>
-    public interface IReadableConfiguration
+    public interface IReadableTagorConfiguration
     {
         /// <summary>
         /// Gets the access token.

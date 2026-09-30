@@ -21,12 +21,12 @@ namespace GDWInnovations.TagorClient.Client
     /// A customized implementation via partial class may reside in another file and may
     /// be excluded from automatic generation via a .openapi-generator-ignore file.
     /// </remarks>
-    public partial class GlobalConfiguration : Configuration
+    public partial class GlobalConfiguration : TagorConfiguration
     {
         #region Private Members
 
         private static readonly object GlobalConfigSync = new { };
-        private static IReadableConfiguration _globalConfiguration;
+        private static IReadableTagorConfiguration _globalConfiguration;
 
         #endregion Private Members
 
@@ -53,7 +53,7 @@ namespace GDWInnovations.TagorClient.Client
         /// Gets or sets the default Configuration.
         /// </summary>
         /// <value>Configuration.</value>
-        public static IReadableConfiguration Instance
+        public static IReadableTagorConfiguration Instance
         {
             get { return _globalConfiguration; }
             set

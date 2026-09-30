@@ -32,7 +32,7 @@ namespace GDWInnovations.TagorClient.Api
         /// User/Add
         /// </summary>
         /// <remarks>
-        /// Add/Create a user. Pass the &#x60;TPAR_Id&#x60; if you want to create a &#x60;User&#x60; for an existing &#x60;Party&#x60;.  Optional you can pass a &#x60;BASE-USER&#x60; context record with as value a &#x60;TUSER_Id&#x60; to inherit the web configuration of this user.
+        /// Add/Create a user. Pass the &#x60;TPAR_Id&#x60; if you want to create a &#x60;User&#x60; for an existing &#x60;Party&#x60;.  Optional you can pass a &#x60;BASE-USER&#x60; context record with as value a &#x60;TUSER_Id&#x60; to inherit the web tagorConfiguration of this user.
         /// </remarks>
         /// <exception cref="GDWInnovations.TagorClient.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="userAddRequest"> (optional)</param>
@@ -44,7 +44,7 @@ namespace GDWInnovations.TagorClient.Api
         /// User/Add
         /// </summary>
         /// <remarks>
-        /// Add/Create a user. Pass the &#x60;TPAR_Id&#x60; if you want to create a &#x60;User&#x60; for an existing &#x60;Party&#x60;.  Optional you can pass a &#x60;BASE-USER&#x60; context record with as value a &#x60;TUSER_Id&#x60; to inherit the web configuration of this user.
+        /// Add/Create a user. Pass the &#x60;TPAR_Id&#x60; if you want to create a &#x60;User&#x60; for an existing &#x60;Party&#x60;.  Optional you can pass a &#x60;BASE-USER&#x60; context record with as value a &#x60;TUSER_Id&#x60; to inherit the web tagorConfiguration of this user.
         /// </remarks>
         /// <exception cref="GDWInnovations.TagorClient.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="userAddRequest"> (optional)</param>
@@ -55,7 +55,7 @@ namespace GDWInnovations.TagorClient.Api
         /// User/CanAccess
         /// </summary>
         /// <remarks>
-        /// This endpoint returns the users that have access to the given asset. E.g. If you pass &#x60;TQDOSSOORT_Id&#x60;, you&#39;ll get all users allowed to view files of this type. Pass one or more of the following filetypes: - &#x60;TQDOSSOORT_Id&#x60; - &#x60;TPAR_Id&#x60;. For filtering a party regardless of type. - &#x60;TPAR|TQPARSOORT_Id&#x60;. For filtering a party with matching party type. Pass both &#x60;TPAR_Id&#x60; and &#x60;TQPARSOORT_Id&#x60; in a context record separated by a pipe. ex: &#x60;9000000000000000001|9000000000000000001&#x60;.   _This searches the values configured on the web configuration tab in the user managment._
+        /// This endpoint returns the users that have access to the given asset. E.g. If you pass &#x60;TQDOSSOORT_Id&#x60;, you&#39;ll get all users allowed to view files of this type. Pass one or more of the following filetypes: - &#x60;TQDOSSOORT_Id&#x60; - &#x60;TPAR_Id&#x60;. For filtering a party regardless of type. - &#x60;TPAR|TQPARSOORT_Id&#x60;. For filtering a party with matching party type. Pass both &#x60;TPAR_Id&#x60; and &#x60;TQPARSOORT_Id&#x60; in a context record separated by a pipe. ex: &#x60;9000000000000000001|9000000000000000001&#x60;.   _This searches the values configured on the web tagorConfiguration tab in the user managment._
         /// </remarks>
         /// <exception cref="GDWInnovations.TagorClient.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="codeGetListRequest"> (optional)</param>
@@ -67,7 +67,7 @@ namespace GDWInnovations.TagorClient.Api
         /// User/CanAccess
         /// </summary>
         /// <remarks>
-        /// This endpoint returns the users that have access to the given asset. E.g. If you pass &#x60;TQDOSSOORT_Id&#x60;, you&#39;ll get all users allowed to view files of this type. Pass one or more of the following filetypes: - &#x60;TQDOSSOORT_Id&#x60; - &#x60;TPAR_Id&#x60;. For filtering a party regardless of type. - &#x60;TPAR|TQPARSOORT_Id&#x60;. For filtering a party with matching party type. Pass both &#x60;TPAR_Id&#x60; and &#x60;TQPARSOORT_Id&#x60; in a context record separated by a pipe. ex: &#x60;9000000000000000001|9000000000000000001&#x60;.   _This searches the values configured on the web configuration tab in the user managment._
+        /// This endpoint returns the users that have access to the given asset. E.g. If you pass &#x60;TQDOSSOORT_Id&#x60;, you&#39;ll get all users allowed to view files of this type. Pass one or more of the following filetypes: - &#x60;TQDOSSOORT_Id&#x60; - &#x60;TPAR_Id&#x60;. For filtering a party regardless of type. - &#x60;TPAR|TQPARSOORT_Id&#x60;. For filtering a party with matching party type. Pass both &#x60;TPAR_Id&#x60; and &#x60;TQPARSOORT_Id&#x60; in a context record separated by a pipe. ex: &#x60;9000000000000000001|9000000000000000001&#x60;.   _This searches the values configured on the web tagorConfiguration tab in the user managment._
         /// </remarks>
         /// <exception cref="GDWInnovations.TagorClient.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="codeGetListRequest"> (optional)</param>
@@ -124,7 +124,7 @@ namespace GDWInnovations.TagorClient.Api
         /// User/GetPermissionsList
         /// </summary>
         /// <remarks>
-        /// List all permissions of a user by type. Via this endpoint you&#39;ll be able to retreive al permissions with mutliple values. In general this endpoint is for all permissions on the &#x60;Web configuratie&#x60; tab in Tagor.  Possible type values: - &#x60;WEBT3001&#x60; or &#x60;TPAR&#x60; &#x3D; Party   - Get a list of parties + party types. These have to be on a file for a user to be allowed to view the file.   - Unlike the other types this will return a pipe separated value of both party id and party type id   - &#x60;WEBT3002&#x60; or &#x60;TQDOSSOORT&#x60; &#x3D; File type   - Returns a list of all file types a user is allowed to see   - &#x60;WEBT3006&#x60; or &#x60;TQDISGROEP&#x60; &#x3D; Document types   - Returns a list of all document types a user can use when adding a document   - &#x60;WEBT3007&#x60; or &#x60;WL_QRY_FIELD&#x60; &#x3D; Mergefields   - Returns a list of all mergefields a user is able to request with [&#x60;Document/GetMergefield&#x60;](#operation/DocumentGetMergefield)   - If a user doesn&#39;t have any mergefields configured the default setting from the office configuration screen will be used.   - &#x60;WEBT3005&#x60; or &#x60;TDOCM&#x60; &#x3D; Document types   - Returns a list of all &#x60;TDOCM_Ids&#x60; a user is able to request in [&#x60;Document/Generate&#x60;](#operation/DocumentGenerate)   - &#x60;WEBT3004&#x60; or &#x60;TQDOCSECURITY&#x60; &#x3D; Document security   - Returns a list of all document security types a user is able to see
+        /// List all permissions of a user by type. Via this endpoint you&#39;ll be able to retreive al permissions with mutliple values. In general this endpoint is for all permissions on the &#x60;Web configuratie&#x60; tab in Tagor.  Possible type values: - &#x60;WEBT3001&#x60; or &#x60;TPAR&#x60; &#x3D; Party   - Get a list of parties + party types. These have to be on a file for a user to be allowed to view the file.   - Unlike the other types this will return a pipe separated value of both party id and party type id   - &#x60;WEBT3002&#x60; or &#x60;TQDOSSOORT&#x60; &#x3D; File type   - Returns a list of all file types a user is allowed to see   - &#x60;WEBT3006&#x60; or &#x60;TQDISGROEP&#x60; &#x3D; Document types   - Returns a list of all document types a user can use when adding a document   - &#x60;WEBT3007&#x60; or &#x60;WL_QRY_FIELD&#x60; &#x3D; Mergefields   - Returns a list of all mergefields a user is able to request with [&#x60;Document/GetMergefield&#x60;](#operation/DocumentGetMergefield)   - If a user doesn&#39;t have any mergefields configured the default setting from the office tagorConfiguration screen will be used.   - &#x60;WEBT3005&#x60; or &#x60;TDOCM&#x60; &#x3D; Document types   - Returns a list of all &#x60;TDOCM_Ids&#x60; a user is able to request in [&#x60;Document/Generate&#x60;](#operation/DocumentGenerate)   - &#x60;WEBT3004&#x60; or &#x60;TQDOCSECURITY&#x60; &#x3D; Document security   - Returns a list of all document security types a user is able to see
         /// </remarks>
         /// <exception cref="GDWInnovations.TagorClient.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="codeGetListRequest"> (optional)</param>
@@ -136,7 +136,7 @@ namespace GDWInnovations.TagorClient.Api
         /// User/GetPermissionsList
         /// </summary>
         /// <remarks>
-        /// List all permissions of a user by type. Via this endpoint you&#39;ll be able to retreive al permissions with mutliple values. In general this endpoint is for all permissions on the &#x60;Web configuratie&#x60; tab in Tagor.  Possible type values: - &#x60;WEBT3001&#x60; or &#x60;TPAR&#x60; &#x3D; Party   - Get a list of parties + party types. These have to be on a file for a user to be allowed to view the file.   - Unlike the other types this will return a pipe separated value of both party id and party type id   - &#x60;WEBT3002&#x60; or &#x60;TQDOSSOORT&#x60; &#x3D; File type   - Returns a list of all file types a user is allowed to see   - &#x60;WEBT3006&#x60; or &#x60;TQDISGROEP&#x60; &#x3D; Document types   - Returns a list of all document types a user can use when adding a document   - &#x60;WEBT3007&#x60; or &#x60;WL_QRY_FIELD&#x60; &#x3D; Mergefields   - Returns a list of all mergefields a user is able to request with [&#x60;Document/GetMergefield&#x60;](#operation/DocumentGetMergefield)   - If a user doesn&#39;t have any mergefields configured the default setting from the office configuration screen will be used.   - &#x60;WEBT3005&#x60; or &#x60;TDOCM&#x60; &#x3D; Document types   - Returns a list of all &#x60;TDOCM_Ids&#x60; a user is able to request in [&#x60;Document/Generate&#x60;](#operation/DocumentGenerate)   - &#x60;WEBT3004&#x60; or &#x60;TQDOCSECURITY&#x60; &#x3D; Document security   - Returns a list of all document security types a user is able to see
+        /// List all permissions of a user by type. Via this endpoint you&#39;ll be able to retreive al permissions with mutliple values. In general this endpoint is for all permissions on the &#x60;Web configuratie&#x60; tab in Tagor.  Possible type values: - &#x60;WEBT3001&#x60; or &#x60;TPAR&#x60; &#x3D; Party   - Get a list of parties + party types. These have to be on a file for a user to be allowed to view the file.   - Unlike the other types this will return a pipe separated value of both party id and party type id   - &#x60;WEBT3002&#x60; or &#x60;TQDOSSOORT&#x60; &#x3D; File type   - Returns a list of all file types a user is allowed to see   - &#x60;WEBT3006&#x60; or &#x60;TQDISGROEP&#x60; &#x3D; Document types   - Returns a list of all document types a user can use when adding a document   - &#x60;WEBT3007&#x60; or &#x60;WL_QRY_FIELD&#x60; &#x3D; Mergefields   - Returns a list of all mergefields a user is able to request with [&#x60;Document/GetMergefield&#x60;](#operation/DocumentGetMergefield)   - If a user doesn&#39;t have any mergefields configured the default setting from the office tagorConfiguration screen will be used.   - &#x60;WEBT3005&#x60; or &#x60;TDOCM&#x60; &#x3D; Document types   - Returns a list of all &#x60;TDOCM_Ids&#x60; a user is able to request in [&#x60;Document/Generate&#x60;](#operation/DocumentGenerate)   - &#x60;WEBT3004&#x60; or &#x60;TQDOCSECURITY&#x60; &#x3D; Document security   - Returns a list of all document security types a user is able to see
         /// </remarks>
         /// <exception cref="GDWInnovations.TagorClient.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="codeGetListRequest"> (optional)</param>
@@ -202,7 +202,7 @@ namespace GDWInnovations.TagorClient.Api
         /// User/Add
         /// </summary>
         /// <remarks>
-        /// Add/Create a user. Pass the &#x60;TPAR_Id&#x60; if you want to create a &#x60;User&#x60; for an existing &#x60;Party&#x60;.  Optional you can pass a &#x60;BASE-USER&#x60; context record with as value a &#x60;TUSER_Id&#x60; to inherit the web configuration of this user.
+        /// Add/Create a user. Pass the &#x60;TPAR_Id&#x60; if you want to create a &#x60;User&#x60; for an existing &#x60;Party&#x60;.  Optional you can pass a &#x60;BASE-USER&#x60; context record with as value a &#x60;TUSER_Id&#x60; to inherit the web tagorConfiguration of this user.
         /// </remarks>
         /// <exception cref="GDWInnovations.TagorClient.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="userAddRequest"> (optional)</param>
@@ -215,7 +215,7 @@ namespace GDWInnovations.TagorClient.Api
         /// User/Add
         /// </summary>
         /// <remarks>
-        /// Add/Create a user. Pass the &#x60;TPAR_Id&#x60; if you want to create a &#x60;User&#x60; for an existing &#x60;Party&#x60;.  Optional you can pass a &#x60;BASE-USER&#x60; context record with as value a &#x60;TUSER_Id&#x60; to inherit the web configuration of this user.
+        /// Add/Create a user. Pass the &#x60;TPAR_Id&#x60; if you want to create a &#x60;User&#x60; for an existing &#x60;Party&#x60;.  Optional you can pass a &#x60;BASE-USER&#x60; context record with as value a &#x60;TUSER_Id&#x60; to inherit the web tagorConfiguration of this user.
         /// </remarks>
         /// <exception cref="GDWInnovations.TagorClient.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="userAddRequest"> (optional)</param>
@@ -227,7 +227,7 @@ namespace GDWInnovations.TagorClient.Api
         /// User/CanAccess
         /// </summary>
         /// <remarks>
-        /// This endpoint returns the users that have access to the given asset. E.g. If you pass &#x60;TQDOSSOORT_Id&#x60;, you&#39;ll get all users allowed to view files of this type. Pass one or more of the following filetypes: - &#x60;TQDOSSOORT_Id&#x60; - &#x60;TPAR_Id&#x60;. For filtering a party regardless of type. - &#x60;TPAR|TQPARSOORT_Id&#x60;. For filtering a party with matching party type. Pass both &#x60;TPAR_Id&#x60; and &#x60;TQPARSOORT_Id&#x60; in a context record separated by a pipe. ex: &#x60;9000000000000000001|9000000000000000001&#x60;.   _This searches the values configured on the web configuration tab in the user managment._
+        /// This endpoint returns the users that have access to the given asset. E.g. If you pass &#x60;TQDOSSOORT_Id&#x60;, you&#39;ll get all users allowed to view files of this type. Pass one or more of the following filetypes: - &#x60;TQDOSSOORT_Id&#x60; - &#x60;TPAR_Id&#x60;. For filtering a party regardless of type. - &#x60;TPAR|TQPARSOORT_Id&#x60;. For filtering a party with matching party type. Pass both &#x60;TPAR_Id&#x60; and &#x60;TQPARSOORT_Id&#x60; in a context record separated by a pipe. ex: &#x60;9000000000000000001|9000000000000000001&#x60;.   _This searches the values configured on the web tagorConfiguration tab in the user managment._
         /// </remarks>
         /// <exception cref="GDWInnovations.TagorClient.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="codeGetListRequest"> (optional)</param>
@@ -240,7 +240,7 @@ namespace GDWInnovations.TagorClient.Api
         /// User/CanAccess
         /// </summary>
         /// <remarks>
-        /// This endpoint returns the users that have access to the given asset. E.g. If you pass &#x60;TQDOSSOORT_Id&#x60;, you&#39;ll get all users allowed to view files of this type. Pass one or more of the following filetypes: - &#x60;TQDOSSOORT_Id&#x60; - &#x60;TPAR_Id&#x60;. For filtering a party regardless of type. - &#x60;TPAR|TQPARSOORT_Id&#x60;. For filtering a party with matching party type. Pass both &#x60;TPAR_Id&#x60; and &#x60;TQPARSOORT_Id&#x60; in a context record separated by a pipe. ex: &#x60;9000000000000000001|9000000000000000001&#x60;.   _This searches the values configured on the web configuration tab in the user managment._
+        /// This endpoint returns the users that have access to the given asset. E.g. If you pass &#x60;TQDOSSOORT_Id&#x60;, you&#39;ll get all users allowed to view files of this type. Pass one or more of the following filetypes: - &#x60;TQDOSSOORT_Id&#x60; - &#x60;TPAR_Id&#x60;. For filtering a party regardless of type. - &#x60;TPAR|TQPARSOORT_Id&#x60;. For filtering a party with matching party type. Pass both &#x60;TPAR_Id&#x60; and &#x60;TQPARSOORT_Id&#x60; in a context record separated by a pipe. ex: &#x60;9000000000000000001|9000000000000000001&#x60;.   _This searches the values configured on the web tagorConfiguration tab in the user managment._
         /// </remarks>
         /// <exception cref="GDWInnovations.TagorClient.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="codeGetListRequest"> (optional)</param>
@@ -302,7 +302,7 @@ namespace GDWInnovations.TagorClient.Api
         /// User/GetPermissionsList
         /// </summary>
         /// <remarks>
-        /// List all permissions of a user by type. Via this endpoint you&#39;ll be able to retreive al permissions with mutliple values. In general this endpoint is for all permissions on the &#x60;Web configuratie&#x60; tab in Tagor.  Possible type values: - &#x60;WEBT3001&#x60; or &#x60;TPAR&#x60; &#x3D; Party   - Get a list of parties + party types. These have to be on a file for a user to be allowed to view the file.   - Unlike the other types this will return a pipe separated value of both party id and party type id   - &#x60;WEBT3002&#x60; or &#x60;TQDOSSOORT&#x60; &#x3D; File type   - Returns a list of all file types a user is allowed to see   - &#x60;WEBT3006&#x60; or &#x60;TQDISGROEP&#x60; &#x3D; Document types   - Returns a list of all document types a user can use when adding a document   - &#x60;WEBT3007&#x60; or &#x60;WL_QRY_FIELD&#x60; &#x3D; Mergefields   - Returns a list of all mergefields a user is able to request with [&#x60;Document/GetMergefield&#x60;](#operation/DocumentGetMergefield)   - If a user doesn&#39;t have any mergefields configured the default setting from the office configuration screen will be used.   - &#x60;WEBT3005&#x60; or &#x60;TDOCM&#x60; &#x3D; Document types   - Returns a list of all &#x60;TDOCM_Ids&#x60; a user is able to request in [&#x60;Document/Generate&#x60;](#operation/DocumentGenerate)   - &#x60;WEBT3004&#x60; or &#x60;TQDOCSECURITY&#x60; &#x3D; Document security   - Returns a list of all document security types a user is able to see
+        /// List all permissions of a user by type. Via this endpoint you&#39;ll be able to retreive al permissions with mutliple values. In general this endpoint is for all permissions on the &#x60;Web configuratie&#x60; tab in Tagor.  Possible type values: - &#x60;WEBT3001&#x60; or &#x60;TPAR&#x60; &#x3D; Party   - Get a list of parties + party types. These have to be on a file for a user to be allowed to view the file.   - Unlike the other types this will return a pipe separated value of both party id and party type id   - &#x60;WEBT3002&#x60; or &#x60;TQDOSSOORT&#x60; &#x3D; File type   - Returns a list of all file types a user is allowed to see   - &#x60;WEBT3006&#x60; or &#x60;TQDISGROEP&#x60; &#x3D; Document types   - Returns a list of all document types a user can use when adding a document   - &#x60;WEBT3007&#x60; or &#x60;WL_QRY_FIELD&#x60; &#x3D; Mergefields   - Returns a list of all mergefields a user is able to request with [&#x60;Document/GetMergefield&#x60;](#operation/DocumentGetMergefield)   - If a user doesn&#39;t have any mergefields configured the default setting from the office tagorConfiguration screen will be used.   - &#x60;WEBT3005&#x60; or &#x60;TDOCM&#x60; &#x3D; Document types   - Returns a list of all &#x60;TDOCM_Ids&#x60; a user is able to request in [&#x60;Document/Generate&#x60;](#operation/DocumentGenerate)   - &#x60;WEBT3004&#x60; or &#x60;TQDOCSECURITY&#x60; &#x3D; Document security   - Returns a list of all document security types a user is able to see
         /// </remarks>
         /// <exception cref="GDWInnovations.TagorClient.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="codeGetListRequest"> (optional)</param>
@@ -315,7 +315,7 @@ namespace GDWInnovations.TagorClient.Api
         /// User/GetPermissionsList
         /// </summary>
         /// <remarks>
-        /// List all permissions of a user by type. Via this endpoint you&#39;ll be able to retreive al permissions with mutliple values. In general this endpoint is for all permissions on the &#x60;Web configuratie&#x60; tab in Tagor.  Possible type values: - &#x60;WEBT3001&#x60; or &#x60;TPAR&#x60; &#x3D; Party   - Get a list of parties + party types. These have to be on a file for a user to be allowed to view the file.   - Unlike the other types this will return a pipe separated value of both party id and party type id   - &#x60;WEBT3002&#x60; or &#x60;TQDOSSOORT&#x60; &#x3D; File type   - Returns a list of all file types a user is allowed to see   - &#x60;WEBT3006&#x60; or &#x60;TQDISGROEP&#x60; &#x3D; Document types   - Returns a list of all document types a user can use when adding a document   - &#x60;WEBT3007&#x60; or &#x60;WL_QRY_FIELD&#x60; &#x3D; Mergefields   - Returns a list of all mergefields a user is able to request with [&#x60;Document/GetMergefield&#x60;](#operation/DocumentGetMergefield)   - If a user doesn&#39;t have any mergefields configured the default setting from the office configuration screen will be used.   - &#x60;WEBT3005&#x60; or &#x60;TDOCM&#x60; &#x3D; Document types   - Returns a list of all &#x60;TDOCM_Ids&#x60; a user is able to request in [&#x60;Document/Generate&#x60;](#operation/DocumentGenerate)   - &#x60;WEBT3004&#x60; or &#x60;TQDOCSECURITY&#x60; &#x3D; Document security   - Returns a list of all document security types a user is able to see
+        /// List all permissions of a user by type. Via this endpoint you&#39;ll be able to retreive al permissions with mutliple values. In general this endpoint is for all permissions on the &#x60;Web configuratie&#x60; tab in Tagor.  Possible type values: - &#x60;WEBT3001&#x60; or &#x60;TPAR&#x60; &#x3D; Party   - Get a list of parties + party types. These have to be on a file for a user to be allowed to view the file.   - Unlike the other types this will return a pipe separated value of both party id and party type id   - &#x60;WEBT3002&#x60; or &#x60;TQDOSSOORT&#x60; &#x3D; File type   - Returns a list of all file types a user is allowed to see   - &#x60;WEBT3006&#x60; or &#x60;TQDISGROEP&#x60; &#x3D; Document types   - Returns a list of all document types a user can use when adding a document   - &#x60;WEBT3007&#x60; or &#x60;WL_QRY_FIELD&#x60; &#x3D; Mergefields   - Returns a list of all mergefields a user is able to request with [&#x60;Document/GetMergefield&#x60;](#operation/DocumentGetMergefield)   - If a user doesn&#39;t have any mergefields configured the default setting from the office tagorConfiguration screen will be used.   - &#x60;WEBT3005&#x60; or &#x60;TDOCM&#x60; &#x3D; Document types   - Returns a list of all &#x60;TDOCM_Ids&#x60; a user is able to request in [&#x60;Document/Generate&#x60;](#operation/DocumentGenerate)   - &#x60;WEBT3004&#x60; or &#x60;TQDOCSECURITY&#x60; &#x3D; Document security   - Returns a list of all document security types a user is able to see
         /// </remarks>
         /// <exception cref="GDWInnovations.TagorClient.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="codeGetListRequest"> (optional)</param>
@@ -419,51 +419,73 @@ namespace GDWInnovations.TagorClient.Api
         /// <returns></returns>
         public UserApi(string basePath)
         {
-            this.Configuration = GDWInnovations.TagorClient.Client.Configuration.MergeConfigurations(
+            this.Configuration = GDWInnovations.TagorClient.Client.TagorConfiguration.MergeConfigurations(
                 GDWInnovations.TagorClient.Client.GlobalConfiguration.Instance,
-                new GDWInnovations.TagorClient.Client.Configuration { BasePath = basePath }
+                new GDWInnovations.TagorClient.Client.TagorConfiguration { BasePath = basePath }
             );
             this.Client = new GDWInnovations.TagorClient.Client.ApiClient(this.Configuration.BasePath);
             this.AsynchronousClient = new GDWInnovations.TagorClient.Client.ApiClient(this.Configuration.BasePath);
-            this.ExceptionFactory = GDWInnovations.TagorClient.Client.Configuration.DefaultExceptionFactory;
+            this.ExceptionFactory = GDWInnovations.TagorClient.Client.TagorConfiguration.DefaultExceptionFactory;
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UserApi"/> class
-        /// using Configuration object
+        /// using TagorConfiguration object
         /// </summary>
-        /// <param name="configuration">An instance of Configuration</param>
+        /// <param name="tagorConfiguration">An instance of TagorConfiguration</param>
         /// <returns></returns>
-        public UserApi(GDWInnovations.TagorClient.Client.Configuration configuration)
+        public UserApi(GDWInnovations.TagorClient.Client.TagorConfiguration tagorConfiguration)
         {
-            if (configuration == null) throw new ArgumentNullException("configuration");
+            if (tagorConfiguration == null) throw new ArgumentNullException("tagorConfiguration");
 
-            this.Configuration = GDWInnovations.TagorClient.Client.Configuration.MergeConfigurations(
+            this.Configuration = GDWInnovations.TagorClient.Client.TagorConfiguration.MergeConfigurations(
                 GDWInnovations.TagorClient.Client.GlobalConfiguration.Instance,
-                configuration
+                tagorConfiguration
             );
             this.Client = new GDWInnovations.TagorClient.Client.ApiClient(this.Configuration.BasePath);
             this.AsynchronousClient = new GDWInnovations.TagorClient.Client.ApiClient(this.Configuration.BasePath);
-            ExceptionFactory = GDWInnovations.TagorClient.Client.Configuration.DefaultExceptionFactory;
+            ExceptionFactory = GDWInnovations.TagorClient.Client.TagorConfiguration.DefaultExceptionFactory;
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UserApi"/> class
-        /// using a Configuration object and client instance.
+        /// using a readable TagorConfiguration object and sets the logger on the underlying clients.
+        /// </summary>
+        /// <param name="tagorConfiguration">An instance of IReadableTagorConfiguration</param>
+        /// <param name="loggerFactory">The logger factory</param>
+        public UserApi(GDWInnovations.TagorClient.Client.IReadableTagorConfiguration tagorConfiguration, ILoggerFactory loggerFactory)
+        {
+            if (tagorConfiguration == null) throw new ArgumentNullException("tagorConfiguration");
+
+            this.Configuration = GDWInnovations.TagorClient.Client.TagorConfiguration.MergeConfigurations(
+                GDWInnovations.TagorClient.Client.GlobalConfiguration.Instance,
+                tagorConfiguration
+            );
+            this.Client = new GDWInnovations.TagorClient.Client.ApiClient(this.Configuration.BasePath);
+            this.AsynchronousClient = new GDWInnovations.TagorClient.Client.ApiClient(this.Configuration.BasePath);
+            ExceptionFactory = GDWInnovations.TagorClient.Client.TagorConfiguration.DefaultExceptionFactory;
+
+            this.Client.SetLogger(loggerFactory);
+            this.AsynchronousClient.SetLogger(loggerFactory);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UserApi"/> class
+        /// using a TagorConfiguration object and client instance.
         /// </summary>
         /// <param name="client">The client interface for synchronous API access.</param>
         /// <param name="asyncClient">The client interface for asynchronous API access.</param>
-        /// <param name="configuration">The configuration object.</param>
-        public UserApi(GDWInnovations.TagorClient.Client.ISynchronousClient client, GDWInnovations.TagorClient.Client.IAsynchronousClient asyncClient, GDWInnovations.TagorClient.Client.IReadableConfiguration configuration)
+        /// <param name="tagorConfiguration">The tagorConfiguration object.</param>
+        public UserApi(GDWInnovations.TagorClient.Client.ISynchronousClient client, GDWInnovations.TagorClient.Client.IAsynchronousClient asyncClient, GDWInnovations.TagorClient.Client.IReadableTagorConfiguration tagorConfiguration)
         {
             if (client == null) throw new ArgumentNullException("client");
             if (asyncClient == null) throw new ArgumentNullException("asyncClient");
-            if (configuration == null) throw new ArgumentNullException("configuration");
+            if (tagorConfiguration == null) throw new ArgumentNullException("tagorConfiguration");
 
             this.Client = client;
             this.AsynchronousClient = asyncClient;
-            this.Configuration = configuration;
-            this.ExceptionFactory = GDWInnovations.TagorClient.Client.Configuration.DefaultExceptionFactory;
+            this.Configuration = tagorConfiguration;
+            this.ExceptionFactory = GDWInnovations.TagorClient.Client.TagorConfiguration.DefaultExceptionFactory;
         }
 
         /// <summary>
@@ -486,10 +508,10 @@ namespace GDWInnovations.TagorClient.Api
         }
 
         /// <summary>
-        /// Gets or sets the configuration object
+        /// Gets or sets the tagorConfiguration object
         /// </summary>
-        /// <value>An instance of the Configuration</value>
-        public GDWInnovations.TagorClient.Client.IReadableConfiguration Configuration { get; set; }
+        /// <value>An instance of the TagorConfiguration</value>
+        public GDWInnovations.TagorClient.Client.IReadableTagorConfiguration Configuration { get; set; }
 
         /// <summary>
         /// Provides a factory method hook for the creation of exceptions.
@@ -508,7 +530,7 @@ namespace GDWInnovations.TagorClient.Api
         }
 
         /// <summary>
-        /// User/Add Add/Create a user. Pass the &#x60;TPAR_Id&#x60; if you want to create a &#x60;User&#x60; for an existing &#x60;Party&#x60;.  Optional you can pass a &#x60;BASE-USER&#x60; context record with as value a &#x60;TUSER_Id&#x60; to inherit the web configuration of this user.
+        /// User/Add Add/Create a user. Pass the &#x60;TPAR_Id&#x60; if you want to create a &#x60;User&#x60; for an existing &#x60;Party&#x60;.  Optional you can pass a &#x60;BASE-USER&#x60; context record with as value a &#x60;TUSER_Id&#x60; to inherit the web tagorConfiguration of this user.
         /// </summary>
         /// <exception cref="GDWInnovations.TagorClient.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="userAddRequest"> (optional)</param>
@@ -521,7 +543,7 @@ namespace GDWInnovations.TagorClient.Api
         }
 
         /// <summary>
-        /// User/Add Add/Create a user. Pass the &#x60;TPAR_Id&#x60; if you want to create a &#x60;User&#x60; for an existing &#x60;Party&#x60;.  Optional you can pass a &#x60;BASE-USER&#x60; context record with as value a &#x60;TUSER_Id&#x60; to inherit the web configuration of this user.
+        /// User/Add Add/Create a user. Pass the &#x60;TPAR_Id&#x60; if you want to create a &#x60;User&#x60; for an existing &#x60;Party&#x60;.  Optional you can pass a &#x60;BASE-USER&#x60; context record with as value a &#x60;TUSER_Id&#x60; to inherit the web tagorConfiguration of this user.
         /// </summary>
         /// <exception cref="GDWInnovations.TagorClient.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="userAddRequest"> (optional)</param>
@@ -586,7 +608,7 @@ namespace GDWInnovations.TagorClient.Api
         }
 
         /// <summary>
-        /// User/Add Add/Create a user. Pass the &#x60;TPAR_Id&#x60; if you want to create a &#x60;User&#x60; for an existing &#x60;Party&#x60;.  Optional you can pass a &#x60;BASE-USER&#x60; context record with as value a &#x60;TUSER_Id&#x60; to inherit the web configuration of this user.
+        /// User/Add Add/Create a user. Pass the &#x60;TPAR_Id&#x60; if you want to create a &#x60;User&#x60; for an existing &#x60;Party&#x60;.  Optional you can pass a &#x60;BASE-USER&#x60; context record with as value a &#x60;TUSER_Id&#x60; to inherit the web tagorConfiguration of this user.
         /// </summary>
         /// <exception cref="GDWInnovations.TagorClient.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="userAddRequest"> (optional)</param>
@@ -600,7 +622,7 @@ namespace GDWInnovations.TagorClient.Api
         }
 
         /// <summary>
-        /// User/Add Add/Create a user. Pass the &#x60;TPAR_Id&#x60; if you want to create a &#x60;User&#x60; for an existing &#x60;Party&#x60;.  Optional you can pass a &#x60;BASE-USER&#x60; context record with as value a &#x60;TUSER_Id&#x60; to inherit the web configuration of this user.
+        /// User/Add Add/Create a user. Pass the &#x60;TPAR_Id&#x60; if you want to create a &#x60;User&#x60; for an existing &#x60;Party&#x60;.  Optional you can pass a &#x60;BASE-USER&#x60; context record with as value a &#x60;TUSER_Id&#x60; to inherit the web tagorConfiguration of this user.
         /// </summary>
         /// <exception cref="GDWInnovations.TagorClient.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="userAddRequest"> (optional)</param>
@@ -667,7 +689,7 @@ namespace GDWInnovations.TagorClient.Api
         }
 
         /// <summary>
-        /// User/CanAccess This endpoint returns the users that have access to the given asset. E.g. If you pass &#x60;TQDOSSOORT_Id&#x60;, you&#39;ll get all users allowed to view files of this type. Pass one or more of the following filetypes: - &#x60;TQDOSSOORT_Id&#x60; - &#x60;TPAR_Id&#x60;. For filtering a party regardless of type. - &#x60;TPAR|TQPARSOORT_Id&#x60;. For filtering a party with matching party type. Pass both &#x60;TPAR_Id&#x60; and &#x60;TQPARSOORT_Id&#x60; in a context record separated by a pipe. ex: &#x60;9000000000000000001|9000000000000000001&#x60;.   _This searches the values configured on the web configuration tab in the user managment._
+        /// User/CanAccess This endpoint returns the users that have access to the given asset. E.g. If you pass &#x60;TQDOSSOORT_Id&#x60;, you&#39;ll get all users allowed to view files of this type. Pass one or more of the following filetypes: - &#x60;TQDOSSOORT_Id&#x60; - &#x60;TPAR_Id&#x60;. For filtering a party regardless of type. - &#x60;TPAR|TQPARSOORT_Id&#x60;. For filtering a party with matching party type. Pass both &#x60;TPAR_Id&#x60; and &#x60;TQPARSOORT_Id&#x60; in a context record separated by a pipe. ex: &#x60;9000000000000000001|9000000000000000001&#x60;.   _This searches the values configured on the web tagorConfiguration tab in the user managment._
         /// </summary>
         /// <exception cref="GDWInnovations.TagorClient.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="codeGetListRequest"> (optional)</param>
@@ -680,7 +702,7 @@ namespace GDWInnovations.TagorClient.Api
         }
 
         /// <summary>
-        /// User/CanAccess This endpoint returns the users that have access to the given asset. E.g. If you pass &#x60;TQDOSSOORT_Id&#x60;, you&#39;ll get all users allowed to view files of this type. Pass one or more of the following filetypes: - &#x60;TQDOSSOORT_Id&#x60; - &#x60;TPAR_Id&#x60;. For filtering a party regardless of type. - &#x60;TPAR|TQPARSOORT_Id&#x60;. For filtering a party with matching party type. Pass both &#x60;TPAR_Id&#x60; and &#x60;TQPARSOORT_Id&#x60; in a context record separated by a pipe. ex: &#x60;9000000000000000001|9000000000000000001&#x60;.   _This searches the values configured on the web configuration tab in the user managment._
+        /// User/CanAccess This endpoint returns the users that have access to the given asset. E.g. If you pass &#x60;TQDOSSOORT_Id&#x60;, you&#39;ll get all users allowed to view files of this type. Pass one or more of the following filetypes: - &#x60;TQDOSSOORT_Id&#x60; - &#x60;TPAR_Id&#x60;. For filtering a party regardless of type. - &#x60;TPAR|TQPARSOORT_Id&#x60;. For filtering a party with matching party type. Pass both &#x60;TPAR_Id&#x60; and &#x60;TQPARSOORT_Id&#x60; in a context record separated by a pipe. ex: &#x60;9000000000000000001|9000000000000000001&#x60;.   _This searches the values configured on the web tagorConfiguration tab in the user managment._
         /// </summary>
         /// <exception cref="GDWInnovations.TagorClient.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="codeGetListRequest"> (optional)</param>
@@ -745,7 +767,7 @@ namespace GDWInnovations.TagorClient.Api
         }
 
         /// <summary>
-        /// User/CanAccess This endpoint returns the users that have access to the given asset. E.g. If you pass &#x60;TQDOSSOORT_Id&#x60;, you&#39;ll get all users allowed to view files of this type. Pass one or more of the following filetypes: - &#x60;TQDOSSOORT_Id&#x60; - &#x60;TPAR_Id&#x60;. For filtering a party regardless of type. - &#x60;TPAR|TQPARSOORT_Id&#x60;. For filtering a party with matching party type. Pass both &#x60;TPAR_Id&#x60; and &#x60;TQPARSOORT_Id&#x60; in a context record separated by a pipe. ex: &#x60;9000000000000000001|9000000000000000001&#x60;.   _This searches the values configured on the web configuration tab in the user managment._
+        /// User/CanAccess This endpoint returns the users that have access to the given asset. E.g. If you pass &#x60;TQDOSSOORT_Id&#x60;, you&#39;ll get all users allowed to view files of this type. Pass one or more of the following filetypes: - &#x60;TQDOSSOORT_Id&#x60; - &#x60;TPAR_Id&#x60;. For filtering a party regardless of type. - &#x60;TPAR|TQPARSOORT_Id&#x60;. For filtering a party with matching party type. Pass both &#x60;TPAR_Id&#x60; and &#x60;TQPARSOORT_Id&#x60; in a context record separated by a pipe. ex: &#x60;9000000000000000001|9000000000000000001&#x60;.   _This searches the values configured on the web tagorConfiguration tab in the user managment._
         /// </summary>
         /// <exception cref="GDWInnovations.TagorClient.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="codeGetListRequest"> (optional)</param>
@@ -759,7 +781,7 @@ namespace GDWInnovations.TagorClient.Api
         }
 
         /// <summary>
-        /// User/CanAccess This endpoint returns the users that have access to the given asset. E.g. If you pass &#x60;TQDOSSOORT_Id&#x60;, you&#39;ll get all users allowed to view files of this type. Pass one or more of the following filetypes: - &#x60;TQDOSSOORT_Id&#x60; - &#x60;TPAR_Id&#x60;. For filtering a party regardless of type. - &#x60;TPAR|TQPARSOORT_Id&#x60;. For filtering a party with matching party type. Pass both &#x60;TPAR_Id&#x60; and &#x60;TQPARSOORT_Id&#x60; in a context record separated by a pipe. ex: &#x60;9000000000000000001|9000000000000000001&#x60;.   _This searches the values configured on the web configuration tab in the user managment._
+        /// User/CanAccess This endpoint returns the users that have access to the given asset. E.g. If you pass &#x60;TQDOSSOORT_Id&#x60;, you&#39;ll get all users allowed to view files of this type. Pass one or more of the following filetypes: - &#x60;TQDOSSOORT_Id&#x60; - &#x60;TPAR_Id&#x60;. For filtering a party regardless of type. - &#x60;TPAR|TQPARSOORT_Id&#x60;. For filtering a party with matching party type. Pass both &#x60;TPAR_Id&#x60; and &#x60;TQPARSOORT_Id&#x60; in a context record separated by a pipe. ex: &#x60;9000000000000000001|9000000000000000001&#x60;.   _This searches the values configured on the web tagorConfiguration tab in the user managment._
         /// </summary>
         /// <exception cref="GDWInnovations.TagorClient.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="codeGetListRequest"> (optional)</param>
@@ -1144,7 +1166,7 @@ namespace GDWInnovations.TagorClient.Api
         }
 
         /// <summary>
-        /// User/GetPermissionsList List all permissions of a user by type. Via this endpoint you&#39;ll be able to retreive al permissions with mutliple values. In general this endpoint is for all permissions on the &#x60;Web configuratie&#x60; tab in Tagor.  Possible type values: - &#x60;WEBT3001&#x60; or &#x60;TPAR&#x60; &#x3D; Party   - Get a list of parties + party types. These have to be on a file for a user to be allowed to view the file.   - Unlike the other types this will return a pipe separated value of both party id and party type id   - &#x60;WEBT3002&#x60; or &#x60;TQDOSSOORT&#x60; &#x3D; File type   - Returns a list of all file types a user is allowed to see   - &#x60;WEBT3006&#x60; or &#x60;TQDISGROEP&#x60; &#x3D; Document types   - Returns a list of all document types a user can use when adding a document   - &#x60;WEBT3007&#x60; or &#x60;WL_QRY_FIELD&#x60; &#x3D; Mergefields   - Returns a list of all mergefields a user is able to request with [&#x60;Document/GetMergefield&#x60;](#operation/DocumentGetMergefield)   - If a user doesn&#39;t have any mergefields configured the default setting from the office configuration screen will be used.   - &#x60;WEBT3005&#x60; or &#x60;TDOCM&#x60; &#x3D; Document types   - Returns a list of all &#x60;TDOCM_Ids&#x60; a user is able to request in [&#x60;Document/Generate&#x60;](#operation/DocumentGenerate)   - &#x60;WEBT3004&#x60; or &#x60;TQDOCSECURITY&#x60; &#x3D; Document security   - Returns a list of all document security types a user is able to see
+        /// User/GetPermissionsList List all permissions of a user by type. Via this endpoint you&#39;ll be able to retreive al permissions with mutliple values. In general this endpoint is for all permissions on the &#x60;Web configuratie&#x60; tab in Tagor.  Possible type values: - &#x60;WEBT3001&#x60; or &#x60;TPAR&#x60; &#x3D; Party   - Get a list of parties + party types. These have to be on a file for a user to be allowed to view the file.   - Unlike the other types this will return a pipe separated value of both party id and party type id   - &#x60;WEBT3002&#x60; or &#x60;TQDOSSOORT&#x60; &#x3D; File type   - Returns a list of all file types a user is allowed to see   - &#x60;WEBT3006&#x60; or &#x60;TQDISGROEP&#x60; &#x3D; Document types   - Returns a list of all document types a user can use when adding a document   - &#x60;WEBT3007&#x60; or &#x60;WL_QRY_FIELD&#x60; &#x3D; Mergefields   - Returns a list of all mergefields a user is able to request with [&#x60;Document/GetMergefield&#x60;](#operation/DocumentGetMergefield)   - If a user doesn&#39;t have any mergefields configured the default setting from the office tagorConfiguration screen will be used.   - &#x60;WEBT3005&#x60; or &#x60;TDOCM&#x60; &#x3D; Document types   - Returns a list of all &#x60;TDOCM_Ids&#x60; a user is able to request in [&#x60;Document/Generate&#x60;](#operation/DocumentGenerate)   - &#x60;WEBT3004&#x60; or &#x60;TQDOCSECURITY&#x60; &#x3D; Document security   - Returns a list of all document security types a user is able to see
         /// </summary>
         /// <exception cref="GDWInnovations.TagorClient.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="codeGetListRequest"> (optional)</param>
@@ -1157,7 +1179,7 @@ namespace GDWInnovations.TagorClient.Api
         }
 
         /// <summary>
-        /// User/GetPermissionsList List all permissions of a user by type. Via this endpoint you&#39;ll be able to retreive al permissions with mutliple values. In general this endpoint is for all permissions on the &#x60;Web configuratie&#x60; tab in Tagor.  Possible type values: - &#x60;WEBT3001&#x60; or &#x60;TPAR&#x60; &#x3D; Party   - Get a list of parties + party types. These have to be on a file for a user to be allowed to view the file.   - Unlike the other types this will return a pipe separated value of both party id and party type id   - &#x60;WEBT3002&#x60; or &#x60;TQDOSSOORT&#x60; &#x3D; File type   - Returns a list of all file types a user is allowed to see   - &#x60;WEBT3006&#x60; or &#x60;TQDISGROEP&#x60; &#x3D; Document types   - Returns a list of all document types a user can use when adding a document   - &#x60;WEBT3007&#x60; or &#x60;WL_QRY_FIELD&#x60; &#x3D; Mergefields   - Returns a list of all mergefields a user is able to request with [&#x60;Document/GetMergefield&#x60;](#operation/DocumentGetMergefield)   - If a user doesn&#39;t have any mergefields configured the default setting from the office configuration screen will be used.   - &#x60;WEBT3005&#x60; or &#x60;TDOCM&#x60; &#x3D; Document types   - Returns a list of all &#x60;TDOCM_Ids&#x60; a user is able to request in [&#x60;Document/Generate&#x60;](#operation/DocumentGenerate)   - &#x60;WEBT3004&#x60; or &#x60;TQDOCSECURITY&#x60; &#x3D; Document security   - Returns a list of all document security types a user is able to see
+        /// User/GetPermissionsList List all permissions of a user by type. Via this endpoint you&#39;ll be able to retreive al permissions with mutliple values. In general this endpoint is for all permissions on the &#x60;Web configuratie&#x60; tab in Tagor.  Possible type values: - &#x60;WEBT3001&#x60; or &#x60;TPAR&#x60; &#x3D; Party   - Get a list of parties + party types. These have to be on a file for a user to be allowed to view the file.   - Unlike the other types this will return a pipe separated value of both party id and party type id   - &#x60;WEBT3002&#x60; or &#x60;TQDOSSOORT&#x60; &#x3D; File type   - Returns a list of all file types a user is allowed to see   - &#x60;WEBT3006&#x60; or &#x60;TQDISGROEP&#x60; &#x3D; Document types   - Returns a list of all document types a user can use when adding a document   - &#x60;WEBT3007&#x60; or &#x60;WL_QRY_FIELD&#x60; &#x3D; Mergefields   - Returns a list of all mergefields a user is able to request with [&#x60;Document/GetMergefield&#x60;](#operation/DocumentGetMergefield)   - If a user doesn&#39;t have any mergefields configured the default setting from the office tagorConfiguration screen will be used.   - &#x60;WEBT3005&#x60; or &#x60;TDOCM&#x60; &#x3D; Document types   - Returns a list of all &#x60;TDOCM_Ids&#x60; a user is able to request in [&#x60;Document/Generate&#x60;](#operation/DocumentGenerate)   - &#x60;WEBT3004&#x60; or &#x60;TQDOCSECURITY&#x60; &#x3D; Document security   - Returns a list of all document security types a user is able to see
         /// </summary>
         /// <exception cref="GDWInnovations.TagorClient.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="codeGetListRequest"> (optional)</param>
@@ -1222,7 +1244,7 @@ namespace GDWInnovations.TagorClient.Api
         }
 
         /// <summary>
-        /// User/GetPermissionsList List all permissions of a user by type. Via this endpoint you&#39;ll be able to retreive al permissions with mutliple values. In general this endpoint is for all permissions on the &#x60;Web configuratie&#x60; tab in Tagor.  Possible type values: - &#x60;WEBT3001&#x60; or &#x60;TPAR&#x60; &#x3D; Party   - Get a list of parties + party types. These have to be on a file for a user to be allowed to view the file.   - Unlike the other types this will return a pipe separated value of both party id and party type id   - &#x60;WEBT3002&#x60; or &#x60;TQDOSSOORT&#x60; &#x3D; File type   - Returns a list of all file types a user is allowed to see   - &#x60;WEBT3006&#x60; or &#x60;TQDISGROEP&#x60; &#x3D; Document types   - Returns a list of all document types a user can use when adding a document   - &#x60;WEBT3007&#x60; or &#x60;WL_QRY_FIELD&#x60; &#x3D; Mergefields   - Returns a list of all mergefields a user is able to request with [&#x60;Document/GetMergefield&#x60;](#operation/DocumentGetMergefield)   - If a user doesn&#39;t have any mergefields configured the default setting from the office configuration screen will be used.   - &#x60;WEBT3005&#x60; or &#x60;TDOCM&#x60; &#x3D; Document types   - Returns a list of all &#x60;TDOCM_Ids&#x60; a user is able to request in [&#x60;Document/Generate&#x60;](#operation/DocumentGenerate)   - &#x60;WEBT3004&#x60; or &#x60;TQDOCSECURITY&#x60; &#x3D; Document security   - Returns a list of all document security types a user is able to see
+        /// User/GetPermissionsList List all permissions of a user by type. Via this endpoint you&#39;ll be able to retreive al permissions with mutliple values. In general this endpoint is for all permissions on the &#x60;Web configuratie&#x60; tab in Tagor.  Possible type values: - &#x60;WEBT3001&#x60; or &#x60;TPAR&#x60; &#x3D; Party   - Get a list of parties + party types. These have to be on a file for a user to be allowed to view the file.   - Unlike the other types this will return a pipe separated value of both party id and party type id   - &#x60;WEBT3002&#x60; or &#x60;TQDOSSOORT&#x60; &#x3D; File type   - Returns a list of all file types a user is allowed to see   - &#x60;WEBT3006&#x60; or &#x60;TQDISGROEP&#x60; &#x3D; Document types   - Returns a list of all document types a user can use when adding a document   - &#x60;WEBT3007&#x60; or &#x60;WL_QRY_FIELD&#x60; &#x3D; Mergefields   - Returns a list of all mergefields a user is able to request with [&#x60;Document/GetMergefield&#x60;](#operation/DocumentGetMergefield)   - If a user doesn&#39;t have any mergefields configured the default setting from the office tagorConfiguration screen will be used.   - &#x60;WEBT3005&#x60; or &#x60;TDOCM&#x60; &#x3D; Document types   - Returns a list of all &#x60;TDOCM_Ids&#x60; a user is able to request in [&#x60;Document/Generate&#x60;](#operation/DocumentGenerate)   - &#x60;WEBT3004&#x60; or &#x60;TQDOCSECURITY&#x60; &#x3D; Document security   - Returns a list of all document security types a user is able to see
         /// </summary>
         /// <exception cref="GDWInnovations.TagorClient.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="codeGetListRequest"> (optional)</param>
@@ -1236,7 +1258,7 @@ namespace GDWInnovations.TagorClient.Api
         }
 
         /// <summary>
-        /// User/GetPermissionsList List all permissions of a user by type. Via this endpoint you&#39;ll be able to retreive al permissions with mutliple values. In general this endpoint is for all permissions on the &#x60;Web configuratie&#x60; tab in Tagor.  Possible type values: - &#x60;WEBT3001&#x60; or &#x60;TPAR&#x60; &#x3D; Party   - Get a list of parties + party types. These have to be on a file for a user to be allowed to view the file.   - Unlike the other types this will return a pipe separated value of both party id and party type id   - &#x60;WEBT3002&#x60; or &#x60;TQDOSSOORT&#x60; &#x3D; File type   - Returns a list of all file types a user is allowed to see   - &#x60;WEBT3006&#x60; or &#x60;TQDISGROEP&#x60; &#x3D; Document types   - Returns a list of all document types a user can use when adding a document   - &#x60;WEBT3007&#x60; or &#x60;WL_QRY_FIELD&#x60; &#x3D; Mergefields   - Returns a list of all mergefields a user is able to request with [&#x60;Document/GetMergefield&#x60;](#operation/DocumentGetMergefield)   - If a user doesn&#39;t have any mergefields configured the default setting from the office configuration screen will be used.   - &#x60;WEBT3005&#x60; or &#x60;TDOCM&#x60; &#x3D; Document types   - Returns a list of all &#x60;TDOCM_Ids&#x60; a user is able to request in [&#x60;Document/Generate&#x60;](#operation/DocumentGenerate)   - &#x60;WEBT3004&#x60; or &#x60;TQDOCSECURITY&#x60; &#x3D; Document security   - Returns a list of all document security types a user is able to see
+        /// User/GetPermissionsList List all permissions of a user by type. Via this endpoint you&#39;ll be able to retreive al permissions with mutliple values. In general this endpoint is for all permissions on the &#x60;Web configuratie&#x60; tab in Tagor.  Possible type values: - &#x60;WEBT3001&#x60; or &#x60;TPAR&#x60; &#x3D; Party   - Get a list of parties + party types. These have to be on a file for a user to be allowed to view the file.   - Unlike the other types this will return a pipe separated value of both party id and party type id   - &#x60;WEBT3002&#x60; or &#x60;TQDOSSOORT&#x60; &#x3D; File type   - Returns a list of all file types a user is allowed to see   - &#x60;WEBT3006&#x60; or &#x60;TQDISGROEP&#x60; &#x3D; Document types   - Returns a list of all document types a user can use when adding a document   - &#x60;WEBT3007&#x60; or &#x60;WL_QRY_FIELD&#x60; &#x3D; Mergefields   - Returns a list of all mergefields a user is able to request with [&#x60;Document/GetMergefield&#x60;](#operation/DocumentGetMergefield)   - If a user doesn&#39;t have any mergefields configured the default setting from the office tagorConfiguration screen will be used.   - &#x60;WEBT3005&#x60; or &#x60;TDOCM&#x60; &#x3D; Document types   - Returns a list of all &#x60;TDOCM_Ids&#x60; a user is able to request in [&#x60;Document/Generate&#x60;](#operation/DocumentGenerate)   - &#x60;WEBT3004&#x60; or &#x60;TQDOCSECURITY&#x60; &#x3D; Document security   - Returns a list of all document security types a user is able to see
         /// </summary>
         /// <exception cref="GDWInnovations.TagorClient.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="codeGetListRequest"> (optional)</param>

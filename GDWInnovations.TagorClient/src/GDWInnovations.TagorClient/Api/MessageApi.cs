@@ -368,13 +368,13 @@ namespace GDWInnovations.TagorClient.Api
         /// <returns></returns>
         public MessageApi(string basePath)
         {
-            this.Configuration = GDWInnovations.TagorClient.Client.Configuration.MergeConfigurations(
+            this.Configuration = GDWInnovations.TagorClient.Client.TagorConfiguration.MergeConfigurations(
                 GDWInnovations.TagorClient.Client.GlobalConfiguration.Instance,
-                new GDWInnovations.TagorClient.Client.Configuration { BasePath = basePath }
+                new GDWInnovations.TagorClient.Client.TagorConfiguration { BasePath = basePath }
             );
             this.Client = new GDWInnovations.TagorClient.Client.ApiClient(this.Configuration.BasePath);
             this.AsynchronousClient = new GDWInnovations.TagorClient.Client.ApiClient(this.Configuration.BasePath);
-            this.ExceptionFactory = GDWInnovations.TagorClient.Client.Configuration.DefaultExceptionFactory;
+            this.ExceptionFactory = GDWInnovations.TagorClient.Client.TagorConfiguration.DefaultExceptionFactory;
         }
 
         /// <summary>
@@ -383,17 +383,39 @@ namespace GDWInnovations.TagorClient.Api
         /// </summary>
         /// <param name="configuration">An instance of Configuration</param>
         /// <returns></returns>
-        public MessageApi(GDWInnovations.TagorClient.Client.Configuration configuration)
+        public MessageApi(GDWInnovations.TagorClient.Client.TagorConfiguration configuration)
         {
             if (configuration == null) throw new ArgumentNullException("configuration");
 
-            this.Configuration = GDWInnovations.TagorClient.Client.Configuration.MergeConfigurations(
+            this.Configuration = GDWInnovations.TagorClient.Client.TagorConfiguration.MergeConfigurations(
                 GDWInnovations.TagorClient.Client.GlobalConfiguration.Instance,
                 configuration
             );
             this.Client = new GDWInnovations.TagorClient.Client.ApiClient(this.Configuration.BasePath);
             this.AsynchronousClient = new GDWInnovations.TagorClient.Client.ApiClient(this.Configuration.BasePath);
-            ExceptionFactory = GDWInnovations.TagorClient.Client.Configuration.DefaultExceptionFactory;
+            ExceptionFactory = GDWInnovations.TagorClient.Client.TagorConfiguration.DefaultExceptionFactory;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MessageApi"/> class
+        /// using a readable TagorConfiguration object and sets the logger on the underlying clients.
+        /// </summary>
+        /// <param name="tagorConfiguration">An instance of IReadableTagorConfiguration</param>
+        /// <param name="loggerFactory">The logger factory</param>
+        public MessageApi(GDWInnovations.TagorClient.Client.IReadableTagorConfiguration tagorConfiguration, ILoggerFactory loggerFactory)
+        {
+            if (tagorConfiguration == null) throw new ArgumentNullException("tagorConfiguration");
+
+            this.Configuration = GDWInnovations.TagorClient.Client.TagorConfiguration.MergeConfigurations(
+                GDWInnovations.TagorClient.Client.GlobalConfiguration.Instance,
+                tagorConfiguration
+            );
+            this.Client = new GDWInnovations.TagorClient.Client.ApiClient(this.Configuration.BasePath);
+            this.AsynchronousClient = new GDWInnovations.TagorClient.Client.ApiClient(this.Configuration.BasePath);
+            ExceptionFactory = GDWInnovations.TagorClient.Client.TagorConfiguration.DefaultExceptionFactory;
+
+            this.Client.SetLogger(loggerFactory);
+            this.AsynchronousClient.SetLogger(loggerFactory);
         }
 
         /// <summary>
@@ -403,7 +425,7 @@ namespace GDWInnovations.TagorClient.Api
         /// <param name="client">The client interface for synchronous API access.</param>
         /// <param name="asyncClient">The client interface for asynchronous API access.</param>
         /// <param name="configuration">The configuration object.</param>
-        public MessageApi(GDWInnovations.TagorClient.Client.ISynchronousClient client, GDWInnovations.TagorClient.Client.IAsynchronousClient asyncClient, GDWInnovations.TagorClient.Client.IReadableConfiguration configuration)
+        public MessageApi(GDWInnovations.TagorClient.Client.ISynchronousClient client, GDWInnovations.TagorClient.Client.IAsynchronousClient asyncClient, GDWInnovations.TagorClient.Client.IReadableTagorConfiguration configuration)
         {
             if (client == null) throw new ArgumentNullException("client");
             if (asyncClient == null) throw new ArgumentNullException("asyncClient");
@@ -412,7 +434,7 @@ namespace GDWInnovations.TagorClient.Api
             this.Client = client;
             this.AsynchronousClient = asyncClient;
             this.Configuration = configuration;
-            this.ExceptionFactory = GDWInnovations.TagorClient.Client.Configuration.DefaultExceptionFactory;
+            this.ExceptionFactory = GDWInnovations.TagorClient.Client.TagorConfiguration.DefaultExceptionFactory;
         }
 
         /// <summary>
@@ -438,7 +460,7 @@ namespace GDWInnovations.TagorClient.Api
         /// Gets or sets the configuration object
         /// </summary>
         /// <value>An instance of the Configuration</value>
-        public GDWInnovations.TagorClient.Client.IReadableConfiguration Configuration { get; set; }
+        public GDWInnovations.TagorClient.Client.IReadableTagorConfiguration Configuration { get; set; }
 
         /// <summary>
         /// Provides a factory method hook for the creation of exceptions.

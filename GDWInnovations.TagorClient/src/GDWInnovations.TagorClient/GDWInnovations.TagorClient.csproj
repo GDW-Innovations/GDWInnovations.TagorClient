@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo><!-- setting GenerateAssemblyInfo to false causes this bug https://github.com/dotnet/project-system/issues/3934 -->
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <AssemblyName>GDWInnovations.TagorClient</AssemblyName>
     <PackageId>GDWInnovations.TagorClient</PackageId>
     <OutputType>Library</OutputType>
@@ -12,7 +12,7 @@
     <Description>A TAGOR library in csharp, generated from OpenAPI doc</Description>
     <Copyright>No Copyright</Copyright>
     <RootNamespace>GDWInnovations.TagorClient</RootNamespace>
-    <Version>1.1.7</Version>
+    <Version>1.1.8</Version>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\GDWInnovations.TagorClient.xml</DocumentationFile>
     <RepositoryUrl>https://github.com/GDW-Innovations/GDWInnovations.Tagor.NET.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -39,14 +39,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="JsonSubTypes" Version="2.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.2" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="RestSharp" Version="112.0.0" />
-    <PackageReference Include="Polly" Version="8.1.0" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="JsonSubTypes" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.12" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+    <PackageReference Include="RestSharp" Version="114.0.0" />
+    <PackageReference Include="Polly" Version="8.8.0" />
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>

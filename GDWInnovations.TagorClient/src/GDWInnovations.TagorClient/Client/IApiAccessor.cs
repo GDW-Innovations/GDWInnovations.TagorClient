@@ -22,7 +22,7 @@ namespace GDWInnovations.TagorClient.Client
         /// Gets or sets the configuration object
         /// </summary>
         /// <value>An instance of the Configuration</value>
-        IReadableConfiguration Configuration { get; set; }
+        IReadableTagorConfiguration Configuration { get; set; }
 
         /// <summary>
         /// Gets the base path of the API client.
