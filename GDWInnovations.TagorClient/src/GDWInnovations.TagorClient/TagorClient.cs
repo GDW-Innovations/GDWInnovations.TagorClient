@@ -17,6 +17,7 @@ namespace GDWInnovations.TagorClient
         public IPartyApi Party { get; }
         public IPayApi Pay { get; }
         public ISolvencyReportApi SolvencyReport { get; }
+        public ITagorServiceApi Service { get; }
         public IUserApi User { get; }
     }
 
@@ -33,6 +34,7 @@ namespace GDWInnovations.TagorClient
         public IPartyApi Party { get; }
         public IPayApi Pay { get; }
         public ISolvencyReportApi SolvencyReport { get; }
+        public ITagorServiceApi Service { get; }
         public IUserApi User { get; }
 
         public TagorClient(ILoggerFactory loggerFactory, IReadableTagorConfiguration config)
@@ -58,6 +60,7 @@ namespace GDWInnovations.TagorClient
             Pay = new PayApi(config, loggerFactory);
 
             SolvencyReport = new SolvencyReportApi(config, loggerFactory);
+            Service = new TagorServiceApi(config, loggerFactory);
 
             User = new UserApi(config, loggerFactory);
         }
