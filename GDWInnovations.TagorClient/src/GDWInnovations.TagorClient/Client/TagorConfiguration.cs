@@ -15,10 +15,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Net.Http;
 using System.Net.Security;
 
 namespace GDWInnovations.TagorClient.Client
@@ -29,12 +26,6 @@ namespace GDWInnovations.TagorClient.Client
     public class TagorConfiguration : IReadableTagorConfiguration
     {
         #region Constants
-
-        /// <summary>
-        /// Version of the package.
-        /// </summary>
-        /// <value>Version of the package.</value>
-        public const string Version = "1.1.10";
 
         /// <summary>
         /// Identifier for ISO 8601 DateTime Format
