@@ -191,22 +191,6 @@ namespace GDWInnovations.TagorClient.Client
         }
 
         /// <summary>
-        /// Gets or sets the default header.
-        /// </summary>
-        [Obsolete("Use DefaultHeaders instead.")]
-        public virtual IDictionary<string, string> DefaultHeader
-        {
-            get
-            {
-                return DefaultHeaders;
-            }
-            set
-            {
-                DefaultHeaders = value;
-            }
-        }
-
-        /// <summary>
         /// Gets or sets the default headers.
         /// </summary>
         public virtual IDictionary<string, string> DefaultHeaders { get; set; }
