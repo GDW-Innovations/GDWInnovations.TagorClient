@@ -171,6 +171,8 @@ namespace GDWInnovations.TagorClient.Client
     {
         private readonly string _baseUrl;
         private ILogger<ApiClient> _logger;
+        private readonly Policy<RestResponse> _retryPolicy;
+        private readonly AsyncPolicy<RestResponse> _asyncRetryPolicy;
 
         /// <summary>
         /// Sets the logger for this client.
@@ -217,19 +219,36 @@ namespace GDWInnovations.TagorClient.Client
         public ApiClient()
         {
             _baseUrl = GlobalConfiguration.Instance.BasePath;
+            var retryConfiguration = new TagorRetryConfiguration();
+            _retryPolicy = retryConfiguration.CreatePolicy();
+            _asyncRetryPolicy = retryConfiguration.CreateAsyncPolicy();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ApiClient" /> with the default retry configuration.
+        /// </summary>
+        /// <param name="basePath">The target service's base path in URL format.</param>
+        /// <exception cref="ArgumentException"></exception>
+        public ApiClient(string basePath) : this(basePath, new TagorRetryConfiguration())
+        {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ApiClient" />
         /// </summary>
         /// <param name="basePath">The target service's base path in URL format.</param>
+        /// <param name="retryConfiguration">Retry settings for transient failures.</param>
         /// <exception cref="ArgumentException"></exception>
-        public ApiClient(string basePath)
+        public ApiClient(string basePath, TagorRetryConfiguration retryConfiguration)
         {
             if (string.IsNullOrEmpty(basePath))
                 throw new ArgumentException("basePath cannot be empty");
+            if (retryConfiguration == null)
+                throw new ArgumentNullException(nameof(retryConfiguration));
 
             _baseUrl = basePath;
+            _retryPolicy = retryConfiguration.CreatePolicy();
+            _asyncRetryPolicy = retryConfiguration.CreateAsyncPolicy();
         }
 
         /// <summary>
@@ -557,9 +576,11 @@ namespace GDWInnovations.TagorClient.Client
 
         private async Task<RestResponse<T>> DeserializeRestResponseFromPolicyAsync<T>(RestClient client, RestRequest request, PolicyResult<RestResponse> policyResult, CancellationToken cancellationToken = default)
         {
-            if (policyResult.Outcome == OutcomeType.Successful) 
+            // Retries exhausted on a handled result (e.g. 503): return that last response, not an empty one
+            var response = policyResult.Outcome == OutcomeType.Successful ? policyResult.Result : policyResult.FinalHandledResult;
+            if (response != null)
             {
-                return await client.Deserialize<T>(policyResult.Result, cancellationToken);
+                return await client.Deserialize<T>(response, cancellationToken);
             }
             else
             {
@@ -588,9 +609,9 @@ namespace GDWInnovations.TagorClient.Client
 
             Func<RestClient, Task<RestResponse<T>>> getResponse = (client) =>
             {
-                if (RetryConfiguration.RetryPolicy != null)
+                if (_retryPolicy != null)
                 {
-                    var policy = RetryConfiguration.RetryPolicy;
+                    var policy = _retryPolicy;
                     var policyResult = policy.ExecuteAndCapture(() => client.Execute(request));
                     return DeserializeRestResponseFromPolicyAsync<T>(client, request, policyResult);
                 }
@@ -612,9 +633,9 @@ namespace GDWInnovations.TagorClient.Client
 
             Func<RestClient, Task<RestResponse<T>>> getResponse = async (client) =>
             {
-                if (RetryConfiguration.AsyncRetryPolicy != null)
+                if (_asyncRetryPolicy != null)
                 {
-                    var policy = RetryConfiguration.AsyncRetryPolicy;
+                    var policy = _asyncRetryPolicy;
                     var policyResult = await policy.ExecuteAndCaptureAsync((ct) => client.ExecuteAsync(request, ct), cancellationToken).ConfigureAwait(false);
                     return await DeserializeRestResponseFromPolicyAsync<T>(client, request, policyResult, cancellationToken);
                 }

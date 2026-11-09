@@ -37,32 +37,26 @@ namespace GDWInnovations.TagorClient
         public ITagorServiceApi Service { get; }
         public IUserApi User { get; }
 
-        public TagorClient(ILoggerFactory loggerFactory, IReadableTagorConfiguration config)
+        public TagorClient(ILoggerFactory loggerFactory, IReadableTagorConfiguration config, TagorRetryConfiguration retryConfiguration)
         {
-            Actions = new ActionsApi(config, loggerFactory);
+            // Same merge the generated Api constructors do, then one shared ApiClient carrying the retry settings
+            config = TagorConfiguration.MergeConfigurations(GlobalConfiguration.Instance, config);
+            var client = new ApiClient(config.BasePath, retryConfiguration);
+            client.SetLogger(loggerFactory);
 
-            Code = new CodeApi(config, loggerFactory);
-
-            Config = new ConfigApi(config, loggerFactory);
-
-            Document = new DocumentApi(config, loggerFactory);
-
-            Dossier = new DossierApi(config, loggerFactory);
-
-            Dossierlijn = new DossierlijnApi(config, loggerFactory);
-
-            Login = new LoginApi(config, loggerFactory);
-
-            Message = new MessageApi(config, loggerFactory);
-
-            Party = new PartyApi(config, loggerFactory);
-
-            Pay = new PayApi(config, loggerFactory);
-
-            SolvencyReport = new SolvencyReportApi(config, loggerFactory);
-            Service = new TagorServiceApi(config, loggerFactory);
-
-            User = new UserApi(config, loggerFactory);
+            Actions = new ActionsApi(client, client, config);
+            Code = new CodeApi(client, client, config);
+            Config = new ConfigApi(client, client, config);
+            Document = new DocumentApi(client, client, config);
+            Dossier = new DossierApi(client, client, config);
+            Dossierlijn = new DossierlijnApi(client, client, config);
+            Login = new LoginApi(client, client, config);
+            Message = new MessageApi(client, client, config);
+            Party = new PartyApi(client, client, config);
+            Pay = new PayApi(client, client, config);
+            SolvencyReport = new SolvencyReportApi(client, client, config);
+            Service = new TagorServiceApi(client, client, config);
+            User = new UserApi(client, client, config);
         }
     }
 }

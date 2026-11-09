@@ -21,3 +21,6 @@
 #docs/*.md
 # Then explicitly reverse the ignore rule for a single file:
 #!docs/README.md
+
+# Replaced by hand-written TagorRetryConfiguration; keep the generator from recreating the static Polly class
+src/GDWInnovations.TagorClient/Client/RetryConfiguration.cs
