@@ -398,3 +398,4 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+GDWInnovations.TagorClient/src/GDWInnovations.TagorClient.IntegrationTest/appsettings.json
