@@ -51,7 +51,10 @@ namespace GDWInnovations.TagorClient.Client
                 {
                     OverrideSpecifiedNames = false
                 }
-            }
+            },
+            // Keep date strings as strings so TagorDateOnlyConverter sees them as written (no local-time conversion).
+            DateParseHandling = DateParseHandling.None,
+            Converters = { new TagorDateOnlyConverter() }
         };
 
         public CustomJsonCodec(IReadableTagorConfiguration configuration)
@@ -197,7 +200,10 @@ namespace GDWInnovations.TagorClient.Client
                 {
                     OverrideSpecifiedNames = false
                 }
-            }
+            },
+            // Keep date strings as strings so TagorDateOnlyConverter sees them as written (no local-time conversion).
+            DateParseHandling = DateParseHandling.None,
+            Converters = { new TagorDateOnlyConverter() }
         };
 
         /// <summary>
