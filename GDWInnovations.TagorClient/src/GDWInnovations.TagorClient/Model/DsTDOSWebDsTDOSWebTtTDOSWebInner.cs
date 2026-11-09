@@ -65,7 +65,8 @@ namespace GDWInnovations.TagorClient.Model
         /// <param name="saldoKlant">saldoKlant.</param>
         /// <param name="saldoAanl">saldoAanl.</param>
         /// <param name="saldoVerw">saldoVerw.</param>
-        public DsTDOSWebDsTDOSWebTtTDOSWebInner(string aanlegger = default(string), string archiefnr = default(string), DateOnly datumStop = default(DateOnly), string dossiernaam = default(string), string klant = default(string), string klantRef1 = default(string), string klantRef2 = default(string), DateOnly sOLVDatumAdres = default(DateOnly), DateOnly sOLVDatumFinan = default(DateOnly), DateOnly statusDatum = default(DateOnly), DateOnly statusDatumAlarm = default(DateOnly), DateOnly statusDatumKlant = default(DateOnly), DateOnly statusDatumStadium = default(DateOnly), string tDOSId = default(string), string tQSOLVIdAdres = default(string), string tQSOLVIdFinan = default(string), string tQSTATUSId = default(string), string tQSTATUSIdAlarm = default(string), string tQSTATUSIdKlant = default(string), string tQSTATUSIdStadium = default(string), string tQSTATUSIdStop = default(string), DateOnly verkoopDatum = default(DateOnly), string verweerder = default(string), DateOnly datumCreatie = default(DateOnly), DateOnly datumWijziging = default(DateOnly), bool subdossier = default(bool), string tQDOSSOORTId = default(string), decimal saldoKlant = default(decimal), decimal saldoAanl = default(decimal), decimal saldoVerw = default(decimal))
+        /// <param name="hoofdDossier">hoofdDossier.</param>
+        public DsTDOSWebDsTDOSWebTtTDOSWebInner(string aanlegger = default(string), string archiefnr = default(string), DateOnly datumStop = default(DateOnly), string dossiernaam = default(string), string klant = default(string), string klantRef1 = default(string), string klantRef2 = default(string), DateOnly sOLVDatumAdres = default(DateOnly), DateOnly sOLVDatumFinan = default(DateOnly), DateOnly statusDatum = default(DateOnly), DateOnly statusDatumAlarm = default(DateOnly), DateOnly statusDatumKlant = default(DateOnly), DateOnly statusDatumStadium = default(DateOnly), string tDOSId = default(string), string tQSOLVIdAdres = default(string), string tQSOLVIdFinan = default(string), string tQSTATUSId = default(string), string tQSTATUSIdAlarm = default(string), string tQSTATUSIdKlant = default(string), string tQSTATUSIdStadium = default(string), string tQSTATUSIdStop = default(string), DateOnly verkoopDatum = default(DateOnly), string verweerder = default(string), DateOnly datumCreatie = default(DateOnly), DateOnly datumWijziging = default(DateOnly), bool subdossier = default(bool), string tQDOSSOORTId = default(string), decimal saldoKlant = default(decimal), decimal saldoAanl = default(decimal), decimal saldoVerw = default(decimal), string hoofdDossier = default(string))
         {
             this.Aanlegger = aanlegger;
             this.Archiefnr = archiefnr;
@@ -97,6 +98,7 @@ namespace GDWInnovations.TagorClient.Model
             this.SaldoKlant = saldoKlant;
             this.SaldoAanl = saldoAanl;
             this.SaldoVerw = saldoVerw;
+            this.HoofdDossier = hoofdDossier;
         }
 
         /// <summary>
@@ -278,6 +280,13 @@ namespace GDWInnovations.TagorClient.Model
         /// </summary>
         [DataMember(Name = "SaldoVerw", EmitDefaultValue = false)]
         public decimal SaldoVerw { get; set; }
+
+        /// <summary>
+        /// Gets or Sets HoofdDossier (manually added 9/11/2026, it's in the Tagor Response, but not in the API Docks)
+        /// </summary>
+        [DataMember(Name = "Hoofddossier", EmitDefaultValue = false)]
+        public string HoofdDossier { get; set; }
+
 
         /// <summary>
         /// Returns the string presentation of the object

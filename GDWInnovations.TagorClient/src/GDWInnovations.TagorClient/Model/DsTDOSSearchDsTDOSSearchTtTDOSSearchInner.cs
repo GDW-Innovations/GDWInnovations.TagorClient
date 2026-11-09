@@ -56,7 +56,9 @@ namespace GDWInnovations.TagorClient.Model
         /// <param name="saldoKlant">saldoKlant.</param>
         /// <param name="saldoAanl">saldoAanl.</param>
         /// <param name="saldoVerw">saldoVerw.</param>
-        public DsTDOSSearchDsTDOSSearchTtTDOSSearchInner(string aanlegger = default(string), string archiefnr = default(string), DateOnly? datumCreatie = default(DateOnly?), DateOnly? datumLtstBet = default(DateOnly?), string dossiernaam = default(string), string klant = default(string), string klantRef1 = default(string), string referteAdvocaat = default(string), string referteConfr = default(string), string tDOSId = default(string), string tQSTATUSId = default(string), string tQSTATUSIdAlarm = default(string), string tQSTATUSIdKlant = default(string), string tQSTATUSIdStadium = default(string), string tQSTATUSIdStop = default(string), DateOnly? verschijningsdatum = default(DateOnly?), string verweerder = default(string), string tQDOSSOORTId = default(string), decimal saldoKlant = default(decimal), decimal saldoAanl = default(decimal), decimal saldoVerw = default(decimal))
+        /// <param name="subdossier">subdossier.</param>
+        /// <param name="hoofddossier">hoofddossier.</param>
+        public DsTDOSSearchDsTDOSSearchTtTDOSSearchInner(string aanlegger = default(string), string archiefnr = default(string), DateOnly? datumCreatie = default(DateOnly?), DateOnly? datumLtstBet = default(DateOnly?), string dossiernaam = default(string), string klant = default(string), string klantRef1 = default(string), string referteAdvocaat = default(string), string referteConfr = default(string), string tDOSId = default(string), string tQSTATUSId = default(string), string tQSTATUSIdAlarm = default(string), string tQSTATUSIdKlant = default(string), string tQSTATUSIdStadium = default(string), string tQSTATUSIdStop = default(string), DateOnly? verschijningsdatum = default(DateOnly?), string verweerder = default(string), string tQDOSSOORTId = default(string), decimal saldoKlant = default(decimal), decimal saldoAanl = default(decimal), decimal saldoVerw = default(decimal), bool subdossier = default(bool), string hoofddossier = default(string))
         {
             this.Aanlegger = aanlegger;
             this.Archiefnr = archiefnr;
@@ -79,6 +81,8 @@ namespace GDWInnovations.TagorClient.Model
             this.SaldoKlant = saldoKlant;
             this.SaldoAanl = saldoAanl;
             this.SaldoVerw = saldoVerw;
+            this.Subdossier = subdossier;
+            this.Hoofddossier = hoofddossier;
         }
 
         /// <summary>
@@ -208,6 +212,18 @@ namespace GDWInnovations.TagorClient.Model
         public decimal SaldoVerw { get; set; }
 
         /// <summary>
+        /// Gets or Sets Subdossier  (manually added 9/11/2026, it's in the Tagor Response, but not in the API Docks)
+        /// </summary>
+        [DataMember(Name = "Subdossier", EmitDefaultValue = false)]
+        public bool Subdossier { get; set; }
+
+        /// <summary>
+        /// Gets or Sets Hoofddossier  (manually added 9/11/2026, it's in the Tagor Response, but not in the API Docks)
+        /// </summary>
+        [DataMember(Name = "Hoofddossier", EmitDefaultValue = false)]
+        public string Hoofddossier { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -236,6 +252,8 @@ namespace GDWInnovations.TagorClient.Model
             sb.Append("  SaldoKlant: ").Append(SaldoKlant).Append("\n");
             sb.Append("  SaldoAanl: ").Append(SaldoAanl).Append("\n");
             sb.Append("  SaldoVerw: ").Append(SaldoVerw).Append("\n");
+            sb.Append("  Subdossier: ").Append(Subdossier).Append("\n");
+            sb.Append("  Hoofddossier: ").Append(Hoofddossier).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
